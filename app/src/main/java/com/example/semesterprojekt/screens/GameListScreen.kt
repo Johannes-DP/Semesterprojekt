@@ -1,6 +1,8 @@
 package com.example.semesterprojekt.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -12,14 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
 import com.example.semesterprojekt.widgets.GameListGrid
 import com.example.semesterprojekt.widgets.HomeTopAppBar
 
 @Composable
-fun HomeScreen(
+fun GameListScreen(
     navController: NavController
 ){
     Scaffold(topBar = {
@@ -39,13 +40,13 @@ fun HomeScreen(
             }
         )
     },
-    floatingActionButton = {
-        FloatingActionButton(onClick = { /*TODO Move to detailed List Screen*/ })
-        {
-            Icon(Icons.Filled.Add, "Add List")
-        }
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /*TODO Move to detailed List Screen*/ })
+            {
+                Icon(Icons.Filled.Add, "Add List")
+            }
 
-    }) {padding ->
+        }) {padding ->
         MainContent(
             modifier = Modifier.padding(padding),
             navController = navController
@@ -53,7 +54,7 @@ fun HomeScreen(
     }
 }
 
-@Composable
+/*@Composable
 fun MainContent(
     modifier: Modifier,
     navController: NavController
@@ -68,7 +69,8 @@ fun MainContent(
 fun GameLists(
     modifier: Modifier,
     navController: NavController,
-    gameLists: List<GameList> = getGameLists())
+    gameLists: List<GameList> = getGameLists()
+)
 {
     LazyVerticalGrid(columns = GridCells.Fixed(2)){
         items(gameLists){ gameList ->
@@ -78,5 +80,4 @@ fun GameLists(
 
         }
     }
-}
-
+}*/
