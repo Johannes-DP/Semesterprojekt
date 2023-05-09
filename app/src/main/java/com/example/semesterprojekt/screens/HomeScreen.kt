@@ -1,8 +1,8 @@
 package com.example.semesterprojekt.screens
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -13,6 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.semesterprojekt.models.Game
+import com.example.semesterprojekt.models.GameList
+import com.example.semesterprojekt.models.getGameLists
+import com.example.semesterprojekt.widgets.GameListGrid
 import com.example.semesterprojekt.widgets.HomeTopAppBar
 
 @Composable
@@ -57,8 +61,16 @@ fun MainContent(
 @Composable
 fun GameLists(
     modifier: Modifier,
-    navController: NavController
-){
+    navController: NavController,
+    gameLists: List<GameList> = getGameLists())
+{
+    LazyVerticalGrid(columns = GridCells.Fixed(2)){
+        items(gameLists){ gameList ->
+            GameListGrid(
+                gameList = gameList,
+            )
 
+        }
+    }
 }
 
