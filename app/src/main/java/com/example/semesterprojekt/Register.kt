@@ -28,7 +28,7 @@ class Register : AppCompatActivity() {
         updateUI(currentUser)
     }
 
-    private fun createAccount(email: String, password: String){
+    public fun createAccount(email: String, password: String){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this){task ->
                 if(task.isSuccessful){
