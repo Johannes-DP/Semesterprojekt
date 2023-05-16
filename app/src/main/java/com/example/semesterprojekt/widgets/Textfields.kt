@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.widgets
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -33,6 +34,7 @@ fun EmailField(label: String, modifier: Modifier){
         label = {Text(label)},
         singleLine = true,
         modifier = modifier,
+        shape = RoundedCornerShape(percent = 20),
         keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }
@@ -48,6 +50,7 @@ fun PasswordField(label: String, modifier: Modifier){
         label = {Text(label)},
         singleLine = true,
         modifier = modifier,
+        shape = RoundedCornerShape(percent = 20),
         visualTransformation = if(passwordIsVisible){
             VisualTransformation.None}else{
             PasswordVisualTransformation()

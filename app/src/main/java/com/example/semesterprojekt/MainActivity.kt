@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.semesterprojekt.data.Register
 import com.example.semesterprojekt.navigation.Navigation
 import com.example.semesterprojekt.ui.theme.SemesterprojektTheme
 
@@ -16,6 +17,7 @@ class MainActivity : ComponentActivity() {
             SemesterprojektTheme {
                 // A surface container using the 'background' color from the theme
                 Navigation()
+                Register()
             }
         }
     }

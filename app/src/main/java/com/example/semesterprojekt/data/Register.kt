@@ -1,10 +1,12 @@
-package com.example.semesterprojekt
+package com.example.semesterprojekt.data
 
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.Composable
+import com.example.semesterprojekt.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -27,8 +29,13 @@ class Register : AppCompatActivity() {
         val currentUser = auth.currentUser
         updateUI(currentUser)
     }
+@Composable
+    public fun createAccount(email: String,password: String){
+        val auth = Firebase.auth
+        auth.createUserWithEmailAndPassword(email,password)
+    }
 
-    public fun createAccount(email: String, password: String){
+   /* public fun createAccount(email: String, password: String){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this){task ->
                 if(task.isSuccessful){
@@ -45,8 +52,10 @@ class Register : AppCompatActivity() {
                     updateUI(null)
                 }
             }
-    }
+    }*/
     private fun updateUI(user: FirebaseUser?){
 
     }
+
+    companion object
 }

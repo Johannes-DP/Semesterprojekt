@@ -4,14 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.HomeScreen
 import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
 import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 
+
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
+    val repository = AuthRepository()
 
     NavHost(navController = navController, startDestination = Screen.Registration.route){
 
@@ -20,7 +23,8 @@ fun Navigation(){
         }
 
         composable(route = Screen.Registration.route){
-            Registration(navController = navController, viewModel = RegistrationViewModel())
+            Registration(navController = navController, viewModel = RegistrationViewModel(repository)
+            )
         }
     }
 }

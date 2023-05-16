@@ -1,8 +1,13 @@
 package com.example.semesterprojekt.viewmodels;
 
-public class RegistrationViewModel {
+import androidx.lifecycle.ViewModel
+import com.example.semesterprojekt.repository.AuthRepository
 
-    fun signUp(email: String, password: String){
+class RegistrationViewModel (
+    private val repository: AuthRepository
+    ): ViewModel() {
 
+    suspend fun signUp(email: String, password: String){
+        repository.firebaseSignUp(email,password)
     }
 }

@@ -1,8 +1,16 @@
 package com.example.semesterprojekt.repository
 
-interface AuthRepository{
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
-suspend fun firebaseSignUp(email: String, password: String)
 
-fun signOut()
+class AuthRepository(){
+
+suspend fun firebaseSignUp(email: String, password: String) {
+    val auth = Firebase.auth
+    auth.createUserWithEmailAndPassword(email,password).await()
+}
+
+//fun signOut() = AuthDao.signOut()
 }
