@@ -7,19 +7,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.semesterprojekt.screens.HomeScreen
 import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
+import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route){
+    NavHost(navController = navController, startDestination = Screen.Registration.route){
 
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController)
         }
 
         composable(route = Screen.Registration.route){
-            Registration(navController = navController)
+            Registration(navController = navController, viewModel = RegistrationViewModel())
         }
     }
 }
