@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,16 +17,29 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
-import com.example.semesterprojekt.widgets.GameListGrid
+import com.example.semesterprojekt.widgets.GameGrid
 import com.example.semesterprojekt.widgets.HomeTopAppBar
+import com.example.semesterprojekt.models.Game
+import com.example.semesterprojekt.models.getGames
+import com.example.semesterprojekt.widgets.OtherTopAppBar
 
 @Composable
-fun GameListScreen(
-    navController: NavController
+fun GameDetailScreen(
+    navController: NavController,
+    gameId:String?
+
 ){
+    val games = getGames()
+    var game = games[0]
+    for (item: Game in games) {
+        if (item.id == gameId) {
+            game = item
+        }
+    }
     Scaffold(topBar = {
-        HomeTopAppBar(
-            title = "Your Lists",
+        OtherTopAppBar(
+            arrowBackClicked = {navController.popBackStack()},
+            title = " "+ game.title,
             menuContent = {
                 DropdownMenuItem(onClick = { /*TODO Navigate to EditProfileScreen*/ }) {
                     Row {
@@ -39,45 +53,14 @@ fun GameListScreen(
                 /*TODO Add more Items*/
             }
         )
-    },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO Move to detailed List Screen*/ })
-            {
-                Icon(Icons.Filled.Add, "Add List")
-            }
 
         }) {padding ->
-        MainContent(
-            modifier = Modifier.padding(padding),
-            navController = navController
-        )
-    }
-}
-
-/*@Composable
-fun MainContent(
-    modifier: Modifier,
-    navController: NavController
-){
-    GameLists(
-        modifier = modifier,
-        navController = navController
-    )
-}
-
-@Composable
-fun GameLists(
-    modifier: Modifier,
-    navController: NavController,
-    gameLists: List<GameList> = getGameLists()
-)
-{
-    LazyVerticalGrid(columns = GridCells.Fixed(2)){
-        items(gameLists){ gameList ->
-            GameListGrid(
-                gameList = gameList
-            )
+        Column(modifier = Modifier.padding(padding)) {
 
         }
     }
-}*/
+}
+
+
+
+

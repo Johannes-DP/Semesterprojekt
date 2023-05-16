@@ -40,7 +40,7 @@ fun HomeScreen(
         )
     },
     floatingActionButton = {
-        FloatingActionButton(onClick = { /*TODO Move to detailed List Screen*/ })
+        FloatingActionButton(onClick = { /*TODO Move to Add List Screen*/ })
         {
             Icon(Icons.Filled.Add, "Add List")
         }
@@ -73,7 +73,10 @@ fun GameLists(
     LazyVerticalGrid(columns = GridCells.Fixed(2)){
         items(gameLists){ gameList ->
             GameListGrid(
-                gameList = gameList
+                gameList = gameList,
+                onItemClick = {listId ->
+                    navController.navigate(Screen.ListDetailScreen.addId(listId))
+                }
             )
 
         }
