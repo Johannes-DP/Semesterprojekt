@@ -23,8 +23,7 @@ fun Navigation(){
         }
 
         composable(route = Screen.Registration.route){
-            Registration(navController = navController, viewModel = RegistrationViewModel(repository)
-            )
+            Registration(navController = navController)
         }
     }
 }

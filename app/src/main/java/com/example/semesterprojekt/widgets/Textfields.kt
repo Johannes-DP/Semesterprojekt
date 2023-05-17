@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.widgets
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -11,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-
+import com.example.semesterprojekt.screens.TextfieldUiState
 
 @Composable
 fun SimpleTextField(label: String, modifier: Modifier){
@@ -24,32 +25,32 @@ fun SimpleTextField(label: String, modifier: Modifier){
         modifier = modifier
     )
 }
+/*
 @Composable
-fun EmailField(label: String, modifier: Modifier){
-    var text by remember { mutableStateOf("") }
+fun EmailField(){
 
     OutlinedTextField(
         value = text,
         onValueChange ={text=it},
-        label = {Text(label)},
+        label = {Text("Email")},
         singleLine = true,
-        modifier = modifier,
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(percent = 20),
         keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email)
     )
+
 }
 @Composable
-fun PasswordField(label: String, modifier: Modifier){
-    var text by remember { mutableStateOf("") }
+fun PasswordField(){
     var passwordIsVisible by remember{ mutableStateOf(false) }
 
 
     OutlinedTextField(
         value = text,
         onValueChange ={text=it},
-        label = {Text(label)},
+        label = {Text("Password")},
         singleLine = true,
-        modifier = modifier,
+        modifier =  Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(percent = 20),
         visualTransformation = if(passwordIsVisible){
             VisualTransformation.None}else{
@@ -76,4 +77,57 @@ fun PasswordField(label: String, modifier: Modifier){
 
         }
     )
+}*/
+
+@Composable
+fun DataTextfields(state: TextfieldUiState, onChange: (TextfieldUiState)->Unit){
+
+    OutlinedTextField(
+        value = state.email,
+        onValueChange ={input -> onChange(state.copy(email = input))},
+        label = {Text("Email")},
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(percent = 20),
+        keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email)
+    )
+
+    var passwordIsVisible by remember{ mutableStateOf(false) }
+
+    //TODO: Recomposition and Factory for ViewModel -> AuthRepository
+
+    OutlinedTextField(
+        value = state.password,
+        onValueChange ={input -> onChange(state.copy(password = input))},
+        label = {Text("Password")},
+        singleLine = true,
+        modifier =  Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(percent = 20),
+        visualTransformation = if(passwordIsVisible){
+            VisualTransformation.None}else{
+            PasswordVisualTransformation()
+        },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        trailingIcon = {
+            val icon = if (passwordIsVisible) {
+                Icons.Filled.Visibility
+            } else {
+                Icons.Filled.VisibilityOff
+            }
+            IconButton(
+                onClick = {
+                    passwordIsVisible = !passwordIsVisible
+                }
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null
+                )
+            }
+
+
+        }
+    )
+
 }
+

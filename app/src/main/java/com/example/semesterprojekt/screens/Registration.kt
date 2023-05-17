@@ -1,43 +1,42 @@
 package com.example.semesterprojekt.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.lifecycle.viewmodel.compose.*
+import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.RegistrationViewModel
-import com.example.semesterprojekt.widgets.EmailField
-import com.example.semesterprojekt.widgets.PasswordField
+import com.example.semesterprojekt.widgets.DataTextfields
 import kotlinx.coroutines.launch
 
 @Composable
 fun Registration(
-    navController: NavController,
-    viewModel: RegistrationViewModel
+    navController: NavController
 ){
-    val coroutineScope = rememberCoroutineScope()
+    val viewModel1: RegistrationViewModel = viewModel()
 
-    var email by remember{
+
+    val coroutineScope = rememberCoroutineScope()
+    val warning = "Registration failed. Please check if your email is valid and your password is long enough(6 characters)!"
+
+    var showWarning by remember{
+        mutableStateOf(false)
+    }
+
+    /*var email by remember{
     mutableStateOf("")
     }
     var password by remember{
         mutableStateOf("")
-    }
+    }*/
         Column( Modifier.fillMaxWidth()) {
 
-            OutlinedTextField(
+            DataTextfields(state = viewModel1.textfieldUiState, onChange = {newUiState->viewModel1.newState(newUiState)})
+
+            /*OutlinedTextField(
                 value = email,
                 onValueChange ={email=it},
                 label = {Text("EMail")},
@@ -88,51 +87,25 @@ fun Registration(
                         }
                     }
                 }
-            )
-
-            /*OutlinedTextField(
-                value = password,
-                onValueChange ={password=it},
-                label = {Text("label")},
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                visualTransformation = if(passwordIsVisible){
-                    VisualTransformation.None}else{
-                    PasswordVisualTransformation()
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                trailingIcon = {
-                    val icon = if (passwordIsVisible) {
-                        Icons.Filled.Visibility
-                    } else {
-                        Icons.Filled.VisibilityOff
-                    }
-                    IconButton(
-                        onClick = {
-                            passwordIsVisible = !passwordIsVisible
-                        }
-                    ) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = null
-                        )
-                    }
-
-
-                }
             )*/
+
             Button(onClick = {
                 coroutineScope.launch {
-                    viewModel.signUp(email = email, password = password)
+                    try{
+                        viewModel1.signUp()
+                        showWarning = false
+                    }catch (e: Exception){
+                        print (e)
+                        showWarning = true
+                    }
                 }
             })
             {
                 Text("Register")
             }
+            if(showWarning)
+            Text(warning)
         }
 
-
-        }
-
-
+}
 
