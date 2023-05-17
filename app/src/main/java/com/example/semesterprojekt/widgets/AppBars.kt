@@ -3,6 +3,7 @@ package com.example.semesterprojekt.widgets
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 
@@ -54,6 +55,28 @@ fun OtherTopAppBar(
                 onDismissRequest = { showMenu = false }
             ) {
                 menuContent()
+            }
+        }
+    )
+}
+
+@Composable
+fun EditTopAppBar(
+    arrowBackClicked: () -> Unit = {},
+    title: String = "default"
+){
+
+    TopAppBar(
+        title = { Text("Editing: " + title) },
+        navigationIcon = {
+            IconButton(onClick = { arrowBackClicked }) {
+                Icon(imageVector = Icons.Default.ArrowBack, "getBack")
+
+            }
+        },
+        actions = {
+            IconButton(onClick = { /*TODO: add list saving*/ }) {
+                Icon(imageVector = Icons.Default.Done, contentDescription = "Save")
             }
         }
     )

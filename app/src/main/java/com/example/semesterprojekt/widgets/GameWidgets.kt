@@ -1,7 +1,10 @@
 package com.example.semesterprojekt.widgets
 
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -79,18 +83,23 @@ fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}){
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GameGrid(
     game: Game,
+    gameList: GameList,
     onItemClick: (String) -> Unit = {},
-    onDeleteClick: (Game) -> Unit = {}) {
+    onDeleteClick: (String) -> Unit = {},
+    onLongClick: (String) -> Unit = {}) {
 
     Card(
         modifier = Modifier
-            .clickable { onItemClick(game.id) }
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(5.dp),
+            .padding(5.dp)
+            .combinedClickable(
+                onClick = { onItemClick(game.id) },
+                onLongClick = { onLongClick(gameList.id) }),
         border = null,
         elevation = 0.dp
     ) {
@@ -110,12 +119,8 @@ fun GameGrid(
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (game.image != "null"){
-                            GameImage(imageUrl = game.image)
-                        } else {
-                            Image(painter = painterResource(id = R.drawable.default_picture), contentDescription = "No picture found")
-                        }
-                        DeleteIcon(game, onDeleteClick)
+                        GameImage(imageUrl = game.image)
+                        //DeleteIcon(game, onDeleteClick)
 
 
                     }
@@ -123,29 +128,63 @@ fun GameGrid(
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            GameName(game)
+            GameName(game.title, MaterialTheme.typography.body2)
             //Text(text = "Movie Images", style = MaterialTheme.typography.h5)
         }
     }
 }
 
 @Composable
+fun EditGameList(game: Game){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+
+        Text(text = game.title)
+
+        DeleteIcon(game = game, onDeleteClick = { gameId -> Log.d("GameDelete", gameId)})
+    }
+    Divider()
+}
+@Composable
 fun GameImage(imageUrl: String) {
-    SubcomposeAsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imageUrl)
-            .crossfade(true)
-            .build(),
-        contentScale = ContentScale.Crop,
-        contentDescription = "GameImage",
-        loading = {
-            CircularProgressIndicator()
+    if (imageUrl != "null"){
+        SubcomposeAsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            contentScale = ContentScale.Crop,
+            contentDescription = "GameImage",
+            loading = {
+                CircularProgressIndicator()
+            }
+        )
+    } else {
+        Image(
+            painter = painterResource(id = R.drawable.default_picture),
+            contentDescription = "No picture found"
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Column() {
+                Spacer(modifier = Modifier.height(70.dp))
+                Text(text = "No Image Found", style = MaterialTheme.typography.body2)
+            }
+
         }
-    )
+    }
 }
 
 @Composable
-fun DeleteIcon(game: Game, onDeleteClick: (Game) -> Unit){
+fun DeleteIcon(game: Game, onDeleteClick: (String) -> Unit){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -153,28 +192,43 @@ fun DeleteIcon(game: Game, onDeleteClick: (Game) -> Unit){
         contentAlignment = Alignment.TopEnd
     ) {
         Icon(
-            tint = Color.White,
+            tint = MaterialTheme.colors.primary,
             imageVector = Icons.Default.Delete,
             contentDescription = "Delete Movie",
-            modifier = Modifier.clickable { onDeleteClick(game) }
+            modifier = Modifier.clickable { onDeleteClick(game.id) }
         )
     }
 }
 
 @Composable
-fun GameName(game: Game){
-    Row(
+fun GameName(name: String, style: TextStyle){
+    Column(
         modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .padding(10.dp),
+        //verticalAlignment = Alignment.CenterVertically,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = game.title, style = MaterialTheme.typography.body2)
+        Text(text = name, style = style)
     }
 }
 
 @Composable
 fun GameDetails(game: Game){
-    GameImage(game.image)
+    GameDetailRow(category = "Released in: ", game.releaseYear.toString())
+    GameDetailRow(category = "Developer: ", game.developer)
+    GameDetailRow(category = "Publisher: ", game.publisher)
+    GameDetailRow(category = "Platform: ", game.platform.toString())
+}
 
-
+@Composable
+fun GameDetailRow(category: String, argument: String){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Text(text = category + argument,style = MaterialTheme.typography.body1)
+    }
 }

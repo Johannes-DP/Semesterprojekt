@@ -22,6 +22,11 @@ fun Navigation(){
             ListDetailScreen(navController = navController,
                 listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY))
         }
+        composable(route = Screen.ModifyListScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
+        ){ backStackEntry ->
+            ModifyListScreen(navController = navController,
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY))
+        }
         composable(route = Screen.GameDetailScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             GameDetailScreen(navController = navController,

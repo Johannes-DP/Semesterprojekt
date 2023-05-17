@@ -13,6 +13,12 @@ sealed class Screen (val route: String) {
         }
     }
 
+    object ModifyListScreen : Screen("modifyList/{$DETAIL_ARGUMENT_KEY}") {
+        fun addId(id: String): String {
+            return this.route.replace(oldValue = "{$DETAIL_ARGUMENT_KEY}", newValue = id)
+        }
+    }
+
     object GameDetailScreen : Screen("gameDetail/{$GAME_ARGUMENT_KEY}") {
         fun addId(id: String): String {
             return this.route.replace(oldValue = "{$GAME_ARGUMENT_KEY}", newValue = id)
