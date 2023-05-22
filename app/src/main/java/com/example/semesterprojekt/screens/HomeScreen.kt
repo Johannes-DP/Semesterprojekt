@@ -60,6 +60,22 @@ fun HomeScreen(
                             )
                         }
 
+                        Row {
+                            IconButton(
+                                onClick = {navController.navigate(Screen.Registration.route)}){
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Registration/Login",
+                                    modifier = Modifier.padding(4.dp)
+                                )
+
+                            Text(
+                                text = "Login", modifier = Modifier
+                                    .width(100.dp)
+                                    .padding(4.dp)
+                            )
+                            }
+                        }
                     }
                     /*TODO Add more Items*/
                 }
