@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.TextfieldUiState
 
-class RegistrationViewModel (
-    //private val repository: AuthRepository
-    ): ViewModel() {
+class RegistrationViewModel (private val repository: AuthRepository): ViewModel() {
 
     var textfieldUiState by mutableStateOf(TextfieldUiState())
         private set
@@ -18,7 +16,7 @@ class RegistrationViewModel (
 
             val email = textfieldUiState.email
             val password = textfieldUiState.password
-            //repository.firebaseSignUp(email,password)
+            repository.firebaseSignUp(email,password)
     }
 
     fun newState(newUiState: TextfieldUiState){

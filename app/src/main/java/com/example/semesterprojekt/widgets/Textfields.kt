@@ -94,8 +94,6 @@ fun DataTextfields(state: TextfieldUiState, onChange: (TextfieldUiState)->Unit){
 
     var passwordIsVisible by remember{ mutableStateOf(false) }
 
-    //TODO: Recomposition and Factory for ViewModel -> AuthRepository
-
     OutlinedTextField(
         value = state.password,
         onValueChange ={input -> onChange(state.copy(password = input))},
