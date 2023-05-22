@@ -56,7 +56,8 @@ fun GameDetailScreen(
         Column(modifier = Modifier.padding(padding), horizontalAlignment = Alignment.CenterHorizontally) {
             Card(
                 modifier = Modifier
-                    .width(170.dp),
+                    .width(170.dp)
+                    .padding(10.dp),
                 shape = RoundedCornerShape(corner = CornerSize(15.dp)),
                 elevation = 5.dp,
 

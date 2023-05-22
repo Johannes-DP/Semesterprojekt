@@ -215,6 +215,7 @@ fun GameName(name: String, style: TextStyle){
 
 @Composable
 fun GameDetails(game: Game){
+    GameDetailRow(category = "Rating: ", argument = game.rating.toString(), category2 = "Amount: ", argument2 = game.ratingsCount.toString())
     GameDetailRow(category = "Released in: ", game.releaseYear.toString())
     GameDetailRow(category = "Developer: ", game.developer)
     GameDetailRow(category = "Publisher: ", game.publisher)
@@ -222,13 +223,16 @@ fun GameDetails(game: Game){
 }
 
 @Composable
-fun GameDetailRow(category: String, argument: String){
+fun GameDetailRow(category: String, argument: String,category2: String = "", argument2: String = ""){
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 15.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ){
         Text(text = category + argument,style = MaterialTheme.typography.body1)
+        Text(text = category2 + argument2,style = MaterialTheme.typography.body1)
+
     }
 }
