@@ -22,7 +22,7 @@ fun Navigation(){
     val navController = rememberNavController()
     val repository = AuthRepository()
 
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route){
+    NavHost(navController = navController, startDestination = Screen.Registration.route){
 
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController)
@@ -30,6 +30,7 @@ fun Navigation(){
 
         composable(route = Screen.Registration.route){
             Registration(navController = navController)
+        }
 
         composable(route = Screen.ListDetailScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
@@ -45,6 +46,6 @@ fun Navigation(){
         ){ backStackEntry ->
             GameDetailScreen(navController = navController,
                 gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY))
+            }
         }
-    }
 }

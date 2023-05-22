@@ -9,7 +9,6 @@ sealed class Screen (val route: String) {
 
 
     object Registration : Screen("registration")
-}
 
     object ListDetailScreen : Screen("listDetail/{$DETAIL_ARGUMENT_KEY}") {
         fun addId(id: String): String {
