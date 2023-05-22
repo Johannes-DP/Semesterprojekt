@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
+import com.example.semesterprojekt.screens.Screen
 
 @Composable
 fun HomeTopAppBar(
@@ -77,6 +78,21 @@ fun EditTopAppBar(
         actions = {
             IconButton(onClick = { /*TODO: add list saving*/ }) {
                 Icon(imageVector = Icons.Default.Done, contentDescription = "Save")
+            }
+        }
+    )
+}
+
+@Composable
+fun RegistrationTopBar(
+    arrowBackClicked: () -> Unit = {},
+    title: String ="Default"
+){
+    TopAppBar(
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(onClick = { arrowBackClicked }) {
+                Icon(imageVector = Icons.Default.ArrowBack, "getBack")
             }
         }
     )

@@ -5,13 +5,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
-import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.HomeScreen
 import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
-import com.example.semesterprojekt.viewmodels.RegistrationViewModel
-
 
 import androidx.navigation.navArgument
 import com.example.semesterprojekt.screens.*
@@ -20,7 +16,6 @@ import com.example.semesterprojekt.screens.*
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    val repository = AuthRepository()
 
     NavHost(navController = navController, startDestination = Screen.Registration.route){
 

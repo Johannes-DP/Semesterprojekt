@@ -19,6 +19,12 @@ class RegistrationViewModel (private val repository: AuthRepository): ViewModel(
             repository.firebaseSignUp(email,password)
     }
 
+    suspend fun logIn(){
+        val email = textfieldUiState.email
+        val password = textfieldUiState.password
+        repository.firebaseLogIn(email,password)
+    }
+
     fun newState(newUiState: TextfieldUiState){
         textfieldUiState = newUiState.copy()
     }

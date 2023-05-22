@@ -10,6 +10,6 @@ class RegistrationViewModelFactory(private val repository: AuthRepository):ViewM
             return RegistrationViewModel(repository) as T
         }
 
-        throw java.lang.IllegalArgumentException("Unkown ViewModel class")
+        throw java.lang.IllegalArgumentException("Unknown ViewModel class")
     }
 }
