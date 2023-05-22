@@ -22,7 +22,7 @@ fun Navigation(){
     val navController = rememberNavController()
     val repository = AuthRepository()
 
-    NavHost(navController = navController, startDestination = Screen.Registration.route){
+    NavHost(navController = navController, startDestination = Screen.MainScreen.route){
 
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController)

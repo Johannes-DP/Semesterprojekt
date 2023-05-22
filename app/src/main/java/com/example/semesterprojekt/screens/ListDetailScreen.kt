@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,8 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
-import com.example.semesterprojekt.models.Game
-import com.example.semesterprojekt.models.getGames
+import com.example.semesterprojekt.viewmodels.ListDetailViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
@@ -36,6 +37,7 @@ fun ListDetailScreen(
     listId:String?
 
 ) {
+    val viewModel = ListDetailViewModel()
     val lists = getGameLists()
     var gameList = lists[0]
     for (item: GameList in lists) {
@@ -43,6 +45,8 @@ fun ListDetailScreen(
             gameList = item
         }
     }
+    val showDialogState: Boolean by viewModel.showDialog.collectAsState()
+    val clearState: Boolean by viewModel.clearBool.collectAsState()
     val modalBottomSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -90,7 +94,7 @@ fun ListDetailScreen(
                         }
 
                     }
-                    DropdownMenuItem(onClick = { Log.d("Clear List", gameList.id) }) {
+                    DropdownMenuItem(onClick = { viewModel.onClearClicked() }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Clear,
@@ -106,7 +110,7 @@ fun ListDetailScreen(
 
                     }
 
-                    DropdownMenuItem(onClick = { Log.d("DeleteList", gameList.id) }) {
+                    DropdownMenuItem(onClick = { viewModel.onDeleteClicked() }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Delete,
@@ -141,6 +145,16 @@ fun ListDetailScreen(
                     modalBottomSheetState.hide()
                 }
             }
+            AlertDialogs(
+                show = showDialogState,
+                clear = clearState,
+                listId = listId,
+                onConfirm = { listIDString, clearBool ->
+                    viewModel.clearOrDeleteList(listIDString, clearBool)
+                },
+                onDismiss = {viewModel.onDialogDismiss()}
+
+            )
             Column(modifier = Modifier.padding(padding)) {
                 LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                     items(gameList.games) { game ->

@@ -1,136 +1,62 @@
 package com.example.semesterprojekt.widgets
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+
+
 
 @Composable
-fun AlertDialogSample() {
-    MaterialTheme {
-        Column {
-            val openDialog = remember { mutableStateOf(false)  }
+fun AlertDialogs(
+    listId: String?,
+    show: Boolean,
+    clear: Boolean,
+    onConfirm: (String?, Boolean) -> Unit,
+    onDismiss: () -> Unit){
 
-            Button(onClick = {
-                openDialog.value = true
-            }) {
-                Text("Click me")
-            }
-
-            if (openDialog.value) {
-
-                AlertDialog(
-                    onDismissRequest = {
-                        // Dismiss the dialog when the user clicks outside the dialog or on the back
-                        // button. If you want to disable that functionality, simply use an empty
-                        // onCloseRequest.
-                        openDialog.value = false
-                    },
-                    title = {
-                        Text(text = "Dialog Title")
-                    },
-                    text = {
-                        Text("Here is a text ")
-                    },
-                    confirmButton = {
-                        Button(
-
-                            onClick = {
-                                openDialog.value = false
-                            }) {
-                            Text("This is the Confirm Button")
-                        }
-                    },
-                    dismissButton = {
-                        Button(
-
-                            onClick = {
-                                openDialog.value = false
-                            }) {
-                            Text("This is the dismiss Button")
-                        }
-                    }
-                )
-            }
-        }
-
-    }
-}
-
-@Composable
-fun ClearDialog(listId: String){
-    AlertDialog(
-        onDismissRequest = {
-            // Dismiss the dialog when the user clicks outside the dialog or on the back
-            // button. If you want to disable that functionality, simply use an empty
-            // onCloseRequest.
-            //openDialog.value = false
-        },
-        title = {
-            Text(text = "Dialog Title")
-        },
-        text = {
-            Text("Here is a text ")
-        },
-        confirmButton = {
-            Button(
-
-                onClick = {
-                    //openDialog.value = false
-                }) {
-                Text("This is the Confirm Button")
-            }
-        },
-        dismissButton = {
-            Button(
-
-                onClick = {
-                    //openDialog.value = false
-                }) {
-                Text("This is the dismiss Button")
-            }
-        }
-    )
-}
-
-@Composable
-fun DeleteDialog(listId: String){
-    AlertDialog(
-    onDismissRequest = {
-        // Dismiss the dialog when the user clicks outside the dialog or on the back
-        // button. If you want to disable that functionality, simply use an empty
-        // onCloseRequest.
-        //openDialog.value = false
-    },
-    title = {
-        Text(text = "Dialog Title")
-    },
-    text = {
-        Text("Are your sure you want to delete this list? ")
-    },
-    confirmButton = {
-        Button(
-
-            onClick = {
+    if (show){
+        AlertDialog(
+            onDismissRequest = {
+                // Dismiss the dialog when the user clicks outside the dialog or on the back
+                // button. If you want to disable that functionality, simply use an empty
+                // onCloseRequest.
                 //openDialog.value = false
-            }) {
-            Text("This is the Confirm Button")
-        }
-    },
-    dismissButton = {
-        Button(
+            },
+            title = {
+                if (clear){
+                    Text("Are you sure you want to clear your list?")
+                } else {
+                    Text("Are you sure you want to delete your list?")
+                }
+            },
+            text = {
+                if (clear){
+                    Text("This action will clear the whole List. If you want to continue with this action, please press the confirm Button ")
+                } else {
+                    Text("This action will delete your list. If you want to continue with this action, please press the confirm button")
+                }
 
-            onClick = {
-                //openDialog.value = false
-            }) {
-            Text("This is the dismiss Button")
-        }
+            },
+            confirmButton = {
+                Button(
+
+                    onClick = { onConfirm(listId, clear)
+                        //openDialog.value = false
+                    }) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                Button(
+
+                    onClick = {onDismiss()
+                        //openDialog.value = false
+                    }) {
+                    Text("Dismiss")
+                }
+            }
+        )
     }
-)
 
 }
-
