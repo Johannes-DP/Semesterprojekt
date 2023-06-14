@@ -49,3 +49,13 @@ fun DefaultPreview() {
         Greeting("Android")
     }
 }
+
+/*TODO: ViewModel für ganze App -> UserState speichern
+        Spiele aus der Datenbank lesen und anzeigen
+        Exceptionhandling Registration und Login überarbeiten
+        Navigation fixen
+        Seite so umbauen das man eingeloggt sein muss
+        Logout
+        Dummy Rating einbauen
+        Dummy Review einbauen
+*/
