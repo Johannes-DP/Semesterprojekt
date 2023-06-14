@@ -17,10 +17,14 @@ import com.example.semesterprojekt.screens.*
 fun Navigation(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route){
+    NavHost(navController = navController, startDestination = Screen.GameTestingScreen.route){
 
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController)
+        }
+
+        composable(route = Screen.GameTestingScreen.route){
+            GameTestingScreen()
         }
 
         composable(route = Screen.Registration.route){
