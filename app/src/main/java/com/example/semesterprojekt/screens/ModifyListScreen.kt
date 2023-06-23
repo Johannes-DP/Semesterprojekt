@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.getGameLists
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.EditGameList
 import com.example.semesterprojekt.widgets.EditTopAppBar
@@ -33,7 +32,7 @@ fun ModifyListScreen(
     listId:String?,
     userModel: UserStateViewModel
 
-) {
+) { /*
     val lists = getGameLists()
     var gameList = lists[0]
     for (item: GameList in lists) {
@@ -90,6 +89,7 @@ fun ModifyListScreen(
             }
         }
     }
+    */
 }
 
 

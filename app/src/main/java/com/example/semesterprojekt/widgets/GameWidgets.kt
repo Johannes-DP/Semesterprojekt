@@ -32,7 +32,7 @@ fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}){
     Card(
         modifier = Modifier
             .clickable {
-                onItemClick(gameList.id)
+                onItemClick(gameList.title)
             }
             .fillMaxWidth()
             .padding(5.dp),
@@ -44,26 +44,7 @@ fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}){
                 modifier = Modifier
                     .height(150.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(15.dp),
-                    contentAlignment = Alignment.TopStart
-                ) {
-                    Icon(
-                        tint = MaterialTheme.colors.secondary,
-                        imageVector = gameList.icon,
-                        contentDescription = "Icon"
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(15.dp),
-                    contentAlignment = Alignment.TopEnd
-                ) {
-                    Text(text = gameList.count.toString())
-                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -90,7 +71,9 @@ fun GameGrid(
     gameList: GameList,
     onItemClick: (String) -> Unit = {},
     onDeleteClick: (String) -> Unit = {},
-    onLongClick: (String) -> Unit = {}) {
+    onLongClick: (String) -> Unit = {})
+{
+    Log.d("gamegrid", game.toString())
 
     Card(
         modifier = Modifier
@@ -99,7 +82,7 @@ fun GameGrid(
             .padding(5.dp)
             .combinedClickable(
                 onClick = { onItemClick(game.id) },
-                onLongClick = { onLongClick(gameList.id) }),
+                onLongClick = { onLongClick(gameList.title) }),
         border = null,
         elevation = 0.dp
     ) {

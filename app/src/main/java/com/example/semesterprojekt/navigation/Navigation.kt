@@ -31,9 +31,6 @@ fun Navigation(){
             HomeScreen(navController = navController,userState,listViewModel)
         }
 
-        composable(route = Screen.GameTestingScreen.route){
-            GameTestingScreen()
-        }
 
         composable(route = Screen.Registration.route){
             Registration(navController = navController,userState)

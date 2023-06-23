@@ -145,7 +145,7 @@ interface Database{
                 .addOnFailureListener { e -> Log.d("testingtag", "Error writing document " + e) }
         }
 
-        suspend fun getUid(): String{
+        fun getUid(): String{
             Log.d("uid",Firebase.auth.currentUser!!.uid )
             return Firebase.auth.currentUser!!.uid
         }
