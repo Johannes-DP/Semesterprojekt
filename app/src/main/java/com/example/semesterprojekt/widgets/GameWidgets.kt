@@ -215,7 +215,7 @@ fun GameName(name: String, style: TextStyle){
 
 @Composable
 fun GameDetails(game: Game){
-    GameDetailRow(category = "Rating: ", argument = game.rating.toString(), category2 = "Amount: ", argument2 = game.ratingsCount.toString())
+    GameDetailRow(category = "Rating: ", argument = game.rating.toString(), category2 = "Amount: ") //argument2 = game.ratingsCount.toString())
     GameDetailRow(category = "Released in: ", game.releaseYear.toString())
     GameDetailRow(category = "Developer: ", game.developer)
     GameDetailRow(category = "Publisher: ", game.publisher)

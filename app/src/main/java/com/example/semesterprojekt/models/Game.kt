@@ -9,8 +9,11 @@ class Game(
     val platform: List<String>,
     val image: String,
     val rating: Float,
-    val ratingsCount: Int
-)
+   // val ratingsCount: Int
+){
+    constructor(): this("dummyId","dummyTitle", 2512, "dummyPub0", "dummyDev", listOf("dummy1","dummy2"), "dummyIm", 3.2f )
+}
+
 
 fun getGames(): List<Game>{
     return listOf(
@@ -23,7 +26,7 @@ fun getGames(): List<Game>{
             platform = listOf("PC"),
             image = "https://ksr-ugc.imgix.net/assets/032/794/881/eb344f1de1c45bcdfdf2126d4b2e77c4_original.png?ixlib=rb-4.0.2&crop=faces&w=1552&h=873&fit=crop&v=1616109932&auto=format&frame=1&q=92&s=daab41311fb537d00427d14aa9df39ba",
             rating = 8.3f,
-            ratingsCount = 327
+         //   ratingsCount = 327
 
         ),
         Game(
@@ -35,7 +38,7 @@ fun getGames(): List<Game>{
             platform = listOf("PC"),
             image = "https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/LoL_1200x1600-15ad6c981af8d98f50e833eac7843986",
             rating = 5.3f,
-            ratingsCount = 12654
+          //  ratingsCount = 12654
         ),
         Game(
             id = "Game3",
@@ -46,7 +49,7 @@ fun getGames(): List<Game>{
             platform = listOf("PC","Playstation 3","XBox 360", "Nintendo DS"),
             image = "https://assets-prd.ignimgs.com/2022/05/24/call-of-duty-modern-warfare-2-button-02-1653417394041.jpg",
             rating = 4.78f,
-            ratingsCount = 12356
+           // ratingsCount = 12356
         ),
         Game(
             id = "Game4",
@@ -57,7 +60,7 @@ fun getGames(): List<Game>{
             platform = listOf("PC","Playstation 1"),
             image = "null",
             rating = 9.3f,
-            ratingsCount = 5321
+           // ratingsCount = 5321
         ),
         Game(
             id = "Game5",
@@ -68,7 +71,7 @@ fun getGames(): List<Game>{
             platform = listOf("PC", "Playstation 2"),
             image = "https://upload.wikimedia.org/wikipedia/en/4/45/Age_of_Empires_II_Definitive_Edition_cover_art.jpeg",
             rating = 7.5f,
-            ratingsCount = 3126
+           // ratingsCount = 3126
         )
     )
 }
