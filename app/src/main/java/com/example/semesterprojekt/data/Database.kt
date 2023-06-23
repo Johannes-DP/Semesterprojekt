@@ -25,5 +25,10 @@ interface Database{
             val document = db.collection("Games").document("Game1").get().await()
             return document.toObject<Game>()
         }
+
+        suspend fun getUid(): String{
+            return Firebase.auth.currentUser!!.uid
+        }
+
     }
 }

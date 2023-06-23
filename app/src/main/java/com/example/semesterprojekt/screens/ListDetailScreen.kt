@@ -26,6 +26,7 @@ import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.getGames
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
@@ -33,7 +34,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListDetailScreen(
     navController: NavController,
-    listId:String?
+    listId:String?,
+    userModel: UserStateViewModel
 
 ) {
     val lists = getGameLists()

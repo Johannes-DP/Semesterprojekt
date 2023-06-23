@@ -19,12 +19,14 @@ import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.getGames
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
 
 @Composable
 fun GameDetailScreen(
     navController: NavController,
-    gameId:String?
+    gameId:String?,
+    userModel: UserStateViewModel
 
 ){
     val games = getGames()

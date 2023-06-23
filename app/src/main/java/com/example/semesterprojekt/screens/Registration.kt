@@ -12,20 +12,23 @@ import androidx.lifecycle.viewmodel.compose.*
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 import com.example.semesterprojekt.viewmodels.RegistrationViewModelFactory
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.DataTextfields
 import kotlinx.coroutines.launch
 import com.example.semesterprojekt.widgets.RegistrationTopBar
+import kotlinx.coroutines.handleCoroutineException
 
 @Composable
 fun Registration(
-    navController: NavController
+    navController: NavController,
+    userModel: UserStateViewModel
 ) {
     Scaffold(topBar = {RegistrationTopBar(
         title = "Registration",
         arrowBackClicked = { navController.popBackStack() })
     })
     {padding ->
-        RegistrationContent(navController = navController,Modifier.padding(padding))
+        RegistrationContent(navController = navController,Modifier.padding(padding),userModel)
 
     }
 }
@@ -33,7 +36,8 @@ fun Registration(
     @Composable
     fun RegistrationContent(
         navController: NavController,
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        userModel: UserStateViewModel
     ) {
         val factory = RegistrationViewModelFactory(repository = AuthRepository())
         val viewModel: RegistrationViewModel = viewModel(factory = factory)
@@ -62,6 +66,8 @@ fun Registration(
                         try {
                             viewModel.signUp()
                             showWarningR = false
+                            userModel.user = viewModel.logIn()
+                            navController.navigate(Screen.MainScreen.route)
                         } catch (e: Exception) {
                             print(e)
                             showWarningR = true
@@ -74,7 +80,8 @@ fun Registration(
                 Button(onClick = {
                     coroutineScope.launch {
                         try {
-                            viewModel.logIn()
+                            userModel.user = viewModel.logIn()
+                            navController.navigate(Screen.MainScreen.route)
                             showWarningL = false
                         } catch (e: Exception) {
                             print(e)

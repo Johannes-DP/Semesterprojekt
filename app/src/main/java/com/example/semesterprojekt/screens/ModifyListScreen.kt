@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.EditGameList
 import com.example.semesterprojekt.widgets.EditTopAppBar
 import com.example.semesterprojekt.widgets.GameGrid
@@ -29,7 +30,8 @@ import com.example.semesterprojekt.widgets.OtherTopAppBar
 @OptIn(ExperimentalMaterialApi::class)
 fun ModifyListScreen(
     navController: NavController,
-    listId:String?
+    listId:String?,
+    userModel: UserStateViewModel
 
 ) {
     val lists = getGameLists()

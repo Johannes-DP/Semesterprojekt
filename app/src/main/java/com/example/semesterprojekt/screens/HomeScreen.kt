@@ -18,13 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.getGameLists
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    userModel: UserStateViewModel
 ) {
     val modalBottomSheetState =
         rememberModalBottomSheetState(
@@ -44,7 +46,7 @@ fun HomeScreen(
 
         Scaffold(topBar = {
             HomeTopAppBar(
-                title = "Your Lists",
+                title = "Your Lists ",
                 menuContent = {
                     DropdownMenuItem(onClick = { /*TODO Navigate to EditProfileScreen*/ }) {
                         Row {

@@ -19,10 +19,11 @@ class RegistrationViewModel (private val repository: AuthRepository): ViewModel(
             repository.firebaseSignUp(email,password)
     }
 
-    suspend fun logIn(){
+    suspend fun logIn(): String{
         val email = textfieldUiState.email
         val password = textfieldUiState.password
         repository.firebaseLogIn(email,password)
+        return repository.getUid()
     }
 
     fun newState(newUiState: TextfieldUiState){
