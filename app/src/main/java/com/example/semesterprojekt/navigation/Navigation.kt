@@ -13,6 +13,7 @@ import com.example.semesterprojekt.screens.Screen
 import androidx.navigation.navArgument
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.*
+import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModelFactory
 
@@ -22,11 +23,12 @@ fun Navigation(){
     val navController = rememberNavController()
     val factory = UserStateViewModelFactory(repository = AuthRepository())
     val userState: UserStateViewModel =  viewModel(factory = factory)
+    val listViewModel = GameListViewModel()
 
     NavHost(navController = navController, startDestination = Screen.Registration.route){
 
         composable(route = Screen.MainScreen.route){
-            HomeScreen(navController = navController,userState)
+            HomeScreen(navController = navController,userState,listViewModel)
         }
 
         composable(route = Screen.GameTestingScreen.route){
@@ -44,7 +46,7 @@ fun Navigation(){
         composable(route = Screen.ListDetailScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             ListDetailScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState)
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState, listViewModel)
         }
         composable(route = Screen.ModifyListScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
@@ -58,3 +60,4 @@ fun Navigation(){
             }
         }
 }
+
