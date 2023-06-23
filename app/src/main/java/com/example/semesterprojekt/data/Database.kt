@@ -2,7 +2,10 @@ package com.example.semesterprojekt.data
 
 import android.util.Log
 import com.example.semesterprojekt.models.Game
+import com.example.semesterprojekt.models.GameList
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -38,23 +41,89 @@ interface Database{
             //return document.value.toObject<Game>()!!
             return document.toString()
         }
-
-        suspend fun getGames2(): Game? {
-            //val gameList: ArrayList<>
+        suspend fun getLists(
+            gameListArrayList: ArrayList<GameList>
+        ): ArrayList<GameList>{
             val db = Firebase.firestore
-            val docRef = db.collection("Games").document("Game6")
+            db.collection("users").document(getUid())
+                .get()
+                .addOnSuccessListener { fieldSnapshot ->
+                    if (fieldSnapshot.getData()?.isNotEmpty() == true){
+                        val list = fieldSnapshot.data
+                        if (list != null) {
+                            for (document in list){
+                                Log.d("testnow", document.toString())
+                                val gameList = GameList(document.key,
+                                    document.value as List<DocumentReference>,
+                                    ArrayList()
+                                )
+                                gameListArrayList.add(gameList)
+                            }
+                        }
+
+                    }
+                  //  val gameList = fieldSnapshot.data.toObject<GameList>()
+                   // Log.d("after", gameList.toString())
+                }
+                .await()
+            return gameListArrayList
+        }
+
+        suspend fun getGames2(
+            reference: DocumentReference,
+            gameArrayList: ArrayList<Game>
+        ): ArrayList<Game> {
+
+            val db = Firebase.firestore
+            db.collection("Games").document(reference.id)
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot.exists()){
-                        val game = documentSnapshot.toObject<Game>()
-                        Log.d("testing Game", game.toString())
+                    if (documentSnapshot.getData()?.isNotEmpty() == true){
+                        val game = documentSnapshot.toObject(Game::class.java)
+                        if (game != null) {
+                            Log.d("test", game.title)
+                            gameArrayList.add(game)
+                        }
 
+                    }
+                    //  val gameList = fieldSnapshot.data.toObject<GameList>()
+                    // Log.d("after", gameList.toString())
+                }
+
+                .addOnFailureListener{
+                    Log.d("Failure", "not able to get games")
+                }
+                .await()
+            return gameArrayList
+        }
+        suspend fun getGamesRef(
+            gameArrayList: ArrayList<Game>
+        ): ArrayList<Game> {
+
+            val db = Firebase.firestore
+            db.collection("Games")
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (!documentSnapshot.isEmpty){
+                        val list = documentSnapshot.documents
+                        for (document in list){
+                            val game: Game? = document.toObject(Game::class.java)
+                            if (game != null){
+                                Log.d("success", game.title)
+                                gameArrayList.add(game)
+                                Log.d("List", gameArrayList.toString())
+                            }
+                        }
 
                     }
 
                 }
-            return null
 
+                .addOnFailureListener{
+                    Log.d("Failure", "not able to get games")
+                }
+                .await()
+            return gameArrayList
         }
 
         fun addUsertoCollection(){
@@ -76,7 +145,8 @@ interface Database{
                 .addOnFailureListener { e -> Log.d("testingtag", "Error writing document " + e) }
         }
 
-        fun getUid(): String{
+        suspend fun getUid(): String{
+            Log.d("uid",Firebase.auth.currentUser!!.uid )
             return Firebase.auth.currentUser!!.uid
         }
 

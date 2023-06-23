@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.getGameLists
+import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
-    userModel: UserStateViewModel
+    userModel: UserStateViewModel,
+    gameListViewModel: GameListViewModel,
 ) {
     val modalBottomSheetState =
         rememberModalBottomSheetState(
@@ -102,7 +103,8 @@ fun HomeScreen(
             }
             MainContent(
                 modifier = Modifier.padding(padding),
-                navController = navController
+                navController = navController,
+                gameListViewModel = gameListViewModel
             )
         }
     }
@@ -112,11 +114,13 @@ fun HomeScreen(
 @Composable
 fun MainContent(
     modifier: Modifier,
-    navController: NavController
+    navController: NavController,
+    gameListViewModel: GameListViewModel
 ){
     GameLists(
         modifier = modifier,
-        navController = navController
+        navController = navController,
+        gameListViewModel = gameListViewModel
     )
 }
 
@@ -124,10 +128,13 @@ fun MainContent(
 fun GameLists(
     modifier: Modifier,
     navController: NavController,
-    gameLists: List<GameList> = getGameLists())
+    gameListViewModel: GameListViewModel)
 {
+
+    val gameLists = gameListViewModel.gameLists
+    Log.d("Lists???", gameLists.toString())
     LazyVerticalGrid(columns = GridCells.Fixed(2)){
-        items(gameLists){ gameList ->
+        items(items = gameLists){ gameList ->
             GameListGrid(
                 gameList = gameList,
                 onItemClick = {listId ->
