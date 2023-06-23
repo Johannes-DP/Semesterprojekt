@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -38,7 +39,7 @@ fun GameDetailScreen(
     }
     Scaffold(topBar = {
         OtherTopAppBar(
-            arrowBackClicked = {navController.popBackStack()},
+            arrowBackClicked = {navController.popBackStack()/*/Log.d("go back","go back")*/},
             title = " "+ game.title,
             menuContent = {
                 DropdownMenuItem(onClick = { /*TODO Navigate to EditProfileScreen*/ }) {

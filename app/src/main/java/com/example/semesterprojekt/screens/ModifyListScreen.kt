@@ -50,10 +50,7 @@ fun ModifyListScreen(
         topBar = {
             EditTopAppBar(
                 arrowBackClicked = {
-                    Log.d(
-                        "testing",
-                        "hereListDetail"
-                    ) /* navController.popBackStack(),*/
+                     navController.popBackStack()
                 },
                 title = " " + gameList.title,
 

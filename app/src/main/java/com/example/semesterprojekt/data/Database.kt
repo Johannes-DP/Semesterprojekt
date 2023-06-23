@@ -48,8 +48,12 @@ interface Database{
                 .addOnFailureListener { e -> Log.d("testingtag", "Error writing document " + e) }
         }
 
-        suspend fun getUid(): String{
+        fun getUid(): String{
             return Firebase.auth.currentUser!!.uid
+        }
+
+        fun logout(){
+            Firebase.auth.signOut()
         }
 
     }

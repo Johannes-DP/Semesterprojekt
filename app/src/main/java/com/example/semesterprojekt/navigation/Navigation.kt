@@ -1,6 +1,7 @@
 package com.example.semesterprojekt.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,16 +11,19 @@ import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
 
 import androidx.navigation.navArgument
+import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.*
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
+import com.example.semesterprojekt.viewmodels.UserStateViewModelFactory
 
 
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    val userState = UserStateViewModel()
+    val factory = UserStateViewModelFactory(repository = AuthRepository())
+    val userState: UserStateViewModel =  viewModel(factory = factory)
 
-    NavHost(navController = navController, startDestination = Screen.GameTestingScreen.route){
+    NavHost(navController = navController, startDestination = Screen.MainScreen.route){
 
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController,userState)

@@ -11,6 +11,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,25 +63,24 @@ fun HomeScreen(
                                     .padding(4.dp)
                             )
                         }
-
+                    }
+                    DropdownMenuItem(onClick = {
+                        userModel.logout()
+                        navController.navigate(Screen.Registration.route)
+                    }) {
                         Row {
-                            IconButton(
-                                onClick = {navController.navigate(Screen.Registration.route)}){
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "Registration/Login",
-                                    modifier = Modifier.padding(4.dp)
-                                )
-
+                            Icon(
+                                imageVector = Icons.Default.ExitToApp,
+                                contentDescription = "Logout",
+                                modifier = Modifier.padding(4.dp)
+                            )
                             Text(
-                                text = "Login", modifier = Modifier
+                                text = "Logout", modifier = Modifier
                                     .width(100.dp)
                                     .padding(4.dp)
                             )
-                            }
                         }
                     }
-                    /*TODO Add more Items*/
                 }
             )
         },

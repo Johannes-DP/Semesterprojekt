@@ -64,10 +64,7 @@ fun ListDetailScreen(
         Scaffold(topBar = {
             OtherTopAppBar(
                 arrowBackClicked = {
-                    Log.d(
-                        "testing",
-                        "hereListDetail"
-                    ) /* navController.popBackStack(),*/
+                    navController.popBackStack()
                 },
                 title = " " + gameList.title,
                 menuContent = {
