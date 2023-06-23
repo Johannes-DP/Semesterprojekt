@@ -11,16 +11,18 @@ import com.example.semesterprojekt.screens.Screen
 
 import androidx.navigation.navArgument
 import com.example.semesterprojekt.screens.*
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 
 
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
+    val userState = UserStateViewModel()
 
     NavHost(navController = navController, startDestination = Screen.GameTestingScreen.route){
 
         composable(route = Screen.MainScreen.route){
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController,userState)
         }
 
         composable(route = Screen.GameTestingScreen.route){
@@ -28,23 +30,23 @@ fun Navigation(){
         }
 
         composable(route = Screen.Registration.route){
-            Registration(navController = navController)
+            Registration(navController = navController,userState)
         }
 
         composable(route = Screen.ListDetailScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             ListDetailScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY))
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState)
         }
         composable(route = Screen.ModifyListScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             ModifyListScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY))
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState)
         }
         composable(route = Screen.GameDetailScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             GameDetailScreen(navController = navController,
-                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY))
+                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY),userState)
             }
         }
 }
