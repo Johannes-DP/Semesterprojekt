@@ -24,11 +24,11 @@ fun GameTestingScreen(
     developer = "Square",
     platform = listOf("PC","Playstation 1"),
     image = "null",
-    rating = 9.3f,
-    ratingsCount = 5321)
+    rating = 9.3f,)
+    //ratingsCount = 5321)
 
     coroutine.launch {
-        text = Database.getGames()
+        text = Database.getGames2().toString()
     }
 
     Row() {
