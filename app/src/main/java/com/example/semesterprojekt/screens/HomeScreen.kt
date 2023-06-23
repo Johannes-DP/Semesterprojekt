@@ -50,15 +50,15 @@ fun HomeScreen(
             HomeTopAppBar(
                 title = "Your Lists ",
                 menuContent = {
-                    DropdownMenuItem(onClick = { /*TODO Navigate to EditProfileScreen*/ }) {
+                    DropdownMenuItem(onClick = { navController.navigate(Screen.AddGameScreen.route) }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Profile",
+                                contentDescription = "Add Game",
                                 modifier = Modifier.padding(4.dp)
                             )
                             Text(
-                                text = "Edit Profile", modifier = Modifier
+                                text = "Add Game", modifier = Modifier
                                     .width(100.dp)
                                     .padding(4.dp)
                             )
@@ -66,7 +66,7 @@ fun HomeScreen(
                     }
                     DropdownMenuItem(onClick = {
                         userModel.logout()
-                        navController.navigate(Screen.Registration.route)
+                        navController.popBackStack()
                     }) {
                         Row {
                             Icon(

@@ -84,5 +84,29 @@ interface Database{
             Firebase.auth.signOut()
         }
 
+        suspend fun addGameToFirebase(game: Game){
+            val db = Firebase.firestore
+            var x: Int = 7
+
+            val hash = hashMapOf(
+                "developer" to game.developer,
+                "image" to game.image,
+                "platform" to game.platform,
+                "publisher" to game.publisher,
+                "rating" to game.rating,
+                "releaseYear" to game.releaseYear,
+                "title" to game.title
+
+
+            )
+            db.collection("Games").document("Game"+x)
+                .set(hash)
+                .addOnSuccessListener { Log.d("Success","Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document",e)}
+
+            x+=1
+
+        }
+
     }
 }

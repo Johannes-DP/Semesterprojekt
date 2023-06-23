@@ -1,6 +1,7 @@
 package com.example.semesterprojekt.repository
 
 import com.example.semesterprojekt.data.Database
+import com.example.semesterprojekt.models.Game
 
 
 class AuthRepository() {
@@ -13,4 +14,5 @@ class AuthRepository() {
 
     fun logout() = Database.logout()
 
+    suspend fun addGameToFirebase(game: Game) = Database.addGameToFirebase(game)
 }

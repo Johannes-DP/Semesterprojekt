@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.semesterprojekt.data.Database
 import com.example.semesterprojekt.models.Game
+import com.example.semesterprojekt.models.Platform
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
@@ -19,12 +20,12 @@ fun GameTestingScreen(
     val coroutine = rememberCoroutineScope()
     var game = Game(id = "Game4",
     title = "Final Fantasy VIII",
-    releaseYear = 1999,
+    releaseYear = "1999",
     publisher = "Square",
     developer = "Square",
-    platform = listOf("PC","Playstation 1"),
+    platform = listOf(Platform.PC, Platform.Legacy),
     image = "null",
-    rating = 9.3f,)
+    rating = "9.3f",)
     //ratingsCount = 5321)
 
     coroutine.launch {
