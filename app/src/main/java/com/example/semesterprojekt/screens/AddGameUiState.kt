@@ -1,13 +1,11 @@
 package com.example.semesterprojekt.screens
 
-import android.media.Rating
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.ListItemSelectable
 import com.example.semesterprojekt.models.Platform
 import com.example.semesterprojekt.models.Validator
-import java.util.*
 
 data class AddGameUiState(
     val title: String = "",

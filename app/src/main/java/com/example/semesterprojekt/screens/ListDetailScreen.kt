@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
@@ -34,10 +33,11 @@ fun ListDetailScreen(
     navController: NavController,
     listId:String?,
     userModel: UserStateViewModel,
-    gameListViewModel: GameListViewModel
 
 ) {
+    val gameListViewModel = GameListViewModel.getInstance()
     var index = 0
+    Log.d("size", gameListViewModel.gameLists.size.toString())
     for (i in 0 until gameListViewModel.gameLists.size) {
         if (gameListViewModel.gameLists[i].title == listId) {
             index = i
@@ -156,12 +156,11 @@ fun ListDetailScreen(
                             gameList = gameListView,
                             onItemClick = { gameId ->
                                 navController.navigate(Screen.GameDetailScreen.addId(gameId))
-                            },
-                            onLongClick = { listId ->
-                                navController.navigate(Screen.ModifyListScreen.addId(listId))
                             }
 
-                        )
+                        ) { listId ->
+                            navController.navigate(Screen.ModifyListScreen.addId(listId))
+                        }
 
                     }
                 }

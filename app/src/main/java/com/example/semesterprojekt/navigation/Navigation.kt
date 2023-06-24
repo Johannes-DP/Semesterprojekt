@@ -23,12 +23,12 @@ fun Navigation(){
     val navController = rememberNavController()
     val factory = UserStateViewModelFactory(repository = AuthRepository())
     val userState: UserStateViewModel =  viewModel(factory = factory)
-    val listViewModel = GameListViewModel()
+   // val listViewModel = GameListViewModel()
 
     NavHost(navController = navController, startDestination = Screen.SearchGameScreen.route){
 
         composable(route = Screen.MainScreen.route){
-            HomeScreen(navController = navController,userState,listViewModel)
+            HomeScreen(navController = navController,userState)
         }
 
         composable(route = Screen.Registration.route){
@@ -46,7 +46,7 @@ fun Navigation(){
         composable(route = Screen.ListDetailScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             ListDetailScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState, listViewModel)
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState)
         }
         composable(route = Screen.ModifyListScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->

@@ -3,13 +3,13 @@ package com.example.semesterprojekt.data
 import android.util.Log
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.getDefault
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
@@ -65,8 +65,9 @@ interface Database{
                         }
 
                     }
-                  //  val gameList = fieldSnapshot.data.toObject<GameList>()
-                   // Log.d("after", gameList.toString())
+                }
+                .addOnFailureListener{
+                    Log.d("Failure", "not able to get Lists")
                 }
                 .await()
             return gameListArrayList

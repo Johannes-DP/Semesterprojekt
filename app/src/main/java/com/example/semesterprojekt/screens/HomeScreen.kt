@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
@@ -10,12 +11,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
@@ -26,8 +29,9 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController,
     userModel: UserStateViewModel,
-    gameListViewModel: GameListViewModel,
+
 ) {
+    val gameListViewModel = GameListViewModel.getInstance()
     val modalBottomSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -135,6 +139,7 @@ fun MainContent(
     )
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun GameLists(
     modifier: Modifier,
@@ -142,10 +147,12 @@ fun GameLists(
     gameListViewModel: GameListViewModel)
 {
 
-    val gameLists = gameListViewModel.gameLists
-    Log.d("Lists???", gameLists.toString())
+    val gameListsState = remember {gameListViewModel.gameLists}
+
+
+    Log.d("Lists???", gameListsState.toString())
     LazyVerticalGrid(columns = GridCells.Fixed(2)){
-        items(items = gameLists){ gameList ->
+        items(items = gameListsState){ gameList ->
             GameListGrid(
                 gameList = gameList,
                 onItemClick = {listId ->
