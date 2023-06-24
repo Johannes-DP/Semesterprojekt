@@ -1,15 +1,16 @@
 package com.example.semesterprojekt.data
 
+import android.content.ContentValues
+import android.content.Context
 import android.util.Log
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.StateFlow
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,9 +45,7 @@ interface Database{
             //return document.value.toObject<Game>()!!
             return document.toString()
         }
-        suspend fun getLists(
-            gameListArrayList: ArrayList<GameList>
-        ): ArrayList<GameList>{
+        suspend fun getLists(gameLists: ArrayList<GameList>): ArrayList<GameList> {
             val db = Firebase.firestore
             db.collection("users").document(getUid())
                 .get()
@@ -60,7 +59,7 @@ interface Database{
                                     document.value as List<DocumentReference>,
                                     ArrayList()
                                 )
-                                gameListArrayList.add(gameList)
+                                gameLists.add(gameList)
                             }
                         }
 
@@ -70,8 +69,36 @@ interface Database{
                     Log.d("Failure", "not able to get Lists")
                 }
                 .await()
-            return gameListArrayList
+            return gameLists
         }
+
+       /* suspend fun listenToChange(
+            gameListArrayList: ArrayList<GameList>
+        ): ArrayList<GameList>{
+            val db = Firebase.firestore
+            db.collection("users").document(getUid())
+                .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(ContentValues.TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    val documents = snapshot.documentChanges
+
+                    for (change in documents) {
+                        val gameList: GameList = change.document.toObject(GameList::class.java)
+                        gameList.title = change.document.title
+                        val oldGameList = getGoalsById(goal.Id!!, goalArrayList)
+                        if (oldGameList != null){
+                            gameListArrayList.remove(oldGameList)
+                        }
+                        gameListArrayList.add(gameList)
+                    }
+                }
+            }
+            return gameListArrayList
+        }*/
 
         suspend fun getGames2(
             reference: DocumentReference,
@@ -92,35 +119,6 @@ interface Database{
                     }
                     //  val gameList = fieldSnapshot.data.toObject<GameList>()
                     // Log.d("after", gameList.toString())
-                }
-
-                .addOnFailureListener{
-                    Log.d("Failure", "not able to get games")
-                }
-                .await()
-            return gameArrayList
-        }
-        suspend fun getGamesRef(
-            gameArrayList: ArrayList<Game>
-        ): ArrayList<Game> {
-
-            val db = Firebase.firestore
-            db.collection("Games")
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (!documentSnapshot.isEmpty){
-                        val list = documentSnapshot.documents
-                        for (document in list){
-                            val game: Game? = document.toObject(Game::class.java)
-                            if (game != null){
-                                Log.d("success", game.title)
-                                gameArrayList.add(game)
-                                Log.d("List", gameArrayList.toString())
-                            }
-                        }
-
-                    }
-
                 }
 
                 .addOnFailureListener{
@@ -159,9 +157,10 @@ interface Database{
 
         suspend fun addGameToFirebase(game: Game){
             val db = Firebase.firestore
-            val id: String = UUID.randomUUID().toString()
+            val id: String = game.id
 
             val hash = hashMapOf(
+                "id" to game.id,
                 "developer" to game.developer,
                 "image" to game.image,
                 "platform" to game.platform,
@@ -200,18 +199,19 @@ interface Database{
         }
          suspend fun getGameById(id:String?): Game{
             val db = Firebase.firestore
-            var game: Game = Game()
-            if(id != null) {
-                game = Game(id)
-                val ref = db.collection("Games").document(id)
-                val query = ref
+             var gameView = Game()
+            if(id != "dummyId") {
+                db.collection("Games").document(id!!)
                     .get()
                     .addOnSuccessListener { document ->
                         if(document != null) {
                             Log.d("Database",id)
                             Log.d("Database",document.toString() +" found")
-                            game = document.toObject(Game::class.java)!!
+                            val game = document.toObject(Game::class.java)!!
                             Log.d("Database",game.title)
+                            if (game != null){
+                                gameView = game
+                            }
 
                         }
                     }
@@ -220,8 +220,7 @@ interface Database{
                     }
                     .await()
             }
-
-            return game
+             return gameView
         }
 
     }

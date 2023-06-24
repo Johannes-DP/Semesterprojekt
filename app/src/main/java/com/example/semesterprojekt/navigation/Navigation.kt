@@ -25,7 +25,7 @@ fun Navigation(){
     val userState: UserStateViewModel =  viewModel(factory = factory)
    // val listViewModel = GameListViewModel()
 
-    NavHost(navController = navController, startDestination = Screen.SearchGameScreen.route){
+    NavHost(navController = navController, startDestination = Screen.Registration.route){
 
         composable(route = Screen.MainScreen.route){
             HomeScreen(navController = navController,userState)

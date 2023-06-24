@@ -3,7 +3,7 @@ package com.example.semesterprojekt.models
 import java.util.*
 
 class Game(
-    var id: String = UUID.randomUUID().toString(),
+    var id: String /*= UUID.randomUUID().toString()*/,
     var title: String,
     var releaseYear: String,
     var publisher: String,

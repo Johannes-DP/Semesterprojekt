@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,15 +38,19 @@ fun ListDetailScreen(
 
 ) {
     val gameListViewModel = GameListViewModel.getInstance()
+    val gameListsState by gameListViewModel.gameListsState.collectAsState()
     var index = 0
-    Log.d("size", gameListViewModel.gameLists.size.toString())
-    for (i in 0 until gameListViewModel.gameLists.size) {
-        if (gameListViewModel.gameLists[i].title == listId) {
-            index = i
+    Log.d("size", gameListsState.size.toString())
+    if (!gameListsState.isEmpty()){
+        for (i in 0 until gameListsState.size) {
+            if (gameListsState[i].title == listId) {
+                index = i
+            }
         }
+
     }
-    val gameListView = gameListViewModel.gameLists[index]
-    Log.d("listdetail", gameListView.toString())
+    val gameListView = gameListsState[index]
+
 
     val modalBottomSheetState =
         rememberModalBottomSheetState(
@@ -150,11 +156,13 @@ fun ListDetailScreen(
                     Log.d("test", "hello2")
                     Log.d("test", gameListView.games.toString())
                     items(gameListView.games) { game ->
-                        Log.d("heeeere", "testing")
+                        Log.d("heeeere", game.id)
+                        Log.d("testingnow", game.toString())
                         GameGrid(
                             game = game,
                             gameList = gameListView,
                             onItemClick = { gameId ->
+                                Log.d("this is the current ID", gameId)
                                 navController.navigate(Screen.GameDetailScreen.addId(gameId))
                             }
 

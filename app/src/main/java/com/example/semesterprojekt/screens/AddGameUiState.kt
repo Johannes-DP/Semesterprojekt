@@ -6,6 +6,7 @@ import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.ListItemSelectable
 import com.example.semesterprojekt.models.Platform
 import com.example.semesterprojekt.models.Validator
+import java.util.*
 
 data class AddGameUiState(
     val title: String = "",
@@ -38,6 +39,7 @@ fun AddGameUiState.selectPlatform(item: ListItemSelectable): List<Platform>{
 }
 
 fun AddGameUiState.toGame(): Game = Game(
+    id = UUID.randomUUID().toString(),
     title = title,
     releaseYear = releaseYear,
     publisher = publisher,

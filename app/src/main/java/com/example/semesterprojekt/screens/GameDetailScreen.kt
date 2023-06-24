@@ -23,9 +23,7 @@ import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.getGames
 import com.example.semesterprojekt.repository.AuthRepository
-import com.example.semesterprojekt.viewmodels.DetailViewModel
-import com.example.semesterprojekt.viewmodels.DetailViewModelFactory
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
+import com.example.semesterprojekt.viewmodels.*
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
@@ -38,53 +36,57 @@ fun GameDetailScreen(
     gameId:String?,
     userModel: UserStateViewModel
 
-){
-    val factory = DetailViewModelFactory(repository = AuthRepository())
+) {
+
+    val gameViewModel = GameViewModel(gameId)
+    val game by gameViewModel.gameState.collectAsState()
+
+ /*   val factory = DetailViewModelFactory(repository = AuthRepository())
     val detailViewModel: DetailViewModel = viewModel(factory = factory)
 
     val coroutineScope = rememberCoroutineScope()
 
-        coroutineScope.launch {
-            detailViewModel.getGameById(gameId)
-        }
+    coroutineScope.launch {
+        detailViewModel.getGameById(gameId)
+    }
 
-        var game = detailViewModel.game
+    var game = detailViewModel.game
+*/
+    Scaffold(topBar = {
+        MinimalisticAppBar(
+            arrowBackClicked = { navController.popBackStack() },
+            title = " " + game.title
+        )
 
-            Scaffold(topBar = {
-                MinimalisticAppBar(
-                    arrowBackClicked = { navController.popBackStack() },
-                    title = " " + game.title
-                )
+    }) { padding ->
+        Column(
+            modifier = Modifier.padding(padding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Card(
+                modifier = Modifier
+                    .width(170.dp)
+                    .padding(10.dp),
+                shape = RoundedCornerShape(corner = CornerSize(15.dp)),
+                elevation = 5.dp,
 
-            }) { padding ->
-                Column(
-                    modifier = Modifier.padding(padding),
-                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Card(
+                Column {
+                    Box(
                         modifier = Modifier
-                            .width(170.dp)
-                            .padding(10.dp),
-                        shape = RoundedCornerShape(corner = CornerSize(15.dp)),
-                        elevation = 5.dp,
-
-                        ) {
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .height(250.dp)
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                GameImage(imageUrl = game.image)
-                            }
-                        }
+                            .height(250.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GameImage(imageUrl = game.image)
                     }
-                    GameName(name = game.title, MaterialTheme.typography.h5)
-                    GameDetails(game = game)
                 }
             }
-
+            GameName(name = game.title, MaterialTheme.typography.h5)
+            GameDetails(game = game)
+            Log.d("here first?", game.title)
+        }
+    }
 }
 
 

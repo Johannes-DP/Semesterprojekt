@@ -18,7 +18,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
@@ -139,7 +141,6 @@ fun MainContent(
     )
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun GameLists(
     modifier: Modifier,
@@ -147,8 +148,8 @@ fun GameLists(
     gameListViewModel: GameListViewModel)
 {
 
-    val gameListsState = remember {gameListViewModel.gameLists}
 
+    val gameListsState by gameListViewModel.gameListsState.collectAsState()
 
     Log.d("Lists???", gameListsState.toString())
     LazyVerticalGrid(columns = GridCells.Fixed(2)){

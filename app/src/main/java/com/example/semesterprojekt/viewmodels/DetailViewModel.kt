@@ -6,6 +6,7 @@ import com.example.semesterprojekt.repository.AuthRepository;
 
 class DetailViewModel (private val repository: AuthRepository): ViewModel(){
 
+
     var game = Game()
 
     suspend fun getGameById(id: String?){
