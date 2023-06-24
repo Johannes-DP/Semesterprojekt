@@ -42,17 +42,14 @@ fun GameDetailScreen(
     val factory = DetailViewModelFactory(repository = AuthRepository())
     val detailViewModel: DetailViewModel = viewModel(factory = factory)
 
-    var game = Game()
     val coroutineScope = rememberCoroutineScope()
 
-    if( gameId != null) {
-        game = Game(gameId)
-        Log.d("Detail Screen ", game.id)
+
         coroutineScope.launch {
-            game = detailViewModel.getGameById(gameId)
-            Log.d("Detail Screen Game Title", game.title)
+            detailViewModel.getGameById(gameId)
         }
 
+        var game = detailViewModel.game
 
             Scaffold(topBar = {
                 MinimalisticAppBar(
@@ -88,7 +85,7 @@ fun GameDetailScreen(
                     GameDetails(game = game)
                 }
             }
-        }
+
 }
 
 
