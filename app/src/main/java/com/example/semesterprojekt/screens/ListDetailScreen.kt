@@ -24,9 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.semesterprojekt.models.Game
+import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.viewmodels.GameListViewModel
+import com.example.semesterprojekt.viewmodels.ListDetailViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -37,7 +41,11 @@ fun ListDetailScreen(
     userModel: UserStateViewModel,
 
 ) {
-    val gameListViewModel = GameListViewModel.getInstance()
+    val listDetailViewModel = ListDetailViewModel(listId)
+    val gameListState by listDetailViewModel.gameListState.collectAsState()
+
+    /*var gameListView = GameList("",emptyList<DocumentReference>(), ArrayList<Game>() )
+    val gameListViewModel = GameListViewModel()
     val gameListsState by gameListViewModel.gameListsState.collectAsState()
     var index = 0
     Log.d("size", gameListsState.size.toString())
@@ -47,9 +55,10 @@ fun ListDetailScreen(
                 index = i
             }
         }
+        gameListView = gameListsState[index]
 
-    }
-    val gameListView = gameListsState[index]
+    }*/
+
 
 
     val modalBottomSheetState =
@@ -61,7 +70,11 @@ fun ListDetailScreen(
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
-            BottomSheetAddGame()
+            BottomSheetAddGame(
+                listDetailViewModel = listDetailViewModel,
+                onDetailClick = {String -> navController.navigate(Screen.GameDetailScreen.addId(String))},
+                listId = listId!!
+            )
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -154,22 +167,23 @@ fun ListDetailScreen(
                 Log.d("test", "hello")
                 LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                     Log.d("test", "hello2")
-                    Log.d("test", gameListView.games.toString())
-                    items(gameListView.games) { game ->
-                        Log.d("heeeere", game.id)
-                        Log.d("testingnow", game.toString())
-                        GameGrid(
-                            game = game,
-                            gameList = gameListView,
-                            onItemClick = { gameId ->
-                                Log.d("this is the current ID", gameId)
-                                navController.navigate(Screen.GameDetailScreen.addId(gameId))
+                    if (!gameListState.games.isEmpty()) {
+                        items(gameListState.games) { game ->
+                            Log.d("heeeere", game.id)
+                            Log.d("testingnow", game.toString())
+                            GameGrid(
+                                game = game,
+                                gameList = gameListState,
+                                onItemClick = { gameId ->
+                                    Log.d("this is the current ID", gameId)
+                                    navController.navigate(Screen.GameDetailScreen.addId(gameId))
+                                }
+
+                            ) { listId ->
+                                navController.navigate(Screen.ModifyListScreen.addId(listId))
                             }
 
-                        ) { listId ->
-                            navController.navigate(Screen.ModifyListScreen.addId(listId))
                         }
-
                     }
                 }
 

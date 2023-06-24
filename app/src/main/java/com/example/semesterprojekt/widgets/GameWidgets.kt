@@ -1,25 +1,25 @@
 package com.example.semesterprojekt.widgets
 
+import android.graphics.Paint.Align
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.semesterprojekt.R
@@ -166,6 +166,53 @@ fun GameGrid(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun GameSearchGrid(
+    game: Game,
+    onAddToListClick: (String) -> Unit = {},
+    onDetailClick: (String) -> Unit = {})
+{
+    Log.d("gamegrid", game.toString())
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(5.dp),
+        border = null,
+        elevation = 0.dp
+    ) {
+        Column() {
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(corner = CornerSize(15.dp)),
+                elevation = 5.dp,
+
+                ) {
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .height(150.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GameImage(imageUrl = game.image)
+                        AddToListIcon(game = game, onAddToListClick = onAddToListClick)
+                        DetailIcon(game = game, onDetailClick = onDetailClick)
+                    }
+
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            GameName(game.title, MaterialTheme.typography.body2)
+            //Text(text = "Movie Images", style = MaterialTheme.typography.h5)
+        }
+    }
+}
+
 /*@Composable
 fun GameGrid(
     game: Game,
@@ -226,7 +273,7 @@ fun EditGameList(game: Game){
 
         Text(text = game.title)
 
-        DeleteIcon(game = game, onDeleteClick = { gameId -> Log.d("GameDelete", gameId)})
+        //DeleteIcon(game = game, onDeleteClick = { gameId -> Log.d("GameDelete", gameId)})
     }
     Divider()
 }
@@ -265,21 +312,41 @@ fun GameImage(imageUrl: String) {
 }
 
 @Composable
-fun DeleteIcon(game: Game, onDeleteClick: (String) -> Unit){
+fun AddToListIcon(game: Game, onAddToListClick: (String) -> Unit){
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(5.dp),
-        contentAlignment = Alignment.TopEnd
+            .height(300.dp)
+            .padding(5.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterEnd
     ) {
         Icon(
-            tint = MaterialTheme.colors.primary,
-            imageVector = Icons.Default.Delete,
-            contentDescription = "Delete Movie",
-            modifier = Modifier.clickable { onDeleteClick(game.id) }
+            tint = MaterialTheme.colors.secondary,
+            imageVector = Icons.Default.Add,
+            contentDescription = "AddGameToList",
+            modifier = Modifier.clickable { onAddToListClick(game.id) }.size(70.dp)
         )
     }
 }
+
+@Composable
+fun DetailIcon(game: Game, onDetailClick: (String) -> Unit){
+    Box(
+        modifier = Modifier
+            .height(300.dp)
+            .padding(5.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Icon(
+            tint = MaterialTheme.colors.secondary,
+            imageVector = Icons.Default.Info,
+            contentDescription = "ShowGameDetails",
+            modifier = Modifier.clickable { onDetailClick(game.id) }.size(70.dp)
+        )
+    }
+}
+
 
 @Composable
 fun GameName(name: String, style: TextStyle){

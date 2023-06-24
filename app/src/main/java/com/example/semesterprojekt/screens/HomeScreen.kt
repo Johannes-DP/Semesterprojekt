@@ -33,7 +33,7 @@ fun HomeScreen(
     userModel: UserStateViewModel,
 
 ) {
-    val gameListViewModel = GameListViewModel.getInstance()
+    val gameListViewModel = GameListViewModel()
     val modalBottomSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -147,7 +147,6 @@ fun GameLists(
     navController: NavController,
     gameListViewModel: GameListViewModel)
 {
-
 
     val gameListsState by gameListViewModel.gameListsState.collectAsState()
 
