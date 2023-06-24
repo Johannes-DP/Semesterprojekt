@@ -33,7 +33,7 @@ fun ModifyListScreen(
     userModel: UserStateViewModel
 
 ) { /*
-    val lists = getGameLists()
+    /*val lists = getGameLists()
     var gameList = lists[0]
     for (item: GameList in lists) {
         if (item.id == listId) {
@@ -88,7 +88,7 @@ fun ModifyListScreen(
                 }
             }
         }
-    }
+    }*/
     */
 }
 

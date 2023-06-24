@@ -67,6 +67,21 @@ fun OtherTopAppBar(
 }
 
 @Composable
+fun MinimalisticAppBar(
+    arrowBackClicked: () -> Unit = {},
+    title: String = "default",
+){
+    TopAppBar(
+        title = { Text( title) },
+        navigationIcon = {
+            IconButton(onClick = arrowBackClicked ) {
+                Icon(imageVector = Icons.Default.ArrowBack, "getBack")
+
+            }
+        })
+}
+
+@Composable
 fun EditTopAppBar(
     arrowBackClicked: () -> Unit = {},
     title: String = "default"

@@ -3,19 +3,33 @@ package com.example.semesterprojekt.models
 import java.util.*
 
 class Game(
-    val id: String = UUID.randomUUID().toString(),
-    val title: String,
-    val releaseYear: String,
-    val publisher: String,
-    val developer: String,
-    val platform: List<Platform>,
-    val image: String,
-    val rating: String,
+    var id: String = UUID.randomUUID().toString(),
+    var title: String,
+    var releaseYear: String,
+    var publisher: String,
+    var developer: String,
+    var platform: List<Platform>,
+    var image: String,
+    var rating: String,
    // val ratingsCount: Int
 ){
-    //constructor(): this("dummyId","dummyTitle", "2512", "dummyPub0", "dummyDev", listOf("dummy1","dummy2"), "dummyIm", "3.2f" )
+    constructor(): this("dummyId","dummyTitle", "2512", "dummyPub0", "dummyDev", listOf(Platform.PC), "dummyIm", "3.2f" )
+    constructor(id: String): this(id,"dummyTitle", "2512", "dummyPub0", "dummyDev", listOf(Platform.PC), "dummyIm", "3.2f" )
+
 }
 
+fun getDefault(): Game{
+    return Game(
+        id = "Game1",
+        title = "No Game Found",
+        releaseYear = "",
+        publisher = "",
+        developer = "",
+        platform = listOf(),
+        image = "",
+        rating = "",
+    )
+}
 
 fun getGames(): List<Game>{
     return listOf(

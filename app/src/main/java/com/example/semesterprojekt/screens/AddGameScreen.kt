@@ -23,6 +23,7 @@ import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.AddGameViewModel
 import com.example.semesterprojekt.viewmodels.AddGameViewModelFactory
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
+import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.OtherTopAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
 import kotlinx.coroutines.launch
@@ -40,11 +41,10 @@ fun AddGameScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            OtherTopAppBar(//TODO eigene Top Bar
+            MinimalisticAppBar(
                 arrowBackClicked = { navController.popBackStack() },
-                title = "Add Game",
-                menuContent = {})
-        })
+                title = "Add Game"
+            )})
     { padding ->
         MainContent(
             Modifier.padding(padding),

@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.semesterprojekt.R
@@ -83,6 +84,56 @@ fun GameGrid(
             .combinedClickable(
                 onClick = { onItemClick(game.id) },
                 onLongClick = { onLongClick(gameList.title) }),
+        border = null,
+        elevation = 0.dp
+    ) {
+        Column() {
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(corner = CornerSize(15.dp)),
+                elevation = 5.dp,
+
+                ) {
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .height(150.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GameImage(imageUrl = game.image)
+                        //DeleteIcon(game, onDeleteClick)
+
+
+                    }
+
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            GameName(game.title, MaterialTheme.typography.body2)
+            //Text(text = "Movie Images", style = MaterialTheme.typography.h5)
+        }
+    }
+}
+
+
+@Composable
+fun GameGrid(
+    game: Game,
+    onItemClick: (String) -> Unit = {},
+    onDeleteClick: (String) -> Unit = {},
+    onLongClick: (String) -> Unit = {})
+{
+    Log.d("DetailScreenOpening", game.toString())
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(5.dp)
+            .clickable {  onItemClick(game.id) },
         border = null,
         elevation = 0.dp
     ) {

@@ -15,4 +15,8 @@ class AuthRepository() {
     fun logout() = Database.logout()
 
     suspend fun addGameToFirebase(game: Game) = Database.addGameToFirebase(game)
+
+    suspend fun searchGame(title: String): Game = Database.searchGame(title)
+
+    suspend fun getGameById(id: String?): Game = Database.getGameById(id)
 }

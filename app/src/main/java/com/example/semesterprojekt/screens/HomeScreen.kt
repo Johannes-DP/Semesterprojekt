@@ -9,10 +9,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +48,20 @@ fun HomeScreen(
             HomeTopAppBar(
                 title = "Your Lists ",
                 menuContent = {
+                    DropdownMenuItem(onClick = { navController.navigate(Screen.SearchGameScreen.route) }) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search Game",
+                                modifier = Modifier.padding(4.dp)
+                            )
+                            Text(
+                                text = "Search Game", modifier = Modifier
+                                    .width(100.dp)
+                                    .padding(4.dp)
+                            )
+                        }
+                    }
                     DropdownMenuItem(onClick = { navController.navigate(Screen.AddGameScreen.route) }) {
                         Row {
                             Icon(

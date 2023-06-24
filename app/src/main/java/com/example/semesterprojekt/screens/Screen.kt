@@ -31,6 +31,8 @@ sealed class Screen (val route: String) {
     }
 
     object AddGameScreen : Screen("addGame")
+
+    object SearchGameScreen: Screen ("searchGameScreen")
 }
 
 

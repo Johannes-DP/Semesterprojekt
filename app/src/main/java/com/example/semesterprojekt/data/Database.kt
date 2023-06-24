@@ -3,6 +3,7 @@ package com.example.semesterprojekt.data
 import android.util.Log
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
+import com.example.semesterprojekt.models.getDefault
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -10,6 +11,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 interface Database{
@@ -149,14 +152,13 @@ interface Database{
             Log.d("uid",Firebase.auth.currentUser!!.uid )
             return Firebase.auth.currentUser!!.uid
         }
-
         fun logout(){
             Firebase.auth.signOut()
         }
 
         suspend fun addGameToFirebase(game: Game){
             val db = Firebase.firestore
-            var x: Int = 7
+            val id: String = UUID.randomUUID().toString()
 
             val hash = hashMapOf(
                 "developer" to game.developer,
@@ -166,17 +168,62 @@ interface Database{
                 "rating" to game.rating,
                 "releaseYear" to game.releaseYear,
                 "title" to game.title
-
-
             )
-            db.collection("Games").document("Game"+x)
+
+
+            db.collection("Games").document(id)
                 .set(hash)
                 .addOnSuccessListener { Log.d("Success","Successfull written") }
                 .addOnFailureListener { e -> Log.w("Failure", "Error writing Document",e)}
+                .await()
+        }
 
-            x+=1
+        suspend fun searchGame(title:String): Game{
+            val db = Firebase.firestore
+            val ref = db.collection("Games")
+            var game: Game = Game()
+            val query = ref.whereEqualTo("title",title)
+                .get()
+                .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d("TAG", "${document.id} => ${document.data}")
+                    game = document.toObject(Game::class.java)
+                    game.id = document.id
+                }
+            }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                }
+                .await()
+            return game
+        }
+         suspend fun getGameById(id:String?): Game{
+            val db = Firebase.firestore
+            var game: Game = Game()
+            if(id != null) {
+                game = Game(id)
+                val ref = db.collection("Games").document(id)
+                val query = ref
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if(document != null) {
+                            Log.d("Database",id)
+                            Log.d("Database",document.toString() +" found")
+                            game = document.toObject(Game::class.java)!!
+                            Log.d("Database",game.title)
 
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w("TAG", "Error getting documents: ", exception)
+                    }
+                    .await()
+            }
+
+            return game
         }
 
     }
+
+
 }
