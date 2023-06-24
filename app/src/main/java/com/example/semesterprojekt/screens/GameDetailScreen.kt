@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import okhttp3.internal.wait
 
 
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "SuspiciousIndentation")
 @Composable
 fun GameDetailScreen(
     navController: NavController,
@@ -43,7 +43,6 @@ fun GameDetailScreen(
     val detailViewModel: DetailViewModel = viewModel(factory = factory)
 
     val coroutineScope = rememberCoroutineScope()
-
 
         coroutineScope.launch {
             detailViewModel.getGameById(gameId)
