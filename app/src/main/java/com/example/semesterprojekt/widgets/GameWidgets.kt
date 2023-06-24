@@ -296,12 +296,15 @@ fun GameName(name: String, style: TextStyle){
 
 @Composable
 fun GameDetails(game: Game){
-    GameDetailRow(category = "Rating: ", argument = game.rating.toString(), category2 = "Amount: ") //argument2 = game.ratingsCount.toString())
+    GameDetailRow(category = "Metascore: ", argument = game.rating.toString(), category2 = "Userrating: ", argument2 = game.avgRating.toString())
     GameDetailRow(category = "Released in: ", game.releaseYear.toString())
     GameDetailRow(category = "Developer: ", game.developer)
     GameDetailRow(category = "Publisher: ", game.publisher)
     GameDetailRow(category = "Platform: ", game.platform.toString())
+    GameDetailRow(category = "Avg. played Time: ", game.avgHours.toString())
+
 }
+
 
 @Composable
 fun GameDetailRow(category: String, argument: String,category2: String = "", argument2: String = ""){

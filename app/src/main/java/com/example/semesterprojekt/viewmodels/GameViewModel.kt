@@ -23,8 +23,14 @@ class GameViewModel @Inject constructor(private val id: String?/*, private val r
                 Log.d("dummyId triggered", id)
             }
             game = Database.getGameById(id)
+            game.avgRating = Database.getAvgRating(game.id)
+            game.avgHours =  Database.getAvgHours(game.id)
             gameState.value = game
 
         }
+    }
+
+    suspend fun savaData(stars: Double, review: String, hours: Double, userId: String, gameId: String){
+        Database.savaData(stars,review,hours,userId,gameId)
     }
 }

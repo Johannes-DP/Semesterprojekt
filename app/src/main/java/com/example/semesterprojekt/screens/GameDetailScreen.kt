@@ -21,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.models.Game
-import com.example.semesterprojekt.models.getGames
+
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.*
 import com.example.semesterprojekt.widgets.*
@@ -33,7 +33,7 @@ import okhttp3.internal.wait
 @Composable
 fun GameDetailScreen(
     navController: NavController,
-    gameId:String?,
+    gameId: String?,
     userModel: UserStateViewModel
 
 ) {
@@ -53,9 +53,26 @@ fun GameDetailScreen(
     var game = detailViewModel.game
 */
     Scaffold(topBar = {
-        MinimalisticAppBar(
+        DetailScreenAppBar(
             arrowBackClicked = { navController.popBackStack() },
-            title = " " + game.title
+            title = " " + game.title,
+            menuContent = {
+                DropdownMenuItem(onClick = { navController.navigate(Screen.ReviewScreen.addId(game.id))}) {
+                    Row{
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Write Review",
+                            modifier = Modifier.padding(4.dp)
+                        )
+                        Text(
+                            text = "Write Review",
+                            modifier = Modifier
+                                .width(100.dp)
+                                .padding(4.dp)
+                        )
+                    }
+                }
+            }
         )
 
     }) { padding ->

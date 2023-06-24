@@ -11,10 +11,12 @@ class Game(
     var platform: List<Platform>,
     var image: String,
     var rating: String,
+    var avgRating: Double,
+    var avgHours: Double
    // val ratingsCount: Int
 ){
-    constructor(): this("dummyId","dummyTitle", "2512", "dummyPub0", "dummyDev", listOf(Platform.PC), "dummyIm", "3.2f" )
-    constructor(id: String): this(id,"dummyTitle", "2512", "dummyPub0", "dummyDev", listOf(Platform.PC), "dummyIm", "3.2f" )
+    constructor(): this("dummyId","dummyTitle", "2512", "dummyPub0", "dummyDev", listOf(Platform.PC), "dummyIm", "3.2f" ,0.0,0.0)
+    constructor(id: String): this(id,"dummyTitle", "2512", "dummyPub0", "dummyDev", listOf(Platform.PC), "dummyIm", "3.2f",0.0,0.0)
 
 }
 
@@ -28,9 +30,11 @@ fun getDefault(): Game{
         platform = listOf(),
         image = "",
         rating = "",
+        avgHours = 0.0,
+        avgRating = 0.0
     )
 }
-
+/*
 fun getGames(): List<Game>{
     return listOf(
         Game(
@@ -89,5 +93,4 @@ fun getGames(): List<Game>{
             rating = "7.5f",
            // ratingsCount = 3126
         )
-    )
-}
+    )*/

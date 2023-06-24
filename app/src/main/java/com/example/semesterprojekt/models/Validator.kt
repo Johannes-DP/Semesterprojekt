@@ -29,6 +29,11 @@ object Validator{
     fun validateGameRating(rating: String): ValidationResult{
         return ValidationResult(rating.isNotBlank())
     }
+
+    fun validateHours(hours: String): Boolean {
+        return hours.isNotBlank() && hours.toDoubleOrNull() != null && hours.toDouble()
+            .let { it in 0.0..9999.9 }
+    }
     
 }
 

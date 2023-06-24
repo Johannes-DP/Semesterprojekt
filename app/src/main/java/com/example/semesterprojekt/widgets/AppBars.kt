@@ -82,6 +82,36 @@ fun MinimalisticAppBar(
 }
 
 @Composable
+fun DetailScreenAppBar(
+    arrowBackClicked: () -> Unit = {},
+    title: String = "default",
+    menuContent: @Composable () -> Unit
+){
+    var showMenu by remember { mutableStateOf(false) }
+
+    TopAppBar(
+        title = { Text(title) },
+        navigationIcon = {
+            IconButton(onClick = arrowBackClicked) {
+                Icon(imageVector = Icons.Default.ArrowBack, "getBack")
+
+            }
+        },
+        actions = {
+            IconButton(onClick = { showMenu = !showMenu }) {
+                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+            }
+            DropdownMenu(
+                expanded = showMenu,
+                onDismissRequest = { showMenu = false }
+            ) {
+                menuContent()
+            }
+        }
+    )
+}
+
+@Composable
 fun EditTopAppBar(
     arrowBackClicked: () -> Unit = {},
     title: String = "default"

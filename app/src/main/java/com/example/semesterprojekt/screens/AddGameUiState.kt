@@ -46,7 +46,9 @@ fun AddGameUiState.toGame(): Game = Game(
     developer = developer,
     platform = platform,
     image = image,
-    rating = rating
+    rating = rating,
+    avgRating = 0.0,
+    avgHours = 0.0
 )
 
 

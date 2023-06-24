@@ -223,7 +223,117 @@ interface Database{
              return gameView
         }
 
+        suspend fun savaData(stars: Double, review: String, hours: Double,userId: String, gameId: String){
+            val db = Firebase.firestore
+
+            val hashRating = hashMapOf(
+                "Stars" to stars,
+                "UserId" to userId,
+                "GameId" to gameId
+            )
+
+            val hashReview = hashMapOf(
+                "Text" to review,
+                "UserId" to userId,
+                "GameId" to gameId
+            )
+
+            val hashPlaytime = hashMapOf(
+                "Anzahl" to hours,
+                "UserId" to userId,
+                "GameId" to gameId
+            )
+
+            db.collection("Ratings").document(UUID.randomUUID().toString())
+                .set(hashRating)
+                .addOnSuccessListener { Log.d("Success","Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document",e)}
+                .await()
+
+            db.collection("Review").document(UUID.randomUUID().toString())
+                .set(hashReview)
+                .addOnSuccessListener { Log.d("Success","Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document",e)}
+                .await()
+
+            db.collection("Playtime").document(UUID.randomUUID().toString())
+                .set(hashPlaytime)
+                .addOnSuccessListener { Log.d("Success","Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document",e)}
+                .await()
+        }
+
+        suspend fun getAvgRating(gameId: String): Double{
+            val db = Firebase.firestore
+            var holder: Any?
+            var total: Double = 0.0
+            var count: Double  = 0.0
+            var avg: Double = 0.0
+
+            db.collection("Ratings").whereEqualTo("GameId", gameId)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        Log.d("TAG", "${document.id} => ${document.data}")
+                        holder =  document.get("Stars")
+                        if( holder != null){
+                            total += holder as Double
+                        }
+                        count += 1.0
+                        Log.d("RatingID",gameId)
+                        Log.d("Rating",total.toString())
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                    count = 1.0
+                }
+                .await()
+            if(count.toInt() == 0){
+                return avg
+            }
+            avg = total/count
+            Log.d("AVGStars", avg.toString())
+            return avg
+
+        }
+
+        suspend fun getAvgHours(gameId: String): Double{
+            val db = Firebase.firestore
+            var holder: Any?
+            var total: Double = 0.0
+            var count: Double  = 0.0
+            var avg: Double = 0.0
+
+            db.collection("Playtime").whereEqualTo("GameId", gameId)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        Log.d("TAG", "${document.id} => ${document.data}")
+                        holder =  document.get("Anzahl")
+                        Log.d("holder", holder.toString())
+                        if( holder != null){
+                            total += holder as Double
+                        }
+                        count =+ 1.0
+                        Log.d("Hours",total.toString())
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                    count = 1.0
+                }
+                .await()
+            if(count.toInt() == 0){
+                return avg
+            }
+            avg = total/count
+            Log.d("AVGHOUR", avg.toString())
+            return avg
+
+        }
     }
+
 
 
 }

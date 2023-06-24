@@ -9,11 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.semesterprojekt.screens.HomeScreen
 import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
-
 import androidx.navigation.navArgument
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.*
-import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModelFactory
 
@@ -58,6 +56,11 @@ fun Navigation(){
             GameDetailScreen(navController = navController,
                 gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY),userState)
             }
+        composable(route = Screen.ReviewScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
+        ){ backStackEntry ->
+            ReviewScreen(navController = navController,
+                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY),userState)
+        }
         }
 }
 
