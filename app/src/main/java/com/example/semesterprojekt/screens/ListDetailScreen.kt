@@ -17,32 +17,50 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.getGameLists
 import com.example.semesterprojekt.models.Game
-import com.example.semesterprojekt.models.getGames
+import com.example.semesterprojekt.models.GameList
+import com.example.semesterprojekt.viewmodels.GameListViewModel
+import com.example.semesterprojekt.viewmodels.ListDetailViewModel
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListDetailScreen(
     navController: NavController,
-    listId:String?
+    listId:String?,
+    userModel: UserStateViewModel,
 
 ) {
-    val lists = getGameLists()
-    var gameList = lists[0]
-    for (item: GameList in lists) {
-        if (item.id == listId) {
-            gameList = item
+    val listDetailViewModel = ListDetailViewModel(listId)
+    val gameListState by listDetailViewModel.gameListState.collectAsState()
+
+    /*var gameListView = GameList("",emptyList<DocumentReference>(), ArrayList<Game>() )
+    val gameListViewModel = GameListViewModel()
+    val gameListsState by gameListViewModel.gameListsState.collectAsState()
+    var index = 0
+    Log.d("size", gameListsState.size.toString())
+    if (!gameListsState.isEmpty()){
+        for (i in 0 until gameListsState.size) {
+            if (gameListsState[i].title == listId) {
+                index = i
+            }
         }
-    }
+        gameListView = gameListsState[index]
+
+    }*/
+
+
+
     val modalBottomSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -52,7 +70,11 @@ fun ListDetailScreen(
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
-            BottomSheetAddGame()
+            BottomSheetAddGame(
+                listDetailViewModel = listDetailViewModel,
+                onDetailClick = {String -> navController.navigate(Screen.GameDetailScreen.addId(String))},
+                listId = listId!!
+            )
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -67,12 +89,12 @@ fun ListDetailScreen(
                         "hereListDetail"
                     ) /* navController.popBackStack(),*/
                 },
-                title = " " + gameList.title,
+                title = " " + listId, //TODO
                 menuContent = {
                     DropdownMenuItem(onClick = {
                         navController.navigate(
                             Screen.ModifyListScreen.addId(
-                                gameList.id
+                                 "1"//gameList.id
                             )
                         )
                     }) {
@@ -90,7 +112,7 @@ fun ListDetailScreen(
                         }
 
                     }
-                    DropdownMenuItem(onClick = { Log.d("Clear List", gameList.id) }) {
+                    DropdownMenuItem(onClick = { Log.d("Clear List", /*gameList.id*/"1") }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Clear,
@@ -106,7 +128,7 @@ fun ListDetailScreen(
 
                     }
 
-                    DropdownMenuItem(onClick = { Log.d("DeleteList", gameList.id) }) {
+                    DropdownMenuItem(onClick = { Log.d("DeleteList", "1" /*gameList.id*/) }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Delete,
@@ -142,20 +164,26 @@ fun ListDetailScreen(
                 }
             }
             Column(modifier = Modifier.padding(padding)) {
+                Log.d("test", "hello")
                 LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-                    items(gameList.games) { game ->
-                        GameGrid(
-                            game = game,
-                            gameList = gameList,
-                            onItemClick = { gameId ->
-                                navController.navigate(Screen.GameDetailScreen.addId(gameId))
-                            },
-                            onLongClick = { listId ->
+                    Log.d("test", "hello2")
+                    if (!gameListState.games.isEmpty()) {
+                        items(gameListState.games) { game ->
+                            Log.d("heeeere", game.id)
+                            Log.d("testingnow", game.toString())
+                            GameGrid(
+                                game = game,
+                                gameList = gameListState,
+                                onItemClick = { gameId ->
+                                    Log.d("this is the current ID", gameId)
+                                    navController.navigate(Screen.GameDetailScreen.addId(gameId))
+                                }
+
+                            ) { listId ->
                                 navController.navigate(Screen.ModifyListScreen.addId(listId))
                             }
 
-                        )
-
+                        }
                     }
                 }
 
@@ -163,6 +191,7 @@ fun ListDetailScreen(
         }
     }
 }
+
 
 
 

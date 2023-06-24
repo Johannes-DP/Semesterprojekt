@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
@@ -9,23 +10,30 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.getGameLists
+import com.example.semesterprojekt.viewmodels.GameListViewModel
+import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    userModel: UserStateViewModel,
+
 ) {
+    val gameListViewModel = GameListViewModel()
     val modalBottomSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -44,24 +52,53 @@ fun HomeScreen(
 
         Scaffold(topBar = {
             HomeTopAppBar(
-                title = "Your Lists",
+                title = "Your Lists ",
                 menuContent = {
-                    DropdownMenuItem(onClick = { /*TODO Navigate to EditProfileScreen*/ }) {
+                    DropdownMenuItem(onClick = { navController.navigate(Screen.SearchGameScreen.route) }) {
                         Row {
                             Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Profile",
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search Game",
                                 modifier = Modifier.padding(4.dp)
                             )
                             Text(
-                                text = "Edit Profile", modifier = Modifier
+                                text = "Search Game", modifier = Modifier
                                     .width(100.dp)
                                     .padding(4.dp)
                             )
                         }
-
                     }
-                    /*TODO Add more Items*/
+                    DropdownMenuItem(onClick = { navController.navigate(Screen.AddGameScreen.route) }) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Add Game",
+                                modifier = Modifier.padding(4.dp)
+                            )
+                            Text(
+                                text = "Add Game", modifier = Modifier
+                                    .width(100.dp)
+                                    .padding(4.dp)
+                            )
+                        }
+                    }
+                    DropdownMenuItem(onClick = {
+                        userModel.logout()
+                        navController.popBackStack()
+                    }) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Default.ExitToApp,
+                                contentDescription = "Logout",
+                                modifier = Modifier.padding(4.dp)
+                            )
+                            Text(
+                                text = "Logout", modifier = Modifier
+                                    .width(100.dp)
+                                    .padding(4.dp)
+                            )
+                        }
+                    }
                 }
             )
         },
@@ -83,7 +120,8 @@ fun HomeScreen(
             }
             MainContent(
                 modifier = Modifier.padding(padding),
-                navController = navController
+                navController = navController,
+                gameListViewModel = gameListViewModel
             )
         }
     }
@@ -93,11 +131,13 @@ fun HomeScreen(
 @Composable
 fun MainContent(
     modifier: Modifier,
-    navController: NavController
+    navController: NavController,
+    gameListViewModel: GameListViewModel
 ){
     GameLists(
         modifier = modifier,
-        navController = navController
+        navController = navController,
+        gameListViewModel = gameListViewModel
     )
 }
 
@@ -105,10 +145,14 @@ fun MainContent(
 fun GameLists(
     modifier: Modifier,
     navController: NavController,
-    gameLists: List<GameList> = getGameLists())
+    gameListViewModel: GameListViewModel)
 {
+
+    val gameListsState by gameListViewModel.gameListsState.collectAsState()
+
+    Log.d("Lists???", gameListsState.toString())
     LazyVerticalGrid(columns = GridCells.Fixed(2)){
-        items(gameLists){ gameList ->
+        items(items = gameListsState){ gameList ->
             GameListGrid(
                 gameList = gameList,
                 onItemClick = {listId ->
@@ -119,4 +163,3 @@ fun GameLists(
         }
     }
 }
-

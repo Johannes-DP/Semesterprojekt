@@ -12,29 +12,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ListDetailViewModel @Inject constructor(private val id: String?): ViewModel() {
+class GameViewModel @Inject constructor(private val id: String?/*, private val repository: Database*/): ViewModel() {
 
-
-    private val _gameListState = MutableStateFlow(GameList("", emptyList(), ArrayList()))
-    val gameListState: StateFlow<GameList> = _gameListState.asStateFlow()
+    val gameState = MutableStateFlow(Game())
+    var game = Game()
 
     init {
         viewModelScope.launch{
             if (id == "dummyId"){
                 Log.d("dummyId triggered", id)
             }
-            _gameListState.value = Database.getListById(id)
+            game = Database.getGameById(id)
+            game.avgRating = Database.getAvgRating(game.id)
+            game.avgHours =  Database.getAvgHours(game.id)
+            gameState.value = game
 
         }
     }
 
-    suspend fun addGameToList(listName: String, game: Game) {
-        Database.addGametoList(game, listName)
-    }
-
-    suspend fun getGameById(id: String?): Game {
-        Log.d("test", Database.getGameById(id).id)
-        return Database.getGameById(id)
-
+    suspend fun savaData(stars: Double, review: String, hours: Double, userId: String, gameId: String){
+        Database.savaData(stars,review,hours,userId,gameId)
     }
 }

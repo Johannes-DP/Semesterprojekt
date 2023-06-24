@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "917358258003",
+    "firebase_url": "https://semesterprojekt-d5877-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "semesterprojekt-d5877",
+    "storage_bucket": "semesterprojekt-d5877.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917358258003:android:2fe8dccd998493d692a3a6",
+        "android_client_info": {
+          "package_name": "com.example.semesterprojekt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917358258003-tddkm7vukl0rcq2egrgu7u9cf6rdl4se.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHkdYgvSFCR_hcsfo56oNIFysZaQI2GFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917358258003-tddkm7vukl0rcq2egrgu7u9cf6rdl4se.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

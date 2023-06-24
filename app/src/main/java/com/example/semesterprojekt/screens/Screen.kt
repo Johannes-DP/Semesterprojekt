@@ -7,6 +7,11 @@ sealed class Screen (val route: String) {
 
     object MainScreen : Screen("main")
 
+    object GameTestingScreen : Screen("gameTesting")
+
+
+    object Registration : Screen("registration")
+
     object ListDetailScreen : Screen("listDetail/{$DETAIL_ARGUMENT_KEY}") {
         fun addId(id: String): String {
             return this.route.replace(oldValue = "{$DETAIL_ARGUMENT_KEY}", newValue = id)
@@ -26,6 +31,15 @@ sealed class Screen (val route: String) {
     }
 
     object AddGameScreen : Screen("addGame")
+
+    object SearchGameScreen: Screen ("searchGameScreen")
+
+    object ReviewScreen: Screen ("reviewScreen/{$GAME_ARGUMENT_KEY}"){
+        fun addId(id: String): String {
+            return this.route.replace(oldValue = "{$GAME_ARGUMENT_KEY}", newValue = id)
+        }
+    }
 }
+
 
 
