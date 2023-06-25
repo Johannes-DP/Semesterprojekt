@@ -170,7 +170,8 @@ fun GameGrid(
 fun GameSearchGrid(
     game: Game,
     onAddToListClick: (String) -> Unit = {},
-    onDetailClick: (String) -> Unit = {})
+    onDetailClick: (String) -> Unit = {},
+    onAddClick: (String) -> Unit = {})
 {
     Log.d("gamegrid", game.toString())
 

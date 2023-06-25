@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
+import com.example.semesterprojekt.models.Platform
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
@@ -155,6 +156,20 @@ interface Database {
                 .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
         }
 
+        suspend fun filterList(id: String?, platforms: List<Platform>): GameList {
+            var filteredGameList = GameList(id!!, emptyList(), ArrayList())
+            var fullGameList = GameList("", emptyList(), ArrayList())
+            fullGameList = getListById(id)
+            for (platform in platforms){
+                for (game in fullGameList.games){
+                    if (game.platform.contains(platform)){
+                        filteredGameList.games.add(game)
+                    }
+                }
+            }
+            return filteredGameList
+        }
+
         fun getUid(): String {
             Log.d("uid", Firebase.auth.currentUser!!.uid)
             return Firebase.auth.currentUser!!.uid
@@ -242,49 +257,49 @@ interface Database {
     ) {
         val db = Firebase.firestore
 
-        val hashRating = hashMapOf(
-            "Stars" to stars,
-            "UserId" to userId,
-            "GameId" to gameId
-        )
+            val hashRating = hashMapOf(
+                "Stars" to stars,
+                "UserId" to userId,
+                "GameId" to gameId
+            )
 
-        val hashReview = hashMapOf(
-            "Text" to review,
-            "UserId" to userId,
-            "GameId" to gameId
-        )
+            val hashReview = hashMapOf(
+                "Text" to review,
+                "UserId" to userId,
+                "GameId" to gameId
+            )
 
-        val hashPlaytime = hashMapOf(
-            "Anzahl" to hours,
-            "UserId" to userId,
-            "GameId" to gameId
-        )
+            val hashPlaytime = hashMapOf(
+                "Anzahl" to hours,
+                "UserId" to userId,
+                "GameId" to gameId
+            )
 
-        db.collection("Ratings").document(UUID.randomUUID().toString())
-            .set(hashRating)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
+            db.collection("Ratings").document(UUID.randomUUID().toString())
+                .set(hashRating)
+                .addOnSuccessListener { Log.d("Success", "Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
+                .await()
 
-        db.collection("Review").document(UUID.randomUUID().toString())
-            .set(hashReview)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
+            db.collection("Review").document(UUID.randomUUID().toString())
+                .set(hashReview)
+                .addOnSuccessListener { Log.d("Success", "Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
+                .await()
 
-        db.collection("Playtime").document(UUID.randomUUID().toString())
-            .set(hashPlaytime)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
-    }
+            db.collection("Playtime").document(UUID.randomUUID().toString())
+                .set(hashPlaytime)
+                .addOnSuccessListener { Log.d("Success", "Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
+                .await()
+        }
 
-    suspend fun getAvgRating(gameId: String): Double {
-        val db = Firebase.firestore
-        var holder: Any?
-        var total: Double = 0.0
-        var count: Double = 0.0
-        var avg: Double = 0.0
+        suspend fun getAvgRating(gameId: String): Double {
+            val db = Firebase.firestore
+            var holder: Any?
+            var total: Double = 0.0
+            var count: Double = 0.0
+            var avg: Double = 0.0
 
         db.collection("Ratings").whereEqualTo("GameId", gameId)
             .get()
@@ -312,14 +327,14 @@ interface Database {
         //Log.d("AVGStars", avg.toString())
         return avg
 
-    }
+        }
 
-    suspend fun getAvgHours(gameId: String): Double {
-        val db = Firebase.firestore
-        var holder: Any?
-        var total: Double = 0.0
-        var count: Double = 0.0
-        var avg: Double = 0.0
+        suspend fun getAvgHours(gameId: String): Double {
+            val db = Firebase.firestore
+            var holder: Any?
+            var total: Double = 0.0
+            var count: Double = 0.0
+            var avg: Double = 0.0
 
         db.collection("Playtime").whereEqualTo("GameId", gameId)
             .get()

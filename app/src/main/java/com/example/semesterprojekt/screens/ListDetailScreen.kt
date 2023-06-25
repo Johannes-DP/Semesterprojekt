@@ -2,15 +2,14 @@ package com.example.semesterprojekt.screens
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
@@ -20,8 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
@@ -44,23 +45,7 @@ fun ListDetailScreen(
 ) {
     val listDetailViewModel = ListDetailViewModel(listId)
     val gameListState by listDetailViewModel.gameListState.collectAsState()
-
-    /*var gameListView = GameList("",emptyList<DocumentReference>(), ArrayList<Game>() )
-    val gameListViewModel = GameListViewModel()
-    val gameListsState by gameListViewModel.gameListsState.collectAsState()
-    var index = 0
-    Log.d("size", gameListsState.size.toString())
-    if (!gameListsState.isEmpty()){
-        for (i in 0 until gameListsState.size) {
-            if (gameListsState[i].title == listId) {
-                index = i
-            }
-        }
-        gameListView = gameListsState[index]
-
-    }*/
-
-
+    val listDetailUiState = listDetailViewModel.listDetailUiState
 
     val modalBottomSheetState =
         rememberModalBottomSheetState(
@@ -73,7 +58,13 @@ fun ListDetailScreen(
         sheetContent = {
             BottomSheetAddGame(
                 listDetailViewModel = listDetailViewModel,
-                onDetailClick = {String -> navController.navigate(Screen.GameDetailScreen.addId(String))},
+                onDetailClick = { String ->
+                    navController.navigate(
+                        Screen.GameDetailScreen.addId(
+                            String
+                        )
+                    )
+                },
                 listId = listId!!
             )
         },
@@ -92,7 +83,7 @@ fun ListDetailScreen(
                     DropdownMenuItem(onClick = {
                         navController.navigate(
                             Screen.ModifyListScreen.addId(
-                                 "1"//gameList.id
+                                "1"//gameList.id
                             )
                         )
                     }) {
@@ -167,7 +158,51 @@ fun ListDetailScreen(
                     modalBottomSheetState.hide()
                 }
             }
-            Column(modifier = Modifier.padding(padding)) {
+
+            Column(modifier = Modifier.padding(padding), horizontalAlignment = Alignment.CenterHorizontally) {
+                LazyHorizontalGrid(
+                    modifier = Modifier.height(100.dp),
+                    rows = GridCells.Fixed(3),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                )
+                {
+                    /*items(listDetailUiState.selectablePlatformItems) { platformItem ->
+                        Chip(
+                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 2.dp),
+                            colors = ChipDefaults.chipColors(
+                                backgroundColor = if (platformItem.isSelected)
+                                    colorResource(id = com.example.semesterprojekt.R.color.purple_200)
+                                else
+                                    colorResource(id = com.example.semesterprojekt.R.color.white)
+                            ),
+                            onClick = {listDetailUiState.copy(platform= listDetailUiState.selectPlatform(platformItem))
+                            coroutineScope.launch {
+                                listDetailViewModel.filterList(listId,listDetailUiState.platform)
+                                Log.d("in onclick", listDetailUiState.platform.toString())
+                            }
+                            }) {
+                            Text(text = platformItem.title)
+                        }
+                    }*/
+                    items(listDetailUiState.selectablePlatformItems) { platformItem ->
+                        Chip(
+                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 2.dp),
+                            colors = ChipDefaults.chipColors(
+                                backgroundColor = if (platformItem.isSelected)
+                                    colorResource(id = com.example.semesterprojekt.R.color.purple_200)
+                                else
+                                    colorResource(id = com.example.semesterprojekt.R.color.white)
+                            ),
+                            onClick = {listDetailUiState.copy(platform= listDetailUiState.selectPlatform(platformItem))
+                                coroutineScope.launch {
+                                    listDetailViewModel.filterList(listId,listDetailUiState.platform)
+                                    Log.d("in onclick", listDetailUiState.selectablePlatformItems.size.toString())
+                                }
+                            }) {
+                            Text(text = platformItem.title)
+                        }
+                    }
+                }
                 LazyVerticalGrid(columns = GridCells.Fixed(3)) {
                     if (!gameListState.games.isEmpty()) {
                         items(gameListState.games) { game ->

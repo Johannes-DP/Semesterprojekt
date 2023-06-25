@@ -13,35 +13,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class GameListViewModel : ViewModel() {
-    /*companion object{
-        @Volatile
-        private var instance: GameListViewModel? = null
-
-        fun getInstance() =
-            instance ?: synchronized(this) {
-                instance ?: GameListViewModel().also {instance = it}
-            }
-    }*/
 
 
     private val _gameListsState = MutableStateFlow(ArrayList<GameList>())
     val gameListsState: StateFlow<ArrayList<GameList>> = _gameListsState.asStateFlow()
-    val gameLists: ArrayList<GameList> = ArrayList()
-
-
-    private val _gamesState = MutableStateFlow(ArrayList<Game>())
-    val gamesState: StateFlow<ArrayList<Game>> = _gamesState.asStateFlow()
-    val games: ArrayList<Game> = ArrayList()
-
-    val gameState = MutableStateFlow(Game())
+    var gameLists: ArrayList<GameList> = ArrayList()
 
 
     init {
         viewModelScope.launch {
-            Database.getLists(gameLists)
+            gameLists = Database.getLists(gameLists)
             if (gameLists.isEmpty()) {
                 Log.d("GamesViewModel", "Empty List")
             } else {
+                Log.d("GamesViewModel", "List Filled")
                 _gameListsState.value = gameLists
             }
 
@@ -52,7 +37,5 @@ class GameListViewModel : ViewModel() {
         Database.addList(title)
     }
 
-
-
-    }
+}
 
