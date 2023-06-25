@@ -1,6 +1,5 @@
 package com.example.semesterprojekt.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,46 +12,40 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.semesterprojekt.repository.AuthRepository
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.SearchGameViewModel
-import com.example.semesterprojekt.viewmodels.SearchGameViewModelFactory
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.GameGrid
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
-import com.google.android.material.tabs.TabLayout.TabGravity
-import com.google.rpc.context.AttributeContext.Auth
 import kotlinx.coroutines.launch
 
 @Composable
 fun SearchGameScreen(
-    navController: NavController,
-    userModel: UserStateViewModel,
-){
-    val factory = SearchGameViewModelFactory(repository = AuthRepository())
-    val searchViewModel: SearchGameViewModel = viewModel(factory = factory)
+    navController: NavController
+) {
+    val searchViewModel = SearchGameViewModel(repository = ListRepositoryImpl())
 
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar =  {
-        MinimalisticAppBar(
-            arrowBackClicked = { navController.popBackStack() },
-            title = "Search Game"
-        )}){ padding ->
-        MainContent(Modifier.padding(padding),searchViewModel, navController)
+        topBar = {
+            MinimalisticAppBar(
+                arrowBackClicked = { navController.popBackStack() },
+                title = "Search Game"
+            )
+        }) { padding ->
+        MainContent(Modifier.padding(padding), searchViewModel, navController)
     }
 }
 
 @Composable
 fun MainContent(
-modifier: Modifier = Modifier,
-searchViewModel: SearchGameViewModel,
-navController: NavController,
-){
+    modifier: Modifier = Modifier,
+    searchViewModel: SearchGameViewModel,
+    navController: NavController,
+) {
 
     val coroutineScope = rememberCoroutineScope()
     var title by remember {
@@ -65,7 +58,7 @@ navController: NavController,
 
 
 
-    Column (
+    Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth(),
@@ -82,16 +75,22 @@ navController: NavController,
         Button(
             onClick = {
                 coroutineScope.launch {
-                    searchViewModel.SearchGame(title)
+                    searchViewModel.searchGame(title)
                     result = !result
                 }
             }
-        ){
+        ) {
             Text("Search Game")
         }
-        if(result){
+        if (result) {
+            if (searchViewModel.game.id == "dummyId"){
+                Text("No Game Found!")
+            } else {
                 GameGrid(game = searchViewModel.game, onItemClick = { gameId ->
-                    navController.navigate(Screen.GameDetailScreen.addId(gameId))})
+                    navController.navigate(Screen.GameDetailScreen.addId(gameId))
+
+                })
+            }
         }
     }
 }

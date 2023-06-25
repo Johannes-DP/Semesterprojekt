@@ -1,40 +1,65 @@
 package com.example.semesterprojekt.viewmodels
 
-import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.semesterprojekt.data.Database
-import com.example.semesterprojekt.models.Game
-import com.example.semesterprojekt.models.GameList
+import com.example.semesterprojekt.data.ListRepositoryImpl
+import com.example.semesterprojekt.models.*
+import com.example.semesterprojekt.screens.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ListDetailViewModel @Inject constructor(private val id: String?): ViewModel() {
+class ListDetailViewModel @Inject constructor(
+    private val id: String?,
+    private val repository: ListRepositoryImpl
+) : ViewModel() {
 
 
     private val _gameListState = MutableStateFlow(GameList("", emptyList(), ArrayList()))
     val gameListState: StateFlow<GameList> = _gameListState.asStateFlow()
 
-    init {
-        viewModelScope.launch{
-            if (id == "dummyId"){
-                Log.d("dummyId triggered", id)
-            }
-            _gameListState.value = Database.getListById(id)
+    var listDetailUiState by mutableStateOf(ListDetailUiState())
+        private set
 
+
+    init {
+        viewModelScope.launch {
+            _gameListState.value = repository.getListById(id)
         }
     }
 
     suspend fun addGameToList(listName: String, game: Game) {
-        Database.addGametoList(game, listName)
+        repository.addGameToList(game.id, listName)
+        _gameListState.value = repository.getListById(listName)
     }
 
+    suspend fun removeGameFromList(title: String, listId: String?) {
+        if (listId != null)
+            repository.removeGameFromList(title, listId)
+        _gameListState.value = repository.getListById(listId)
+    }
+
+    suspend fun deleteList(listId: String) {
+        repository.deleteList(listId)
+    }
+
+
     suspend fun getGameById(id: String?): Game {
-        Log.d("test", Database.getGameById(id).id)
-        return Database.getGameById(id)
+        return repository.getGameById(id)
+
+    }
+
+    suspend fun filterList(id: String?, platforms: List<Platform>) {
+        if (platforms.isEmpty()) {
+            _gameListState.value = repository.getListById(id)
+        } else {
+            _gameListState.value = repository.filterList(id, platforms)
+        }
 
     }
 }

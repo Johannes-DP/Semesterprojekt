@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.example.semesterprojekt.screens
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -8,17 +10,19 @@ import com.example.semesterprojekt.models.Platform
 import com.example.semesterprojekt.models.Validator
 import java.util.*
 
+@Suppress("NAME_SHADOWING")
 data class AddGameUiState(
     val title: String = "",
-    val releaseYear: String ="",
+    val releaseYear: String = "",
     val publisher: String = "",
     val developer: String = "",
     val platform: List<Platform> = listOf(),
     val image: String = "",
     val rating: String = "",
-    var selectablePlatformItems: SnapshotStateList<ListItemSelectable> = Platform.values().toList().map(){ platform ->
-        ListItemSelectable(title=platform.toString())
-    }.toMutableStateList(),
+    var selectablePlatformItems: SnapshotStateList<ListItemSelectable> = Platform.values().toList()
+        .map { platform ->
+            ListItemSelectable(title = platform.toString())
+        }.toMutableStateList(),
     val titleErr: Boolean = false,
     val yearErr: Boolean = false,
     val pubErr: Boolean = false,
@@ -29,11 +33,11 @@ data class AddGameUiState(
     val actionEnabled: Boolean = false
 )
 
-fun AddGameUiState.selectPlatform(item: ListItemSelectable): List<Platform>{
-    selectablePlatformItems.find {it.title == item.title}?.let {platform ->
+fun AddGameUiState.selectPlatform(item: ListItemSelectable): List<Platform> {
+    selectablePlatformItems.find { it.title == item.title }?.let { platform ->
         platform.isSelected = !platform.isSelected
     }
-    return selectablePlatformItems.filter{ item -> item.isSelected }.map { listItemSelectable ->
+    return selectablePlatformItems.filter { item -> item.isSelected }.map { listItemSelectable ->
         Platform.valueOf(listItemSelectable.title)
     }
 }
@@ -52,7 +56,7 @@ fun AddGameUiState.toGame(): Game = Game(
 )
 
 
-fun AddGameUiState.hasError(): Boolean{
+fun AddGameUiState.hasError(): Boolean {
     val titleResult = Validator.validateGameTitle(title)
     val yearResult = Validator.validateGameYear(releaseYear)
     val pubResult = Validator.validateGamePublisher(publisher)
@@ -68,5 +72,5 @@ fun AddGameUiState.hasError(): Boolean{
         platResult,
         imgResult,
         ratingResult
-    ).any{!it.successful}
+    ).any { !it.successful }
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -16,39 +15,36 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.R
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.models.Validator
 import com.example.semesterprojekt.viewmodels.GameViewModel
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun ReviewScreen(
     navController: NavController,
-    gameId: String?,
-    userModel: UserStateViewModel
-){
+    gameId: String?
+) {
     val scaffoldState = rememberScaffoldState()
-    val gameViewModel = GameViewModel(gameId)
+    val gameViewModel = GameViewModel(gameId, repository = ListRepositoryImpl())
     val game by gameViewModel.gameState.collectAsState()
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar =  {
+        topBar = {
             MinimalisticAppBar(
                 arrowBackClicked = { navController.popBackStack() },
                 title = "Review " + game.title
             )
-        }){ padding ->
-        MainContent(Modifier.padding(padding),gameViewModel, navController, userModel)
+        }) { padding ->
+        MainContent(Modifier.padding(padding), gameViewModel, navController)
     }
 }
 
@@ -58,9 +54,8 @@ fun ReviewScreen(
 fun MainContent(
     modifier: Modifier = Modifier,
     gameViewModel: GameViewModel,
-    navController: NavController,
-    userModel: UserStateViewModel
-){
+    navController: NavController
+) {
     val coroutineScope = rememberCoroutineScope()
 
     var starCount by remember {
@@ -86,23 +81,25 @@ fun MainContent(
 
         LazyHorizontalGrid(
             modifier = Modifier.height(33.dp),
-            rows = GridCells.Fixed(1))
+            rows = GridCells.Fixed(1)
+        )
         {
-            items(5){stars ->
+            items(5) { stars ->
                 Chip(
                     modifier = Modifier.padding(2.dp),
                     colors = ChipDefaults.chipColors(
-                        backgroundColor = if(starCount >= stars+1){
+                        backgroundColor = if (starCount >= stars + 1) {
                             MaterialTheme.colors.secondary
-                        }
-                        else
+                        } else
                             colorResource(id = R.color.white)
                     ),
                     onClick = {
-                        starCount = stars+1
-                    }){
-                    Icon(imageVector = Icons.Default.Star,
-                        contentDescription = "Stars")
+                        starCount = stars + 1
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Stars"
+                    )
                     counter += 1
                 }
             }
@@ -110,9 +107,9 @@ fun MainContent(
 
         SimpleTextField(
             value = review,
-            label = "Review" ,
+            label = "Review",
             isError = false,
-            onChange = {review = it},
+            onChange = { review = it },
             singleLine = false
         )
 
@@ -120,15 +117,20 @@ fun MainContent(
             value = hours,
             label = "Played Time",
             isError = !Validator.validateHours(hours),
-            onChange = {hours = it},
+            onChange = { hours = it },
             keyboardType = KeyboardType.Number
         )
 
         Button(onClick = {
-            if(Validator.validateHours(hours)){
+            if (Validator.validateHours(hours)) {
                 Log.d("Stars", starCount.toString())
                 coroutineScope.launch {
-                    gameViewModel.savaData(starCount.toDouble(),review,hours.toDouble(),userModel.user, gameViewModel.game.id)
+                    gameViewModel.savaData(
+                        starCount.toDouble(),
+                        review,
+                        hours.toDouble(),
+                        gameViewModel.game.id
+                    )
                     navController.popBackStack()
                 }
             }

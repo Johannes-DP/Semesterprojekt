@@ -1,20 +1,18 @@
-package com.example.semesterprojekt.viewmodels;
+package com.example.semesterprojekt.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.models.Game
-import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.getDefault
-import com.example.semesterprojekt.repository.AuthRepository;
 
-class SearchGameViewModel(private val repository:AuthRepository): ViewModel() {
+import javax.inject.Inject
 
-    var game: Game = getDefault()
+class SearchGameViewModel @Inject constructor(private val repository: ListRepositoryImpl) :
+    ViewModel() {
 
-    suspend fun SearchGame(title: String){
+    var game = Game()
+
+    suspend fun searchGame(title: String) {
         game = repository.searchGame(title)
-        }
+    }
 
 }
