@@ -139,11 +139,6 @@ fun RegistrationTopBar(
     title: String ="Default"
 ){
     TopAppBar(
-        title = { Text(title) },
-        navigationIcon = {
-            IconButton(onClick = { arrowBackClicked }) {
-                Icon(imageVector = Icons.Default.ArrowBack, "getBack")
-            }
-        }
+        title = { Text(title) }
     )
 }

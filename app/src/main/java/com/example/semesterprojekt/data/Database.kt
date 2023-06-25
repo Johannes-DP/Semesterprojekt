@@ -216,8 +216,6 @@ interface Database {
             return gameView
         }
 
-    }
-
     suspend fun savaData(
         stars: Double,
         review: String,
@@ -281,8 +279,8 @@ interface Database {
                         total += holder as Double
                     }
                     count += 1.0
-                    Log.d("RatingID", gameId)
-                    Log.d("Rating", total.toString())
+                    //Log.d("RatingID", gameId)
+                    //Log.d("Rating", total.toString())
                 }
             }
             .addOnFailureListener { exception ->
@@ -294,7 +292,7 @@ interface Database {
             return avg
         }
         avg = total / count
-        Log.d("AVGStars", avg.toString())
+        //Log.d("AVGStars", avg.toString())
         return avg
 
     }
@@ -312,12 +310,12 @@ interface Database {
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
                     holder = document.get("Anzahl")
-                    Log.d("holder", holder.toString())
+                    //Log.d("holder", holder.toString())
                     if (holder != null) {
                         total += holder as Double
                     }
-                    count = +1.0
-                    Log.d("Hours", total.toString())
+                    count += 1.0
+                    //Log.d("Hours", total.toString())
                 }
             }
             .addOnFailureListener { exception ->
@@ -332,5 +330,29 @@ interface Database {
         Log.d("AVGHOUR", avg.toString())
         return avg
 
+
+
+    }
+
+        suspend fun getReviews(gameId: String): ArrayList<String>{
+            val db = Firebase.firestore
+            var reviews = ArrayList<String>()
+            var holder: String
+
+            db.collection("Review").whereEqualTo("GameId",gameId)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents){
+                       holder = document.get("Text") as String
+                        Log.d("String", holder)
+                       reviews.add(holder)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                }
+                .await()
+            return reviews
+        }
     }
 }

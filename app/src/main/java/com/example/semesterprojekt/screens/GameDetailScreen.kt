@@ -2,20 +2,25 @@ package com.example.semesterprojekt.screens
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key.Companion.Sleep
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -25,6 +30,7 @@ import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.*
 import com.example.semesterprojekt.widgets.*
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.wait
 
@@ -101,7 +107,28 @@ fun GameDetailScreen(
             }
             GameName(name = game.title, MaterialTheme.typography.h5)
             GameDetails(game = game)
+            GameReviews(gameViewModel)
             Log.d("here first?", game.title)
+        }
+    }
+}
+
+@Composable
+    fun GameReviews(
+        gameViewModel: GameViewModel
+    ){
+
+    val reviews by gameViewModel.reviewState.collectAsState()
+
+    Column (
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Log.d("Screen", reviews.size.toString())
+        for(items in reviews) {
+            Row(){
+                Text(text = items)
+                Log.d("Screen", items)
+            }
         }
     }
 }

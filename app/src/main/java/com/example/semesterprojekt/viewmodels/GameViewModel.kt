@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.viewmodels
 
+import android.provider.ContactsContract.Data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,8 @@ class GameViewModel @Inject constructor(private val id: String?/*, private val r
 
     val gameState = MutableStateFlow(Game())
     var game = Game()
+    val reviewState = MutableStateFlow(ArrayList<String>())
+    var reviews = ArrayList<String>()
 
     init {
         viewModelScope.launch{
@@ -26,11 +29,14 @@ class GameViewModel @Inject constructor(private val id: String?/*, private val r
             game.avgRating = Database.getAvgRating(game.id)
             game.avgHours =  Database.getAvgHours(game.id)
             gameState.value = game
-
+            reviews = Database.getReviews(game.id)
+            reviewState.value = reviews
+            Log.d("GVM", reviews.count().toString())
         }
     }
 
     suspend fun savaData(stars: Double, review: String, hours: Double, userId: String, gameId: String){
         Database.savaData(stars,review,hours,userId,gameId)
     }
+
 }

@@ -14,18 +14,20 @@ import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 import com.example.semesterprojekt.viewmodels.RegistrationViewModelFactory
 import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.DataTextfields
-import kotlinx.coroutines.launch
+import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.RegistrationTopBar
-import kotlinx.coroutines.handleCoroutineException
+import kotlinx.coroutines.launch
+
 
 @Composable
 fun Registration(
     navController: NavController,
     userModel: UserStateViewModel
 ) {
-    Scaffold(topBar = {RegistrationTopBar(
-        title = "Registration",
-        arrowBackClicked = { navController.popBackStack() })
+    Scaffold(topBar = {
+        RegistrationTopBar(
+        title = "Registration"
+        )
     })
     {padding ->
         RegistrationContent(navController = navController,Modifier.padding(padding),userModel)
