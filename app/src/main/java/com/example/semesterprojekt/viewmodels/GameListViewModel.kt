@@ -1,11 +1,9 @@
 package com.example.semesterprojekt.viewmodels
 
-import android.provider.ContactsContract.Data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.semesterprojekt.data.Database
-import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +33,10 @@ class GameListViewModel : ViewModel() {
 
     suspend fun addList(title:String){
         Database.addList(title)
+    }
+
+    fun logout(){
+        Database.logout()
     }
 
 }

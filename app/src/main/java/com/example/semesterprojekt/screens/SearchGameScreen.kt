@@ -1,6 +1,5 @@
 package com.example.semesterprojekt.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,18 +17,14 @@ import androidx.navigation.NavController
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.SearchGameViewModel
 import com.example.semesterprojekt.viewmodels.SearchGameViewModelFactory
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.GameGrid
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
-import com.google.android.material.tabs.TabLayout.TabGravity
-import com.google.rpc.context.AttributeContext.Auth
 import kotlinx.coroutines.launch
 
 @Composable
 fun SearchGameScreen(
-    navController: NavController,
-    userModel: UserStateViewModel,
+    navController: NavController
 ){
     val factory = SearchGameViewModelFactory(repository = AuthRepository())
     val searchViewModel: SearchGameViewModel = viewModel(factory = factory)
@@ -82,7 +77,7 @@ navController: NavController,
         Button(
             onClick = {
                 coroutineScope.launch {
-                    searchViewModel.SearchGame(title)
+                    searchViewModel.searchGame(title)
                     result = !result
                 }
             }

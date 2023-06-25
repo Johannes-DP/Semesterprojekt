@@ -32,29 +32,32 @@ interface Database {
 
         suspend fun getLists(gameLists: ArrayList<GameList>): ArrayList<GameList> {
             val db = Firebase.firestore
-            db.collection("users").document(getUid())
-                .get()
-                .addOnSuccessListener { fieldSnapshot ->
-                    if (fieldSnapshot.getData()?.isNotEmpty() == true) {
-                        val list = fieldSnapshot.data
-                        if (list != null) {
-                            for (document in list) {
-                                Log.d("testnow", document.toString())
-                                val gameList = GameList(
-                                    document.key,
-                                    document.value as List<DocumentReference>,
-                                    ArrayList()
-                                )
-                                gameLists.add(gameList)
+            if(getUid() != ""){
+                db.collection("users").document(getUid())
+                    .get()
+                    .addOnSuccessListener { fieldSnapshot ->
+                        if (fieldSnapshot.getData()?.isNotEmpty() == true) {
+                            val list = fieldSnapshot.data
+                            if (list != null) {
+                                for (document in list) {
+                                    Log.d("testnow", document.toString())
+                                    val gameList = GameList(
+                                        document.key,
+                                        document.value as List<DocumentReference>,
+                                        ArrayList()
+                                    )
+                                    gameLists.add(gameList)
+                                }
                             }
-                        }
 
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    Log.d("Failure", "not able to get Lists")
-                }
-                .await()
+                    .addOnFailureListener {
+                        Log.d("Failure", "not able to get Lists")
+                    }
+                    .await()
+            }
+
             return gameLists
         }
 
@@ -166,9 +169,9 @@ interface Database {
             return filteredGameList
         }
 
-        fun getUid(): String {
-            Log.d("uid", Firebase.auth.currentUser!!.uid)
-            return Firebase.auth.currentUser!!.uid
+        private fun getUid(): String {
+
+            return Firebase.auth.currentUser?.uid ?:""
         }
 
         fun logout() {
@@ -248,26 +251,25 @@ interface Database {
         stars: Double,
         review: String,
         hours: Double,
-        userId: String,
         gameId: String
     ) {
         val db = Firebase.firestore
 
             val hashRating = hashMapOf(
                 "Stars" to stars,
-                "UserId" to userId,
+                "UserId" to getUid(),
                 "GameId" to gameId
             )
 
             val hashReview = hashMapOf(
                 "Text" to review,
-                "UserId" to userId,
+                "UserId" to getUid(),
                 "GameId" to gameId
             )
 
             val hashPlaytime = hashMapOf(
                 "Anzahl" to hours,
-                "UserId" to userId,
+                "UserId" to getUid(),
                 "GameId" to gameId
             )
 
@@ -307,8 +309,6 @@ interface Database {
                         total += holder as Double
                     }
                     count += 1.0
-                    //Log.d("RatingID", gameId)
-                    //Log.d("Rating", total.toString())
                 }
             }
             .addOnFailureListener { exception ->
@@ -320,7 +320,6 @@ interface Database {
             return avg
         }
         avg = total / count
-        //Log.d("AVGStars", avg.toString())
         return avg
 
         }
@@ -357,8 +356,6 @@ interface Database {
         avg = total / count
         Log.d("AVGHOUR", avg.toString())
         return avg
-
-
 
     }
 

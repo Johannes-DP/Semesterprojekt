@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -24,17 +22,14 @@ import androidx.navigation.NavController
 import com.example.semesterprojekt.R
 import com.example.semesterprojekt.models.Validator
 import com.example.semesterprojekt.viewmodels.GameViewModel
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun ReviewScreen(
     navController: NavController,
-    gameId: String?,
-    userModel: UserStateViewModel
+    gameId: String?
 ){
     val scaffoldState = rememberScaffoldState()
     val gameViewModel = GameViewModel(gameId)
@@ -48,7 +43,7 @@ fun ReviewScreen(
                 title = "Review " + game.title
             )
         }){ padding ->
-        MainContent(Modifier.padding(padding),gameViewModel, navController, userModel)
+        MainContent(Modifier.padding(padding),gameViewModel, navController)
     }
 }
 
@@ -58,8 +53,7 @@ fun ReviewScreen(
 fun MainContent(
     modifier: Modifier = Modifier,
     gameViewModel: GameViewModel,
-    navController: NavController,
-    userModel: UserStateViewModel
+    navController: NavController
 ){
     val coroutineScope = rememberCoroutineScope()
 
@@ -128,7 +122,7 @@ fun MainContent(
             if(Validator.validateHours(hours)){
                 Log.d("Stars", starCount.toString())
                 coroutineScope.launch {
-                    gameViewModel.savaData(starCount.toDouble(),review,hours.toDouble(),userModel.user, gameViewModel.game.id)
+                    gameViewModel.savaData(starCount.toDouble(),review,hours.toDouble(), gameViewModel.game.id)
                     navController.popBackStack()
                 }
             }

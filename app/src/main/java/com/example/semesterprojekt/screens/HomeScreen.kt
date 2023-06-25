@@ -18,20 +18,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.GameList
 import com.example.semesterprojekt.viewmodels.GameListViewModel
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    userModel: UserStateViewModel,
-
+    navController: NavController
 ) {
     val gameListViewModel = GameListViewModel()
     val modalBottomSheetState =
@@ -42,7 +37,7 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
-            BottomSheetAddList(userModel.user)
+            BottomSheetAddList()
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -83,8 +78,8 @@ fun HomeScreen(
                         }
                     }
                     DropdownMenuItem(onClick = {
-                        userModel.logout()
                         navController.popBackStack()
+                        gameListViewModel.logout()
                     }) {
                         Row {
                             Icon(

@@ -9,9 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.repository.AuthRepository
-import com.example.semesterprojekt.screens.Screen
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.ListDetailViewModel
 import com.example.semesterprojekt.viewmodels.SearchGameViewModel
@@ -20,7 +18,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun BottomSheetAddList(userId: String) {
+fun BottomSheetAddList() {
 
     val gameListViewModel = GameListViewModel()
     val coroutineScope = rememberCoroutineScope()
@@ -100,27 +98,34 @@ fun BottomSheetAddGame(
         mutableStateOf(false)
     }
 
-    Column(modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()
-        .padding(20.dp)) {
-        Column(modifier = Modifier
-            .fillMaxWidth(),
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .padding(20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Divider(modifier = Modifier
-            .width(80.dp),
-            thickness = 6.dp,)
+        ) {
+            Divider(
+                modifier = Modifier
+                    .width(80.dp),
+                thickness = 6.dp,
+            )
         }
 
-        Row{
+        Row {
             Text(text = "Add Game", style = MaterialTheme.typography.h5)
         }
 
 
-        Row(modifier = Modifier
-            .fillMaxWidth())
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        )
         {
             Column(
                 modifier = Modifier
@@ -139,7 +144,7 @@ fun BottomSheetAddGame(
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            searchViewModel.SearchGame(title)
+                            searchViewModel.searchGame(title)
                             result = !result
                         }
                     }
@@ -150,11 +155,14 @@ fun BottomSheetAddGame(
                     GameSearchGrid(
                         game = searchViewModel.game,
                         onAddToListClick = { String ->
-                                           coroutineScope.launch{
-                                               listDetailViewModel.addGameToList(listId, listDetailViewModel.getGameById(String))
-                                           }
-                                           },
-                        onDetailClick =  onDetailClick
+                            coroutineScope.launch {
+                                listDetailViewModel.addGameToList(
+                                    listId,
+                                    listDetailViewModel.getGameById(String)
+                                )
+                            }
+                        },
+                        onDetailClick = onDetailClick
                         /*navController.navigate(Screen.GameDetailScreen.addId(gameId))*/
                     )
                 }

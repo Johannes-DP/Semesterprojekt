@@ -1,4 +1,4 @@
-package com.example.semesterprojekt.viewmodels;
+package com.example.semesterprojekt.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,17 +13,15 @@ class RegistrationViewModel (private val repository: AuthRepository): ViewModel(
         private set
 
     suspend fun signUp(){
-
-            val email = textfieldUiState.email
-            val password = textfieldUiState.password
-            repository.firebaseSignUp(email,password)
+            repository.firebaseSignUp(textfieldUiState.email,textfieldUiState.password)
+            textfieldUiState.email = ""
+            textfieldUiState.password = ""
     }
 
-    suspend fun logIn(): String{
-        val email = textfieldUiState.email
-        val password = textfieldUiState.password
-        repository.firebaseLogIn(email,password)
-        return repository.getUid()
+    suspend fun logIn(){
+        repository.firebaseLogIn(textfieldUiState.email,textfieldUiState.password)
+        textfieldUiState.email = ""
+        textfieldUiState.password = ""
     }
 
     fun newState(newUiState: TextfieldUiState){

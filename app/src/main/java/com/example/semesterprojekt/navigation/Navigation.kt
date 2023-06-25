@@ -1,7 +1,6 @@
 package com.example.semesterprojekt.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,56 +9,49 @@ import com.example.semesterprojekt.screens.HomeScreen
 import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
 import androidx.navigation.navArgument
-import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.screens.*
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
-import com.example.semesterprojekt.viewmodels.UserStateViewModelFactory
+
 
 
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    val factory = UserStateViewModelFactory(repository = AuthRepository())
+    /*val factory = UserStateViewModelFactory(repository = AuthRepository())
     val userState: UserStateViewModel =  viewModel(factory = factory)
-   // val listViewModel = GameListViewModel()
+   // val listViewModel = GameListViewModel()*/
 
     NavHost(navController = navController, startDestination = Screen.Registration.route){
 
         composable(route = Screen.MainScreen.route){
-            HomeScreen(navController = navController,userState)
+            HomeScreen(navController = navController)
         }
 
         composable(route = Screen.Registration.route){
-            Registration(navController = navController,userState)
+            Registration(navController = navController)
         }
 
         composable(route = Screen.AddGameScreen.route){
-            AddGameScreen(navController = navController,userState)
+            AddGameScreen(navController = navController)
         }
 
         composable(route = Screen.SearchGameScreen.route){
-            SearchGameScreen(navController = navController,userState)
+            SearchGameScreen(navController = navController)
         }
 
         composable(route = Screen.ListDetailScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             ListDetailScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState)
-        }
-        composable(route = Screen.ModifyListScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
-        ){ backStackEntry ->
-            ModifyListScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY),userState)
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY))
         }
         composable(route = Screen.GameDetailScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             GameDetailScreen(navController = navController,
-                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY),userState)
+                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY))
             }
         composable(route = Screen.ReviewScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
         ){ backStackEntry ->
             ReviewScreen(navController = navController,
-                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY),userState)
+                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY))
         }
         }
 }

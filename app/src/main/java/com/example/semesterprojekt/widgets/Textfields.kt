@@ -50,8 +50,7 @@ fun SimpleTextField(
                 onDone()
             }
         ),
-
-        )
+    )
     if (isError){
         Text(
             modifier = Modifier.padding(start = 8.dp),
@@ -63,29 +62,30 @@ fun SimpleTextField(
 }
 
 @Composable
-fun DataTextfields(state: TextfieldUiState, onChange: (TextfieldUiState)->Unit){
+fun DataTextFields(state: TextfieldUiState, onChange: (TextfieldUiState)->Unit) {
 
     OutlinedTextField(
         value = state.email,
-        onValueChange ={input -> onChange(state.copy(email = input))},
-        label = {Text("Email")},
+        onValueChange = { input -> onChange(state.copy(email = input)) },
+        label = { Text("Email") },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(percent = 20),
-        keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 
-    var passwordIsVisible by remember{ mutableStateOf(false) }
+    var passwordIsVisible by remember { mutableStateOf(false) }
 
     OutlinedTextField(
         value = state.password,
-        onValueChange ={input -> onChange(state.copy(password = input))},
-        label = {Text("Password")},
+        onValueChange = { input -> onChange(state.copy(password = input)) },
+        label = { Text("Password") },
         singleLine = true,
-        modifier =  Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(percent = 20),
-        visualTransformation = if(passwordIsVisible){
-            VisualTransformation.None}else{
+        visualTransformation = if (passwordIsVisible) {
+            VisualTransformation.None
+        } else {
             PasswordVisualTransformation()
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -105,10 +105,7 @@ fun DataTextfields(state: TextfieldUiState, onChange: (TextfieldUiState)->Unit){
                     contentDescription = null
                 )
             }
-
-
         }
     )
-
 }
 

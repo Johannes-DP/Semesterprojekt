@@ -12,17 +12,14 @@ import androidx.lifecycle.viewmodel.compose.*
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 import com.example.semesterprojekt.viewmodels.RegistrationViewModelFactory
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
-import com.example.semesterprojekt.widgets.DataTextfields
-import com.example.semesterprojekt.widgets.MinimalisticAppBar
+import com.example.semesterprojekt.widgets.DataTextFields
 import com.example.semesterprojekt.widgets.RegistrationTopBar
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun Registration(
-    navController: NavController,
-    userModel: UserStateViewModel
+    navController: NavController
 ) {
     Scaffold(topBar = {
         RegistrationTopBar(
@@ -30,7 +27,7 @@ fun Registration(
         )
     })
     {padding ->
-        RegistrationContent(navController = navController,Modifier.padding(padding),userModel)
+        RegistrationContent(navController = navController,Modifier.padding(padding))
 
     }
 }
@@ -38,8 +35,7 @@ fun Registration(
     @Composable
     fun RegistrationContent(
         navController: NavController,
-        modifier: Modifier = Modifier,
-        userModel: UserStateViewModel
+        modifier: Modifier = Modifier
     ) {
         val factory = RegistrationViewModelFactory(repository = AuthRepository())
         val viewModel: RegistrationViewModel = viewModel(factory = factory)
@@ -59,7 +55,7 @@ fun Registration(
 
         Column(Modifier.fillMaxWidth()) {
 
-            DataTextfields(
+            DataTextFields(
                 state = viewModel.textfieldUiState,
                 onChange = { newUiState -> viewModel.newState(newUiState) })
             Row() {
@@ -68,7 +64,7 @@ fun Registration(
                         try {
                             viewModel.signUp()
                             showWarningR = false
-                            userModel.user = viewModel.logIn()
+                            viewModel.logIn()
                             navController.navigate(Screen.MainScreen.route)
                         } catch (e: Exception) {
                             print(e)
@@ -82,7 +78,7 @@ fun Registration(
                 Button(onClick = {
                     coroutineScope.launch {
                         try {
-                            userModel.user = viewModel.logIn()
+                            viewModel.logIn()
                             navController.navigate(Screen.MainScreen.route)
                             showWarningL = false
                         } catch (e: Exception) {

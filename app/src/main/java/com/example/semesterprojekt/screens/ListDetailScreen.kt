@@ -1,6 +1,5 @@
 package com.example.semesterprojekt.screens
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -9,36 +8,25 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.Game
-import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.Platform
-import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.ListDetailViewModel
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.*
-import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListDetailScreen(
     navController: NavController,
-    listId:String?,
-    userModel: UserStateViewModel,
+    listId:String?
 
 ) {
     val listDetailViewModel = ListDetailViewModel(listId)
@@ -69,7 +57,6 @@ fun ListDetailScreen(
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetBackgroundColor = Color.White,
-        // scrimColor = Color.Red,  // Color for the fade background when you open/close the drawer
     ) {
         Scaffold(topBar = {
             OtherTopAppBar(
@@ -78,43 +65,6 @@ fun ListDetailScreen(
                 },
                 title = " " + listId, //TODO
                 menuContent = {
-                    DropdownMenuItem(onClick = {
-                        navController.navigate(
-                            Screen.ModifyListScreen.addId(
-                                "1"//gameList.id
-                            )
-                        )
-                    }) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit List",
-                                modifier = Modifier.padding(4.dp)
-                            )
-                            Text(
-                                text = "Edit List", modifier = Modifier
-                                    .width(100.dp)
-                                    .padding(4.dp)
-                            )
-                        }
-
-                    }
-                    DropdownMenuItem(onClick = { Log.d("Clear List", /*gameList.id*/"1") }) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Clear List",
-                                modifier = Modifier.padding(4.dp)
-                            )
-                            Text(
-                                text = "Clear List", modifier = Modifier
-                                    .width(100.dp)
-                                    .padding(4.dp)
-                            )
-                        }
-
-                    }
-
                     DropdownMenuItem(onClick = {
                         coroutineScope.launch {
                             if(listId != null)
@@ -164,24 +114,7 @@ fun ListDetailScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 )
                 {
-                    /*items(listDetailUiState.selectablePlatformItems) { platformItem ->
-                        Chip(
-                            modifier = Modifier.padding(horizontal = 15.dp, vertical = 2.dp),
-                            colors = ChipDefaults.chipColors(
-                                backgroundColor = if (platformItem.isSelected)
-                                    colorResource(id = com.example.semesterprojekt.R.color.purple_200)
-                                else
-                                    colorResource(id = com.example.semesterprojekt.R.color.white)
-                            ),
-                            onClick = {listDetailUiState.copy(platform= listDetailUiState.selectPlatform(platformItem))
-                            coroutineScope.launch {
-                                listDetailViewModel.filterList(listId,listDetailUiState.platform)
-                                Log.d("in onclick", listDetailUiState.platform.toString())
-                            }
-                            }) {
-                            Text(text = platformItem.title)
-                        }
-                    }*/
+
                     items(listDetailUiState.selectablePlatformItems) { platformItem ->
                         Chip(
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 2.dp),
@@ -193,14 +126,9 @@ fun ListDetailScreen(
                             ),
                             onClick = {
                                 listDetailUiState.platform = listDetailUiState.selectPlatform(platformItem)
-                                Log.d("in onclick", listDetailUiState.selectPlatform(platformItem).toString())
-                                Log.d("in onclick", listDetailUiState.platform.toString())
-                                Log.d("in onclick", listDetailUiState.selectPlatform(platformItem).size.toString())
-                                Log.d("in onclick", listDetailUiState.platform.size.toString())
 
                                 coroutineScope.launch {
                                     listDetailViewModel.filterList(listId,listDetailUiState.platform)
-                                    //Log.d("in onclick", listDetailUiState.platform.size.toString())
                                 }
                             }) {
                             Text(text = platformItem.title)
@@ -212,7 +140,6 @@ fun ListDetailScreen(
                         items(gameListState.games) { game ->
                             GameGrid(
                                 game = game,
-                                gameList = gameListState,
                                 onItemClick = { gameId ->
                                     navController.navigate(Screen.GameDetailScreen.addId(gameId))
                                 },

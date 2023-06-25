@@ -7,8 +7,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -22,16 +20,13 @@ import com.example.semesterprojekt.R
 import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.AddGameViewModel
 import com.example.semesterprojekt.viewmodels.AddGameViewModelFactory
-import com.example.semesterprojekt.viewmodels.UserStateViewModel
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
-import com.example.semesterprojekt.widgets.OtherTopAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddGameScreen(
-    navController: NavController,
-    userModel: UserStateViewModel
+    navController: NavController
 ) {
     val factory = AddGameViewModelFactory(repository = AuthRepository())
     val addGameModel: AddGameViewModel = viewModel(factory = factory)

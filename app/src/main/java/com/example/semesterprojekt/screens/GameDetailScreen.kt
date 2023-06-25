@@ -2,64 +2,34 @@ package com.example.semesterprojekt.screens
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.Sleep
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.semesterprojekt.models.GameList
-import com.example.semesterprojekt.models.Game
-
-import com.example.semesterprojekt.repository.AuthRepository
 import com.example.semesterprojekt.viewmodels.*
 import com.example.semesterprojekt.widgets.*
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 
 
 @SuppressLint("CoroutineCreationDuringComposition", "SuspiciousIndentation")
 @Composable
 fun GameDetailScreen(
     navController: NavController,
-    gameId: String?,
-    userModel: UserStateViewModel
+    gameId: String?
 
 ) {
 
     val gameViewModel = GameViewModel(gameId)
     val game by gameViewModel.gameState.collectAsState()
 
- /*   val factory = DetailViewModelFactory(repository = AuthRepository())
-    val detailViewModel: DetailViewModel = viewModel(factory = factory)
-
-    val coroutineScope = rememberCoroutineScope()
-
-    coroutineScope.launch {
-        detailViewModel.getGameById(gameId)
-    }
-
-    var game = detailViewModel.game
-*/
     Scaffold(topBar = {
         DetailScreenAppBar(
             arrowBackClicked = { navController.popBackStack() },

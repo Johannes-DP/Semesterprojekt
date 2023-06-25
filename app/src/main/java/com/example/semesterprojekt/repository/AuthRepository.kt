@@ -10,7 +10,7 @@ class AuthRepository() {
 
     suspend fun firebaseLogIn(email: String, password: String) = Database.firebaseLogIn(email,password)
 
-    fun getUid(): String = Database.getUid()
+    //fun getUid(): String = Database.getUid()
 
     fun logout() = Database.logout()
 
