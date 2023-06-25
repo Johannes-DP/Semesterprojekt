@@ -1,18 +1,18 @@
 package com.example.semesterprojekt.screens
 
 sealed class AddGameUiEvent {
-    object TitleChanged: AddGameUiEvent()
+    object TitleChanged : AddGameUiEvent()
 
-    object YearChanged: AddGameUiEvent()
+    object YearChanged : AddGameUiEvent()
 
-    object PublisherChanged: AddGameUiEvent()
+    object PublisherChanged : AddGameUiEvent()
 
-    object DeveloperChanged: AddGameUiEvent()
+    object DeveloperChanged : AddGameUiEvent()
 
-    object PlatformChanged: AddGameUiEvent()
+    object PlatformChanged : AddGameUiEvent()
 
-    object ImageChanged: AddGameUiEvent()
+    object ImageChanged : AddGameUiEvent()
 
-    object RatingChanged: AddGameUiEvent()
+    object RatingChanged : AddGameUiEvent()
 
 }

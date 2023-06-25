@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.ListDetailViewModel
 import com.example.semesterprojekt.viewmodels.SearchGameViewModel
@@ -20,7 +19,6 @@ fun BottomSheetAddList(
     gameListViewModel: GameListViewModel
 ) {
 
-    //val gameListViewModel = GameListViewModel(repository = ListRepositoryImpl())
     val coroutineScope = rememberCoroutineScope()
     var title by remember {
         mutableStateOf("")
@@ -80,6 +78,7 @@ fun BottomSheetAddList(
         }
     }
 }
+
 @Composable
 fun BottomSheetAddGame(
     listDetailViewModel: ListDetailViewModel,
@@ -88,7 +87,6 @@ fun BottomSheetAddGame(
     onDetailClick: (String) -> Unit = {}
 ) {
 
-    //val searchViewModel = SearchGameViewModel(repository = ListRepositoryImpl())
     val coroutineScope = rememberCoroutineScope()
     var title by remember {
         mutableStateOf("")
@@ -163,7 +161,6 @@ fun BottomSheetAddGame(
                             }
                         },
                         onDetailClick = onDetailClick
-                        /*navController.navigate(Screen.GameDetailScreen.addId(gameId))*/
                     )
                 }
             }

@@ -9,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 import com.example.semesterprojekt.widgets.DataTextFields
 import com.example.semesterprojekt.widgets.RegistrationTopBar
@@ -23,85 +22,90 @@ fun Registration(
 ) {
     Scaffold(topBar = {
         RegistrationTopBar(
-        title = "Registration"
+            title = "Registration"
         )
     })
-    {padding ->
-        RegistrationContent(navController = navController, viewModel = viewModel, modifier = Modifier.padding(padding))
+    { padding ->
+        RegistrationContent(
+            navController = navController,
+            viewModel = viewModel,
+            modifier = Modifier.padding(padding)
+        )
 
     }
 }
 
-    @Composable
-    fun RegistrationContent(
-        navController: NavController,
-        viewModel: RegistrationViewModel,
-        modifier: Modifier = Modifier
-    ) {
+@Composable
+fun RegistrationContent(
+    navController: NavController,
+    viewModel: RegistrationViewModel,
+    modifier: Modifier = Modifier
+) {
 
-       // val viewModel= RegistrationViewModel(repository = ListRepositoryImpl())
 
-        val coroutineScope = rememberCoroutineScope()
-        val warningReg =
-            "Registration failed. Please check if your email is valid and your password is long enough(6 characters)!"
-        val warningLog = "Login failed. Please check your credentials"
+    val coroutineScope = rememberCoroutineScope()
+    val warningReg =
+        "Registration failed. Please check if your email is valid and your password is long enough(6 characters)!"
+    val warningLog = "Login failed. Please check your credentials"
 
-        var showWarningR by remember {
-            mutableStateOf(false)
+    var showWarningR by remember {
+        mutableStateOf(false)
+    }
+
+    var showWarningL by remember {
+        mutableStateOf(false)
+    }
+
+    Column(Modifier.fillMaxWidth()) {
+
+        DataTextFields(
+            state = viewModel.textfieldUiState,
+            onChange = { newUiState ->
+                viewModel.newState(newUiState)
+                Log.d("test", viewModel.textfieldUiState.email)
+            })
+        Row {
+            Button(onClick = {
+                coroutineScope.launch {
+                    try {
+                        viewModel.signUp()
+                        showWarningR = false
+                        viewModel.logIn()
+                        navController.navigate(Screen.MainScreen.route)
+                    } catch (e: Exception) {
+                        print(e)
+                        showWarningR = true
+                    }
+                }
+            })
+            {
+                Text("Register")
+            }
+            Button(onClick = {
+                coroutineScope.launch {
+                    showWarningL = try {
+                        viewModel.logIn()
+                        navController.navigate(Screen.MainScreen.route)
+                        false
+                    } catch (e: Exception) {
+                        print(e)
+                        true
+                    }
+                }
+            })
+            {
+                Text("Login")
+            }
         }
 
-        var showWarningL by remember {
-            mutableStateOf(false)
+        if (showWarningR) {
+            Text(warningReg)
         }
-
-        Column(Modifier.fillMaxWidth()) {
-
-            DataTextFields(
-                state = viewModel.textfieldUiState,
-                onChange = { newUiState -> viewModel.newState(newUiState)
-                Log.d("test", viewModel.textfieldUiState.email)})
-            Row() {
-                Button(onClick = {
-                    coroutineScope.launch {
-                        try {
-                            viewModel.signUp()
-                            showWarningR = false
-                            viewModel.logIn()
-                            navController.navigate(Screen.MainScreen.route)
-                        } catch (e: Exception) {
-                            print(e)
-                            showWarningR = true
-                        }
-                    }
-                })
-                {
-                    Text("Register")
-                }
-                Button(onClick = {
-                    coroutineScope.launch {
-                        try {
-                            viewModel.logIn()
-                            navController.navigate(Screen.MainScreen.route)
-                            showWarningL = false
-                        } catch (e: Exception) {
-                            print(e)
-                            showWarningL = true
-                        }
-                    }
-                })
-                {
-                    Text("Login")
-                }
-            }
-
-            if (showWarningR) {
-                Text(warningReg)
-            }
-            if (showWarningL) {
-                Text(warningLog)
-            }
+        if (showWarningL) {
+            Text(warningLog)
         }
     }
+}
 
 
 

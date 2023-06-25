@@ -23,28 +23,29 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchGameScreen(
     navController: NavController
-){
-    val searchViewModel= SearchGameViewModel(repository = ListRepositoryImpl())
+) {
+    val searchViewModel = SearchGameViewModel(repository = ListRepositoryImpl())
 
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar =  {
-        MinimalisticAppBar(
-            arrowBackClicked = { navController.popBackStack() },
-            title = "Search Game"
-        )}){ padding ->
-        MainContent(Modifier.padding(padding),searchViewModel, navController)
+        topBar = {
+            MinimalisticAppBar(
+                arrowBackClicked = { navController.popBackStack() },
+                title = "Search Game"
+            )
+        }) { padding ->
+        MainContent(Modifier.padding(padding), searchViewModel, navController)
     }
 }
 
 @Composable
 fun MainContent(
-modifier: Modifier = Modifier,
-searchViewModel: SearchGameViewModel,
-navController: NavController,
-){
+    modifier: Modifier = Modifier,
+    searchViewModel: SearchGameViewModel,
+    navController: NavController,
+) {
 
     val coroutineScope = rememberCoroutineScope()
     var title by remember {
@@ -57,7 +58,7 @@ navController: NavController,
 
 
 
-    Column (
+    Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth(),
@@ -78,12 +79,13 @@ navController: NavController,
                     result = !result
                 }
             }
-        ){
+        ) {
             Text("Search Game")
         }
-        if(result){
-                GameGrid(game = searchViewModel.game, onItemClick = { gameId ->
-                    navController.navigate(Screen.GameDetailScreen.addId(gameId))})
+        if (result) {
+            GameGrid(game = searchViewModel.game, onItemClick = { gameId ->
+                navController.navigate(Screen.GameDetailScreen.addId(gameId))
+            })
         }
     }
 }

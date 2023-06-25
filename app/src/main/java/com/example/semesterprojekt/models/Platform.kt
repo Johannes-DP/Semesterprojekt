@@ -12,6 +12,4 @@ enum class Platform{
     Nintendo3DS,
     Switch,
     Legacy
-
-
 }

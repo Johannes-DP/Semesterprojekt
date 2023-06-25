@@ -31,20 +31,20 @@ import kotlinx.coroutines.launch
 fun ReviewScreen(
     navController: NavController,
     gameId: String?
-){
+) {
     val scaffoldState = rememberScaffoldState()
     val gameViewModel = GameViewModel(gameId, repository = ListRepositoryImpl())
     val game by gameViewModel.gameState.collectAsState()
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar =  {
+        topBar = {
             MinimalisticAppBar(
                 arrowBackClicked = { navController.popBackStack() },
                 title = "Review " + game.title
             )
-        }){ padding ->
-        MainContent(Modifier.padding(padding),gameViewModel, navController)
+        }) { padding ->
+        MainContent(Modifier.padding(padding), gameViewModel, navController)
     }
 }
 
@@ -55,7 +55,7 @@ fun MainContent(
     modifier: Modifier = Modifier,
     gameViewModel: GameViewModel,
     navController: NavController
-){
+) {
     val coroutineScope = rememberCoroutineScope()
 
     var starCount by remember {
@@ -81,23 +81,25 @@ fun MainContent(
 
         LazyHorizontalGrid(
             modifier = Modifier.height(33.dp),
-            rows = GridCells.Fixed(1))
+            rows = GridCells.Fixed(1)
+        )
         {
-            items(5){stars ->
+            items(5) { stars ->
                 Chip(
                     modifier = Modifier.padding(2.dp),
                     colors = ChipDefaults.chipColors(
-                        backgroundColor = if(starCount >= stars+1){
+                        backgroundColor = if (starCount >= stars + 1) {
                             MaterialTheme.colors.secondary
-                        }
-                        else
+                        } else
                             colorResource(id = R.color.white)
                     ),
                     onClick = {
-                        starCount = stars+1
-                    }){
-                    Icon(imageVector = Icons.Default.Star,
-                        contentDescription = "Stars")
+                        starCount = stars + 1
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Stars"
+                    )
                     counter += 1
                 }
             }
@@ -105,9 +107,9 @@ fun MainContent(
 
         SimpleTextField(
             value = review,
-            label = "Review" ,
+            label = "Review",
             isError = false,
-            onChange = {review = it},
+            onChange = { review = it },
             singleLine = false
         )
 
@@ -115,15 +117,20 @@ fun MainContent(
             value = hours,
             label = "Played Time",
             isError = !Validator.validateHours(hours),
-            onChange = {hours = it},
+            onChange = { hours = it },
             keyboardType = KeyboardType.Number
         )
 
         Button(onClick = {
-            if(Validator.validateHours(hours)){
+            if (Validator.validateHours(hours)) {
                 Log.d("Stars", starCount.toString())
                 coroutineScope.launch {
-                    gameViewModel.savaData(starCount.toDouble(),review,hours.toDouble(), gameViewModel.game.id)
+                    gameViewModel.savaData(
+                        starCount.toDouble(),
+                        review,
+                        hours.toDouble(),
+                        gameViewModel.game.id
+                    )
                     navController.popBackStack()
                 }
             }

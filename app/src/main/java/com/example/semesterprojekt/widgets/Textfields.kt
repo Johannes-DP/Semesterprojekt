@@ -31,7 +31,7 @@ fun SimpleTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     onDone: () -> Unit = {},
     onChange: (String) -> Unit
-){
+) {
     OutlinedTextField(
         value = value,
         singleLine = singleLine,
@@ -51,7 +51,7 @@ fun SimpleTextField(
             }
         ),
     )
-    if (isError){
+    if (isError) {
         Text(
             modifier = Modifier.padding(start = 8.dp),
             text = errMsg,
@@ -62,7 +62,7 @@ fun SimpleTextField(
 }
 
 @Composable
-fun DataTextFields(state: TextfieldUiState, onChange: (TextfieldUiState)->Unit) {
+fun DataTextFields(state: TextfieldUiState, onChange: (TextfieldUiState) -> Unit) {
 
     OutlinedTextField(
         value = state.email,

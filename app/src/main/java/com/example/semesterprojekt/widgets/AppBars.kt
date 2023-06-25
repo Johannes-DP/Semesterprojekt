@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 fun HomeTopAppBar(
     title: String = "default",
     menuContent: @Composable () -> Unit
-){
+) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -34,7 +34,7 @@ fun OtherTopAppBar(
     arrowBackClicked: () -> Unit = {},
     title: String = "default",
     menuContent: @Composable () -> Unit
-){
+) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -63,11 +63,11 @@ fun OtherTopAppBar(
 fun MinimalisticAppBar(
     arrowBackClicked: () -> Unit = {},
     title: String = "default",
-){
+) {
     TopAppBar(
-        title = { Text( title) },
+        title = { Text(title) },
         navigationIcon = {
-            IconButton(onClick = arrowBackClicked ) {
+            IconButton(onClick = arrowBackClicked) {
                 Icon(imageVector = Icons.Default.ArrowBack, "getBack")
 
             }
@@ -79,7 +79,7 @@ fun DetailScreenAppBar(
     arrowBackClicked: () -> Unit = {},
     title: String = "default",
     menuContent: @Composable () -> Unit
-){
+) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -106,8 +106,8 @@ fun DetailScreenAppBar(
 
 @Composable
 fun RegistrationTopBar(
-    title: String ="Default"
-){
+    title: String = "Default"
+) {
     TopAppBar(
         title = { Text(title) }
     )

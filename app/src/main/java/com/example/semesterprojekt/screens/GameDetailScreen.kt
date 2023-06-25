@@ -1,7 +1,6 @@
 package com.example.semesterprojekt.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
@@ -36,8 +35,8 @@ fun GameDetailScreen(
             arrowBackClicked = { navController.popBackStack() },
             title = " " + game.title,
             menuContent = {
-                DropdownMenuItem(onClick = { navController.navigate(Screen.ReviewScreen.addId(game.id))}) {
-                    Row{
+                DropdownMenuItem(onClick = { navController.navigate(Screen.ReviewScreen.addId(game.id)) }) {
+                    Row {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Write Review",
@@ -83,23 +82,22 @@ fun GameDetailScreen(
             GameName(name = game.title, MaterialTheme.typography.h5)
             GameDetails(game = game)
             GameReviews(gameViewModel)
-            Log.d("here first?", game.title)
         }
     }
 }
 
 @Composable
-    fun GameReviews(
-        gameViewModel: GameViewModel
-    ){
+fun GameReviews(
+    gameViewModel: GameViewModel
+) {
 
     val reviews by gameViewModel.reviewState.collectAsState()
 
-    Column (
+    Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         GameName(name = "Reviews", MaterialTheme.typography.h5)
-        for(items in reviews) {
+        for (items in reviews) {
             TextField(
                 readOnly = true,
                 value = items,

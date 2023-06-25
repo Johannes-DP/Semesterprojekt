@@ -23,11 +23,13 @@ interface ListRepository {
 
     suspend fun getLists(gameLists: ArrayList<GameList>): ArrayList<GameList>
 
-    suspend fun getGames2(reference: DocumentReference, gameArrayList: ArrayList<Game>): ArrayList<Game>
+    suspend fun getGames2(
+        reference: DocumentReference, gameArrayList: ArrayList<Game>
+    ): ArrayList<Game>
 
     suspend fun getListById(id: String?): GameList
 
-    suspend fun addGametoList(game: String, listName: String)
+    suspend fun addGameToList(game: String, listName: String)
 
     suspend fun removeGameFromList(game: String, listName: String)
 
@@ -48,8 +50,5 @@ interface ListRepository {
     suspend fun addList(title: String)
 
     suspend fun deleteList(title: String)
-
-
-
 
 }

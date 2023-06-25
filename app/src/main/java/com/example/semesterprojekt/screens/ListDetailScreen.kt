@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListDetailScreen(
     navController: NavController,
-    listId:String?
+    listId: String?
 
 ) {
     val listDetailViewModel = ListDetailViewModel(listId, repository = ListRepositoryImpl())
@@ -67,11 +67,11 @@ fun ListDetailScreen(
                 arrowBackClicked = {
                     navController.popBackStack()
                 },
-                title = " " + listId, //TODO
+                title = " $listId",
                 menuContent = {
                     DropdownMenuItem(onClick = {
                         coroutineScope.launch {
-                            if(listId != null)
+                            if (listId != null)
                                 listDetailViewModel.deleteList(listId)
                             navController.popBackStack()
                         }
@@ -111,7 +111,10 @@ fun ListDetailScreen(
                 }
             }
 
-            Column(modifier = Modifier.padding(padding), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(padding),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 LazyHorizontalGrid(
                     modifier = Modifier.height(100.dp),
                     rows = GridCells.Fixed(3),
@@ -129,10 +132,14 @@ fun ListDetailScreen(
                                     colorResource(id = com.example.semesterprojekt.R.color.white)
                             ),
                             onClick = {
-                                listDetailUiState.platform = listDetailUiState.selectPlatform(platformItem)
+                                listDetailUiState.platform =
+                                    listDetailUiState.selectPlatform(platformItem)
 
                                 coroutineScope.launch {
-                                    listDetailViewModel.filterList(listId,listDetailUiState.platform)
+                                    listDetailViewModel.filterList(
+                                        listId,
+                                        listDetailUiState.platform
+                                    )
                                 }
                             }) {
                             Text(text = platformItem.title)
@@ -140,20 +147,24 @@ fun ListDetailScreen(
                     }
                 }
                 LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-                    if (!gameListState.games.isEmpty()) {
+                    if (gameListState.games.isNotEmpty()) {
                         items(gameListState.games) { game ->
                             GameGrid(
                                 game = game,
                                 onItemClick = { gameId ->
                                     navController.navigate(Screen.GameDetailScreen.addId(gameId))
                                 },
-                                onLongClick = {gameId ->
+                                onLongClick = { gameId ->
                                     coroutineScope.launch {
-                                        listDetailViewModel.removeGameFromList(gameId,listId)
+                                        listDetailViewModel.removeGameFromList(gameId, listId)
 
                                         navController.popBackStack()
-                                        if(listId != null)
-                                    navController.navigate(Screen.ListDetailScreen.addId(listId))
+                                        if (listId != null)
+                                            navController.navigate(
+                                                Screen.ListDetailScreen.addId(
+                                                    listId
+                                                )
+                                            )
                                     }
 
                                 }

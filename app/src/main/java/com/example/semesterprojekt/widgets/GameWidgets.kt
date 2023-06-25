@@ -23,7 +23,7 @@ import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
 
 @Composable
-fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}){
+fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}) {
 
     Card(
         modifier = Modifier
@@ -47,7 +47,7 @@ fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}){
                         .padding(10.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                Text(text = gameList.title, style = MaterialTheme.typography.h5)
+                    Text(text = gameList.title, style = MaterialTheme.typography.h5)
                 }
             }
         }
@@ -59,8 +59,8 @@ fun GameListGrid(gameList: GameList, onItemClick: (String) -> Unit = {}){
 fun GameGrid(
     game: Game,
     onItemClick: (String) -> Unit = {},
-    onLongClick: (String) -> Unit = {})
-{
+    onLongClick: (String) -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,14 +72,14 @@ fun GameGrid(
         border = null,
         elevation = 0.dp
     ) {
-        Column{
+        Column {
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(corner = CornerSize(15.dp)),
                 elevation = 5.dp,
-                ) {
+            ) {
                 Column {
                     Box(
                         modifier = Modifier
@@ -101,8 +101,8 @@ fun GameGrid(
 @Composable
 fun GameGrid(
     game: Game,
-    onItemClick: (String) -> Unit = {})
-{
+    onItemClick: (String) -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,7 +119,7 @@ fun GameGrid(
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(corner = CornerSize(15.dp)),
                 elevation = 5.dp,
-                ) {
+            ) {
                 Column {
                     Box(
                         modifier = Modifier
@@ -142,8 +142,8 @@ fun GameGrid(
 fun GameSearchGrid(
     game: Game,
     onAddToListClick: (String) -> Unit = {},
-    onDetailClick: (String) -> Unit = {})
-{
+    onDetailClick: (String) -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -158,7 +158,7 @@ fun GameSearchGrid(
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(corner = CornerSize(15.dp)),
                 elevation = 5.dp,
-                ) {
+            ) {
                 Column {
                     Box(
                         modifier = Modifier
@@ -180,7 +180,7 @@ fun GameSearchGrid(
 
 @Composable
 fun GameImage(imageUrl: String) {
-    if (imageUrl != "null"){
+    if (imageUrl != "null") {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imageUrl)
@@ -212,7 +212,7 @@ fun GameImage(imageUrl: String) {
 }
 
 @Composable
-fun AddToListIcon(game: Game, onAddToListClick: (String) -> Unit){
+fun AddToListIcon(game: Game, onAddToListClick: (String) -> Unit) {
     Box(
         modifier = Modifier
             .height(300.dp)
@@ -224,13 +224,15 @@ fun AddToListIcon(game: Game, onAddToListClick: (String) -> Unit){
             tint = MaterialTheme.colors.secondary,
             imageVector = Icons.Default.Add,
             contentDescription = "AddGameToList",
-            modifier = Modifier.clickable { onAddToListClick(game.id) }.size(70.dp)
+            modifier = Modifier
+                .clickable { onAddToListClick(game.id) }
+                .size(70.dp)
         )
     }
 }
 
 @Composable
-fun DetailIcon(game: Game, onDetailClick: (String) -> Unit){
+fun DetailIcon(game: Game, onDetailClick: (String) -> Unit) {
     Box(
         modifier = Modifier
             .height(300.dp)
@@ -242,19 +244,20 @@ fun DetailIcon(game: Game, onDetailClick: (String) -> Unit){
             tint = MaterialTheme.colors.secondary,
             imageVector = Icons.Default.Info,
             contentDescription = "ShowGameDetails",
-            modifier = Modifier.clickable { onDetailClick(game.id) }.size(70.dp)
+            modifier = Modifier
+                .clickable { onDetailClick(game.id) }
+                .size(70.dp)
         )
     }
 }
 
 
 @Composable
-fun GameName(name: String, style: TextStyle){
+fun GameName(name: String, style: TextStyle) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
-        //verticalAlignment = Alignment.CenterVertically,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = name, style = style)
@@ -262,8 +265,13 @@ fun GameName(name: String, style: TextStyle){
 }
 
 @Composable
-fun GameDetails(game: Game){
-    GameDetailRow(category = "Metascore: ", argument = game.rating, category2 = "User Rating: ", argument2 = game.avgRating.toString())
+fun GameDetails(game: Game) {
+    GameDetailRow(
+        category = "Metascore: ",
+        argument = game.rating,
+        category2 = "User Rating: ",
+        argument2 = game.avgRating.toString()
+    )
     GameDetailRow(category = "Released in: ", game.releaseYear)
     GameDetailRow(category = "Developer: ", game.developer)
     GameDetailRow(category = "Publisher: ", game.publisher)
@@ -273,16 +281,21 @@ fun GameDetails(game: Game){
 }
 
 @Composable
-fun GameDetailRow(category: String, argument: String,category2: String = "", argument2: String = ""){
+fun GameDetailRow(
+    category: String,
+    argument: String,
+    category2: String = "",
+    argument2: String = ""
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 15.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Text(text = category + argument,style = MaterialTheme.typography.body1)
-        Text(text = category2 + argument2,style = MaterialTheme.typography.body1)
+    ) {
+        Text(text = category + argument, style = MaterialTheme.typography.body1)
+        Text(text = category2 + argument2, style = MaterialTheme.typography.body1)
 
     }
 }

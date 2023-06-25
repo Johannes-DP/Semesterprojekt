@@ -6,12 +6,13 @@ import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.getDefault
 import javax.inject.Inject
 
-class SearchGameViewModel@Inject constructor(private val repository: ListRepositoryImpl): ViewModel() {
+class SearchGameViewModel @Inject constructor(private val repository: ListRepositoryImpl) :
+    ViewModel() {
 
     var game: Game = getDefault()
 
-    suspend fun searchGame(title: String){
+    suspend fun searchGame(title: String) {
         game = repository.searchGame(title)
-        }
+    }
 
 }

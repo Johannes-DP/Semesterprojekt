@@ -37,13 +37,15 @@ fun AddGameScreen(
             MinimalisticAppBar(
                 arrowBackClicked = { navController.popBackStack() },
                 title = "Add Game"
-            )})
+            )
+        })
     { padding ->
         MainContent(
             Modifier.padding(padding),
             addGameModel = addGameModel,
             navController = navController
-        )}
+        )
+    }
 }
 
 @Composable
@@ -54,14 +56,20 @@ fun MainContent(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    Surface(modifier = modifier
-        .fillMaxWidth()
-        .fillMaxHeight()
-        .padding(10.dp)
-    ){
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(10.dp)
+    ) {
         GameBody(
             addGameUiState = addGameModel.addGameUiState,
-            onGameValueChange = { newUiState, event -> addGameModel.updateUiState(newUiState, event)},
+            onGameValueChange = { newUiState, event ->
+                addGameModel.updateUiState(
+                    newUiState,
+                    event
+                )
+            },
             onSaveClick = {
                 coroutineScope.launch { addGameModel.addGameToFirebase() }
                 navController.popBackStack()
@@ -76,18 +84,18 @@ fun GameBody(
     onGameValueChange: (AddGameUiState, AddGameUiEvent) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
-){
-    Column (
+) {
+    Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth(),
         horizontalAlignment = Alignment.Start
-        ){
+    ) {
         GameInputForm(addGameUiState = addGameUiState, onGameValueChange = onGameValueChange)
         Button(
             enabled = addGameUiState.actionEnabled,
             onClick = onSaveClick
-            ){
+        ) {
             Text(text = "Add Game")
         }
     }
@@ -98,13 +106,13 @@ fun GameBody(
 fun GameInputForm(
     addGameUiState: AddGameUiState,
     onGameValueChange: (AddGameUiState, AddGameUiEvent) -> Unit
-){
+) {
     SimpleTextField(
-        value =addGameUiState.title , 
+        value = addGameUiState.title,
         label = "Enter Title",
         isError = addGameUiState.titleErr,
         errMsg = "Title is required",
-        onChange = {input ->
+        onChange = { input ->
             onGameValueChange(addGameUiState.copy(title = input), AddGameUiEvent.TitleChanged)
         })
 
@@ -113,50 +121,63 @@ fun GameInputForm(
         label = "Enter Year",
         isError = addGameUiState.yearErr,
         errMsg = "Year is required" + addGameUiState.yearErr,
-        onChange = {input ->
+        onChange = { input ->
             onGameValueChange(addGameUiState.copy(releaseYear = input), AddGameUiEvent.YearChanged)
         })
 
     SimpleTextField(
-        value =addGameUiState.publisher ,
+        value = addGameUiState.publisher,
         label = "Enter Publisher",
         isError = addGameUiState.pubErr,
         errMsg = "publisher is required",
-        onChange = {input ->
-            onGameValueChange(addGameUiState.copy(publisher = input), AddGameUiEvent.PublisherChanged)
+        onChange = { input ->
+            onGameValueChange(
+                addGameUiState.copy(publisher = input),
+                AddGameUiEvent.PublisherChanged
+            )
         })
 
     SimpleTextField(
-        value =addGameUiState.developer ,
+        value = addGameUiState.developer,
         label = "Enter Developer",
         isError = addGameUiState.devErr,
         errMsg = "Developer is required",
-        onChange = {input ->
-            onGameValueChange(addGameUiState.copy(developer = input), AddGameUiEvent.DeveloperChanged)
+        onChange = { input ->
+            onGameValueChange(
+                addGameUiState.copy(developer = input),
+                AddGameUiEvent.DeveloperChanged
+            )
         })
 
     LazyHorizontalGrid(
         modifier = Modifier.height(100.dp),
-        rows = GridCells.Fixed(3))
+        rows = GridCells.Fixed(3)
+    )
     {
-        items(addGameUiState.selectablePlatformItems){platformItem ->
+        items(addGameUiState.selectablePlatformItems) { platformItem ->
             Chip(
                 modifier = Modifier.padding(2.dp),
                 colors = ChipDefaults.chipColors(
-                    backgroundColor = if(platformItem.isSelected)
+                    backgroundColor = if (platformItem.isSelected)
                         colorResource(id = R.color.purple_200)
                     else
                         colorResource(id = R.color.white)
-            ),
+                ),
                 onClick = {
-                onGameValueChange(addGameUiState.copy(platform = addGameUiState.selectPlatform(platformItem)), AddGameUiEvent.PlatformChanged)
-            }){
+                    onGameValueChange(
+                        addGameUiState.copy(
+                            platform = addGameUiState.selectPlatform(
+                                platformItem
+                            )
+                        ), AddGameUiEvent.PlatformChanged
+                    )
+                }) {
                 Text(text = platformItem.title)
             }
         }
     }
 
-    if(addGameUiState.platErr){
+    if (addGameUiState.platErr) {
         Text(
             modifier = Modifier.padding(start = 8.dp),
             text = "Platforms are required",
@@ -166,20 +187,20 @@ fun GameInputForm(
     }
 
     SimpleTextField(
-        value =addGameUiState.image ,
+        value = addGameUiState.image,
         label = "Enter Image",
         isError = addGameUiState.imgErr,
         errMsg = "Image is required",
-        onChange = {input ->
+        onChange = { input ->
             onGameValueChange(addGameUiState.copy(image = input), AddGameUiEvent.ImageChanged)
         })
 
     SimpleTextField(
-        value =addGameUiState.rating ,
+        value = addGameUiState.rating,
         label = "Enter Rating",
         isError = addGameUiState.ratingErr,
         errMsg = "Metacritic Rating is required",
-        onChange = {input ->
+        onChange = { input ->
             onGameValueChange(addGameUiState.copy(rating = input), AddGameUiEvent.RatingChanged)
         })
 }

@@ -15,7 +15,8 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ListRepositoryImpl(): ListRepository{
+@Suppress("UNCHECKED_CAST")
+class ListRepositoryImpl : ListRepository {
     override val db = FirebaseFirestore.getInstance()
 
     override suspend fun firebaseSignUp(email: String, password: String) {
@@ -31,10 +32,8 @@ class ListRepositoryImpl(): ListRepository{
     override suspend fun getLists(gameLists: ArrayList<GameList>): ArrayList<GameList> {
         val db = Firebase.firestore
         if (getUid() != "") {
-            db.collection("users").document(getUid())
-                .get()
-                .addOnSuccessListener { fieldSnapshot ->
-                    if (fieldSnapshot.getData()?.isNotEmpty() == true) {
+            db.collection("users").document(getUid()).get().addOnSuccessListener { fieldSnapshot ->
+                    if (fieldSnapshot.data?.isNotEmpty() == true) {
                         val list = fieldSnapshot.data
                         if (list != null) {
                             for (document in list) {
@@ -48,36 +47,30 @@ class ListRepositoryImpl(): ListRepository{
                         }
 
                     }
-                }
-                .addOnFailureListener {
+                }.addOnFailureListener {
                     Log.d("Failure", "not able to get Lists")
-                }
-                .await()
+                }.await()
         }
         return gameLists
     }
 
 
     override suspend fun getGames2(
-        reference: DocumentReference,
-        gameArrayList: ArrayList<Game>
+        reference: DocumentReference, gameArrayList: ArrayList<Game>
     ): ArrayList<Game> {
 
         val db = Firebase.firestore
-        db.collection("Games").document(reference.id)
-            .get()
+        db.collection("Games").document(reference.id).get()
             .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.getData()?.isNotEmpty() == true) {
+                if (documentSnapshot.data?.isNotEmpty() == true) {
                     val game = documentSnapshot.toObject(Game::class.java)
                     if (game != null) {
                         gameArrayList.add(game)
                     }
                 }
-            }
-            .addOnFailureListener {
+            }.addOnFailureListener {
                 Log.d("Failure", "not able to get games")
-            }
-            .await()
+            }.await()
         return gameArrayList
     }
 
@@ -100,8 +93,8 @@ class ListRepositoryImpl(): ListRepository{
     override suspend fun addUserToCollection() {
 
         val db = Firebase.firestore
-        val UID = Firebase.auth.currentUser!!.uid
-        Log.d("UID", "this is the uid" + UID)
+        val uID = Firebase.auth.currentUser!!.uid
+        Log.d("UID", "this is the uid$uID")
 
         val docData = hashMapOf(
 
@@ -111,50 +104,45 @@ class ListRepositoryImpl(): ListRepository{
                 db.document("Games" + "/Game4")
             ),
             "Wishlist" to arrayListOf(
-                db.document("Games" + "/Game1"),
-                db.document("Games" + "/Game3")
+                db.document("Games" + "/Game1"), db.document("Games" + "/Game3")
             ),
             "Played" to arrayListOf(),
         )
 
-        db.collection("users").document(UID)
-            .set(docData)
+        db.collection("users").document(uID).set(docData)
             .addOnSuccessListener { Log.d("testing", "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.d("testingtag", "Error writing document " + e) }
+            .addOnFailureListener { e -> Log.d("testing tag", "Error writing document $e") }
     }
 
-    override suspend fun addGametoList(
-        game: String,
-        listName: String
+    override suspend fun addGameToList(
+        game: String, listName: String
     ) {
         val db = Firebase.firestore
         val userRef = db.collection("users").document(getUid())
 
-        userRef.update(listName, FieldValue.arrayUnion(db.document("Games/" + game)))
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
+        userRef.update(listName, FieldValue.arrayUnion(db.document("Games/$game")))
+            .addOnSuccessListener { Log.d("Success", "Successfully written") }
             .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
     }
 
     override suspend fun removeGameFromList(
-        game: String,
-        listName: String
+        game: String, listName: String
     ) {
         val db = Firebase.firestore
         val userRef = db.collection("users").document(getUid())
 
-        userRef.update(listName, FieldValue.arrayRemove(db.document("Games/" + game)))
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
+        userRef.update(listName, FieldValue.arrayRemove(db.document("Games/$game")))
+            .addOnSuccessListener { Log.d("Success", "Successfully written") }
             .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
     }
 
     override suspend fun filterList(id: String?, platforms: List<Platform>): GameList {
-        var filteredGameList = GameList(id!!, emptyList(), ArrayList())
-        var fullGameList = GameList("", emptyList(), ArrayList())
-        fullGameList = getListById(id)
-        for (platform in platforms){
-            for (game in fullGameList.games){
-                if (game.platform.contains(platform)){
-                    if (!filteredGameList.games.contains(game)){
+        val filteredGameList = GameList(id!!, emptyList(), ArrayList())
+        val fullGameList = getListById(id)
+        for (platform in platforms) {
+            for (game in fullGameList.games) {
+                if (game.platform.contains(platform)) {
+                    if (!filteredGameList.games.contains(game)) {
                         filteredGameList.games.add(game)
                     }
 
@@ -165,7 +153,7 @@ class ListRepositoryImpl(): ListRepository{
     }
 
     private fun getUid(): String {
-        return Firebase.auth.currentUser?.uid?: ""
+        return Firebase.auth.currentUser?.uid ?: ""
     }
 
     override fun logout() {
@@ -188,30 +176,24 @@ class ListRepositoryImpl(): ListRepository{
         )
 
 
-        db.collection("Games").document(id)
-            .set(hash)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
+        db.collection("Games").document(id).set(hash)
+            .addOnSuccessListener { Log.d("Success", "Successfully written") }
+            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }.await()
     }
 
     override suspend fun searchGame(title: String): Game {
         val db = Firebase.firestore
         val ref = db.collection("Games")
-        var game: Game = Game()
-        val query = ref.whereEqualTo("title", title)
-            .get()
-            .addOnSuccessListener { documents ->
+        var game = Game()
+        ref.whereEqualTo("title", title).get().addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
                     game = document.toObject(Game::class.java)
                     game.id = document.id
                 }
-            }
-            .addOnFailureListener { exception ->
+            }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
-            }
-            .await()
+            }.await()
         return game
     }
 
@@ -219,79 +201,56 @@ class ListRepositoryImpl(): ListRepository{
         val db = Firebase.firestore
         var gameView = Game()
         if (id != "dummyId") {
-            db.collection("Games").document(id!!)
-                .get()
-                .addOnSuccessListener { document ->
+            db.collection("Games").document(id!!).get().addOnSuccessListener { document ->
                     if (document != null) {
                         val game = document.toObject(Game::class.java)!!
-                        if (game != null) {
-                            gameView = game
-                        }
-
+                        gameView = game
                     }
-                }
-                .addOnFailureListener { exception ->
+                }.addOnFailureListener { exception ->
                     Log.w("TAG", "Error getting documents: ", exception)
-                }
-                .await()
+                }.await()
         }
         return gameView
     }
 
     override suspend fun savaData(
-        stars: Double,
-        review: String,
-        hours: Double,
-        gameId: String
+        stars: Double, review: String, hours: Double, gameId: String
     ) {
         val db = Firebase.firestore
 
         val hashRating = hashMapOf(
-            "Stars" to stars,
-            "UserId" to getUid(),
-            "GameId" to gameId
+            "Stars" to stars, "UserId" to getUid(), "GameId" to gameId
         )
 
         val hashReview = hashMapOf(
-            "Text" to review,
-            "UserId" to getUid(),
-            "GameId" to gameId
+            "Text" to review, "UserId" to getUid(), "GameId" to gameId
         )
 
         val hashPlaytime = hashMapOf(
-            "Anzahl" to hours,
-            "UserId" to getUid(),
-            "GameId" to gameId
+            "Anzahl" to hours, "UserId" to getUid(), "GameId" to gameId
         )
 
-        db.collection("Ratings").document(UUID.randomUUID().toString())
-            .set(hashRating)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
+        db.collection("Ratings").document(UUID.randomUUID().toString()).set(hashRating)
+            .addOnSuccessListener { Log.d("Success", "Successfully written") }
+            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }.await()
 
-        db.collection("Review").document(UUID.randomUUID().toString())
-            .set(hashReview)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
+        db.collection("Review").document(UUID.randomUUID().toString()).set(hashReview)
+            .addOnSuccessListener { Log.d("Success", "Successfully written") }
+            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }.await()
 
-        db.collection("Playtime").document(UUID.randomUUID().toString())
-            .set(hashPlaytime)
-            .addOnSuccessListener { Log.d("Success", "Successfull written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
-            .await()
+        db.collection("Playtime").document(UUID.randomUUID().toString()).set(hashPlaytime)
+            .addOnSuccessListener { Log.d("Success", "Successfully written") }
+            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }.await()
     }
 
     override suspend fun getAvgRating(gameId: String): Double {
         val db = Firebase.firestore
         var holder: Any?
-        var total: Double = 0.0
-        var count: Double = 0.0
-        var avg: Double = 0.0
+        var total = 0.0
+        var count = 0.0
+        var avg = 0.0
 
-        db.collection("Ratings").whereEqualTo("GameId", gameId)
-            .get()
+        db.collection("Ratings").whereEqualTo("GameId", gameId).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
@@ -303,17 +262,14 @@ class ListRepositoryImpl(): ListRepository{
                     //Log.d("RatingID", gameId)
                     //Log.d("Rating", total.toString())
                 }
-            }
-            .addOnFailureListener { exception ->
+            }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
                 count = 1.0
-            }
-            .await()
+            }.await()
         if (count.toInt() == 0) {
             return avg
         }
         avg = total / count
-        //Log.d("AVGStars", avg.toString())
         return avg
 
     }
@@ -321,12 +277,11 @@ class ListRepositoryImpl(): ListRepository{
     override suspend fun getAvgHours(gameId: String): Double {
         val db = Firebase.firestore
         var holder: Any?
-        var total: Double = 0.0
-        var count: Double = 0.0
-        var avg: Double = 0.0
+        var total = 0.0
+        var count = 0.0
+        var avg = 0.0
 
-        db.collection("Playtime").whereEqualTo("GameId", gameId)
-            .get()
+        db.collection("Playtime").whereEqualTo("GameId", gameId).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     Log.d("TAG", "${document.id} => ${document.data}")
@@ -338,78 +293,63 @@ class ListRepositoryImpl(): ListRepository{
                     count += 1.0
                     //Log.d("Hours", total.toString())
                 }
-            }
-            .addOnFailureListener { exception ->
+            }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
                 count = 1.0
-            }
-            .await()
+            }.await()
         if (count.toInt() == 0) {
             return avg
         }
         avg = total / count
-        Log.d("AVGHOUR", avg.toString())
         return avg
-
-
 
     }
 
-    override suspend fun getReviews(gameId: String): ArrayList<String>{
+    override suspend fun getReviews(gameId: String): ArrayList<String> {
         val db = Firebase.firestore
-        var reviews = ArrayList<String>()
+        val reviews = ArrayList<String>()
         var holder: String
 
-        db.collection("Review").whereEqualTo("GameId",gameId)
-            .get()
+        db.collection("Review").whereEqualTo("GameId", gameId).get()
             .addOnSuccessListener { documents ->
-                for (document in documents){
+                for (document in documents) {
                     holder = document.get("Text") as String
                     Log.d("String", holder)
                     reviews.add(holder)
                 }
-            }
-            .addOnFailureListener { exception ->
+            }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
-            }
-            .await()
+            }.await()
         return reviews
     }
 
-    override suspend fun addList(title: String){
+    override suspend fun addList(title: String) {
         val db = Firebase.firestore
         val hash = hashMapOf(
             title to arrayListOf(
                 db.document("Games" + "/Game1")
             )
         )
-        db.collection("users").document(getUid())
-            .set(hash, SetOptions.merge())
+        db.collection("users").document(getUid()).set(hash, SetOptions.merge())
             .addOnSuccessListener {
-                Log.d("DB","Look DB List")
-            }
-            .addOnFailureListener { exception ->
+                Log.d("DB", "new List created")
+            }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
-            }
-            .await()
-        removeGameFromList("Game1",title)
+            }.await()
+        removeGameFromList("Game1", title)
     }
 
-    override suspend fun deleteList(title: String){
+    override suspend fun deleteList(title: String) {
         val db = Firebase.firestore
 
-        val updates = hashMapOf<String,Any>(
+        val updates = hashMapOf<String, Any>(
             title to FieldValue.delete()
         )
 
-        db.collection("users").document(getUid())
-            .update(updates)
-            .addOnSuccessListener {
-                Log.d("DB","Look DB List")
-            }
-            .addOnFailureListener { exception ->
+        db.collection("users").document(getUid()).update(updates).addOnSuccessListener {
+                Log.d("DB", "Look DB List")
+            }.addOnFailureListener { exception ->
                 Log.w("TAG", "Error getting documents: ", exception)
-            }
-            .await()
+            }.await()
     }
 }

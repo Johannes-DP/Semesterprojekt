@@ -1,7 +1,5 @@
 package com.example.semesterprojekt.screens
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -34,7 +32,8 @@ fun HomeScreen(
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
             confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
-            skipHalfExpanded = true)
+            skipHalfExpanded = true
+        )
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
@@ -43,7 +42,6 @@ fun HomeScreen(
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetBackgroundColor = Color.White,
-        // scrimColor = Color.Red,  // Color for the fade background when you open/close the drawer
     ) {
 
         Scaffold(topBar = {
@@ -129,7 +127,7 @@ fun MainContent(
     modifier: Modifier,
     navController: NavController,
     gameListViewModel: GameListViewModel
-){
+) {
     GameLists(
         modifier = modifier,
         navController = navController,
@@ -141,19 +139,17 @@ fun MainContent(
 fun GameLists(
     modifier: Modifier,
     navController: NavController,
-    gameListViewModel: GameListViewModel)
-{
-
+    gameListViewModel: GameListViewModel
+) {
 
 
     val gameListsState by gameListViewModel.gameListsState.collectAsState()
 
-    Log.d("Lists???", gameListsState.toString())
-    LazyVerticalGrid(columns = GridCells.Fixed(2)){
-        items(items = gameListsState){ gameList ->
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+        items(items = gameListsState) { gameList ->
             GameListGrid(
                 gameList = gameList,
-                onItemClick = {listId ->
+                onItemClick = { listId ->
                     navController.navigate(Screen.ListDetailScreen.addId(listId))
                 }
             )

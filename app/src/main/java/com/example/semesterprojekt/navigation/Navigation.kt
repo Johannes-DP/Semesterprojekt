@@ -15,46 +15,57 @@ import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 
 
 @Composable
-fun Navigation(){
+fun Navigation() {
     val navController = rememberNavController()
-    /*val factory = UserStateViewModelFactory(repository = AuthRepository())
-    val userState: UserStateViewModel =  viewModel(factory = factory)
-   // val listViewModel = GameListViewModel()*/
     val registrationViewModel = RegistrationViewModel(repository = ListRepositoryImpl())
 
-    NavHost(navController = navController, startDestination = Screen.Registration.route){
+    NavHost(navController = navController, startDestination = Screen.Registration.route) {
 
-        composable(route = Screen.MainScreen.route){
+        composable(route = Screen.MainScreen.route) {
             HomeScreen(navController = navController)
         }
 
-        composable(route = Screen.Registration.route){
+        composable(route = Screen.Registration.route) {
             Registration(navController = navController, viewModel = registrationViewModel)
         }
 
-        composable(route = Screen.AddGameScreen.route){
+        composable(route = Screen.AddGameScreen.route) {
             AddGameScreen(navController = navController)
         }
 
-        composable(route = Screen.SearchGameScreen.route){
+        composable(route = Screen.SearchGameScreen.route) {
             SearchGameScreen(navController = navController)
         }
 
-        composable(route = Screen.ListDetailScreen.route, arguments= listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
-        ){ backStackEntry ->
-            ListDetailScreen(navController = navController,
-                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY))
+        composable(
+            route = Screen.ListDetailScreen.route,
+            arguments = listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            ListDetailScreen(
+                navController = navController,
+                listId = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY)
+            )
         }
-        composable(route = Screen.GameDetailScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
-        ){ backStackEntry ->
-            GameDetailScreen(navController = navController,
-                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY))
-            }
-        composable(route = Screen.ReviewScreen.route, arguments= listOf(navArgument(name = GAME_ARGUMENT_KEY) {type = NavType.StringType})
-        ){ backStackEntry ->
-            ReviewScreen(navController = navController,
-                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY))
+        composable(
+            route = Screen.GameDetailScreen.route,
+            arguments = listOf(navArgument(name = GAME_ARGUMENT_KEY) { type = NavType.StringType })
+        ) { backStackEntry ->
+            GameDetailScreen(
+                navController = navController,
+                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY)
+            )
         }
+        composable(
+            route = Screen.ReviewScreen.route,
+            arguments = listOf(navArgument(name = GAME_ARGUMENT_KEY) { type = NavType.StringType })
+        ) { backStackEntry ->
+            ReviewScreen(
+                navController = navController,
+                gameId = backStackEntry.arguments?.getString(GAME_ARGUMENT_KEY)
+            )
         }
+    }
 }
 
