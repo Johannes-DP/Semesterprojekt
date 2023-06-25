@@ -193,10 +193,16 @@ fun ListDetailScreen(
                                 else
                                     colorResource(id = com.example.semesterprojekt.R.color.white)
                             ),
-                            onClick = {listDetailUiState.copy(platform= listDetailUiState.selectPlatform(platformItem))
+                            onClick = {
+                                listDetailUiState.platform = listDetailUiState.selectPlatform(platformItem)
+                                Log.d("in onclick", listDetailUiState.selectPlatform(platformItem).toString())
+                                Log.d("in onclick", listDetailUiState.platform.toString())
+                                Log.d("in onclick", listDetailUiState.selectPlatform(platformItem).size.toString())
+                                Log.d("in onclick", listDetailUiState.platform.size.toString())
+
                                 coroutineScope.launch {
                                     listDetailViewModel.filterList(listId,listDetailUiState.platform)
-                                    Log.d("in onclick", listDetailUiState.selectablePlatformItems.size.toString())
+                                    //Log.d("in onclick", listDetailUiState.platform.size.toString())
                                 }
                             }) {
                             Text(text = platformItem.title)
