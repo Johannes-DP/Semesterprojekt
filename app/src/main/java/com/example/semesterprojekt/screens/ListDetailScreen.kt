@@ -15,10 +15,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +25,7 @@ import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
+import com.example.semesterprojekt.models.Platform
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.ListDetailViewModel
 import com.example.semesterprojekt.viewmodels.UserStateViewModel

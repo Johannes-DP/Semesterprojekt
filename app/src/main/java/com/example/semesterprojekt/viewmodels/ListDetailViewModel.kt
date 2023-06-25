@@ -24,8 +24,6 @@ class ListDetailViewModel @Inject constructor(private val id: String?): ViewMode
     var listDetailUiState by mutableStateOf(ListDetailUiState())
         private set
 
-    var platforms = listOf<Platform>()
-    var platformsSelected = listOf<Platform>()
 
     init {
         viewModelScope.launch {
