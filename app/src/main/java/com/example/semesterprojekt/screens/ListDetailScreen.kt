@@ -18,7 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.ListDetailViewModel
+import com.example.semesterprojekt.viewmodels.SearchGameViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
 
@@ -29,7 +31,8 @@ fun ListDetailScreen(
     listId:String?
 
 ) {
-    val listDetailViewModel = ListDetailViewModel(listId)
+    val listDetailViewModel = ListDetailViewModel(listId, repository = ListRepositoryImpl())
+    val searchGameViewModel = SearchGameViewModel(repository = ListRepositoryImpl())
     val gameListState by listDetailViewModel.gameListState.collectAsState()
     val listDetailUiState = listDetailViewModel.listDetailUiState
 
@@ -44,6 +47,7 @@ fun ListDetailScreen(
         sheetContent = {
             BottomSheetAddGame(
                 listDetailViewModel = listDetailViewModel,
+                searchViewModel = searchGameViewModel,
                 onDetailClick = { String ->
                     navController.navigate(
                         Screen.GameDetailScreen.addId(

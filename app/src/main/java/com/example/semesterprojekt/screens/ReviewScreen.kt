@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.semesterprojekt.R
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.models.Validator
 import com.example.semesterprojekt.viewmodels.GameViewModel
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
@@ -32,7 +33,7 @@ fun ReviewScreen(
     gameId: String?
 ){
     val scaffoldState = rememberScaffoldState()
-    val gameViewModel = GameViewModel(gameId)
+    val gameViewModel = GameViewModel(gameId, repository = ListRepositoryImpl())
     val game by gameViewModel.gameState.collectAsState()
 
     Scaffold(

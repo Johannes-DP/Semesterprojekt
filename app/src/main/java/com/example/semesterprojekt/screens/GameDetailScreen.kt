@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.*
 import com.example.semesterprojekt.widgets.*
 
@@ -27,7 +28,7 @@ fun GameDetailScreen(
 
 ) {
 
-    val gameViewModel = GameViewModel(gameId)
+    val gameViewModel = GameViewModel(gameId, repository = ListRepositoryImpl())
     val game by gameViewModel.gameState.collectAsState()
 
     Scaffold(topBar = {

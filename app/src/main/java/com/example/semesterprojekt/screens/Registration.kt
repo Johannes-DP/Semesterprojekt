@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,10 +9,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import androidx.lifecycle.viewmodel.compose.*
-import com.example.semesterprojekt.repository.AuthRepository
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.RegistrationViewModel
-import com.example.semesterprojekt.viewmodels.RegistrationViewModelFactory
 import com.example.semesterprojekt.widgets.DataTextFields
 import com.example.semesterprojekt.widgets.RegistrationTopBar
 import kotlinx.coroutines.launch
@@ -19,7 +18,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Registration(
-    navController: NavController
+    navController: NavController,
+    viewModel: RegistrationViewModel
 ) {
     Scaffold(topBar = {
         RegistrationTopBar(
@@ -27,7 +27,7 @@ fun Registration(
         )
     })
     {padding ->
-        RegistrationContent(navController = navController,Modifier.padding(padding))
+        RegistrationContent(navController = navController, viewModel = viewModel, modifier = Modifier.padding(padding))
 
     }
 }
@@ -35,10 +35,11 @@ fun Registration(
     @Composable
     fun RegistrationContent(
         navController: NavController,
+        viewModel: RegistrationViewModel,
         modifier: Modifier = Modifier
     ) {
-        val factory = RegistrationViewModelFactory(repository = AuthRepository())
-        val viewModel: RegistrationViewModel = viewModel(factory = factory)
+
+       // val viewModel= RegistrationViewModel(repository = ListRepositoryImpl())
 
         val coroutineScope = rememberCoroutineScope()
         val warningReg =
@@ -57,7 +58,8 @@ fun Registration(
 
             DataTextFields(
                 state = viewModel.textfieldUiState,
-                onChange = { newUiState -> viewModel.newState(newUiState) })
+                onChange = { newUiState -> viewModel.newState(newUiState)
+                Log.d("test", viewModel.textfieldUiState.email)})
             Row() {
                 Button(onClick = {
                     coroutineScope.launch {

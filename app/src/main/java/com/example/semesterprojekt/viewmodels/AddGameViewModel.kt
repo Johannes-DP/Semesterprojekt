@@ -4,14 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel;
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.models.Validator
-import com.example.semesterprojekt.repository.AuthRepository;
 import com.example.semesterprojekt.screens.AddGameUiEvent
 import com.example.semesterprojekt.screens.AddGameUiState
 import com.example.semesterprojekt.screens.hasError
 import com.example.semesterprojekt.screens.toGame
+import javax.inject.Inject
 
-class AddGameViewModel(private val repository: AuthRepository): ViewModel(){
+class AddGameViewModel @Inject constructor( private val repository: ListRepositoryImpl): ViewModel(){
 
     var addGameUiState by mutableStateOf(AddGameUiState())
         private set

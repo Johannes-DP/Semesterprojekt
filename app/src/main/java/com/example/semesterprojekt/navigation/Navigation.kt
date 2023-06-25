@@ -9,8 +9,9 @@ import com.example.semesterprojekt.screens.HomeScreen
 import com.example.semesterprojekt.screens.Registration
 import com.example.semesterprojekt.screens.Screen
 import androidx.navigation.navArgument
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.screens.*
-
+import com.example.semesterprojekt.viewmodels.RegistrationViewModel
 
 
 @Composable
@@ -19,6 +20,7 @@ fun Navigation(){
     /*val factory = UserStateViewModelFactory(repository = AuthRepository())
     val userState: UserStateViewModel =  viewModel(factory = factory)
    // val listViewModel = GameListViewModel()*/
+    val registrationViewModel = RegistrationViewModel(repository = ListRepositoryImpl())
 
     NavHost(navController = navController, startDestination = Screen.Registration.route){
 
@@ -27,7 +29,7 @@ fun Navigation(){
         }
 
         composable(route = Screen.Registration.route){
-            Registration(navController = navController)
+            Registration(navController = navController, viewModel = registrationViewModel)
         }
 
         composable(route = Screen.AddGameScreen.route){

@@ -12,11 +12,9 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.semesterprojekt.repository.AuthRepository
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.SearchGameViewModel
-import com.example.semesterprojekt.viewmodels.SearchGameViewModelFactory
 import com.example.semesterprojekt.widgets.GameGrid
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
@@ -26,8 +24,7 @@ import kotlinx.coroutines.launch
 fun SearchGameScreen(
     navController: NavController
 ){
-    val factory = SearchGameViewModelFactory(repository = AuthRepository())
-    val searchViewModel: SearchGameViewModel = viewModel(factory = factory)
+    val searchViewModel= SearchGameViewModel(repository = ListRepositoryImpl())
 
     val scaffoldState = rememberScaffoldState()
 

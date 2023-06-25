@@ -8,19 +8,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.semesterprojekt.repository.AuthRepository
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.viewmodels.ListDetailViewModel
 import com.example.semesterprojekt.viewmodels.SearchGameViewModel
-import com.example.semesterprojekt.viewmodels.SearchGameViewModelFactory
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun BottomSheetAddList() {
+fun BottomSheetAddList(
+    gameListViewModel: GameListViewModel
+) {
 
-    val gameListViewModel = GameListViewModel()
+    //val gameListViewModel = GameListViewModel(repository = ListRepositoryImpl())
     val coroutineScope = rememberCoroutineScope()
     var title by remember {
         mutableStateOf("")
@@ -83,12 +83,12 @@ fun BottomSheetAddList() {
 @Composable
 fun BottomSheetAddGame(
     listDetailViewModel: ListDetailViewModel,
+    searchViewModel: SearchGameViewModel,
     listId: String,
     onDetailClick: (String) -> Unit = {}
 ) {
 
-    val factory = SearchGameViewModelFactory(repository = AuthRepository())
-    val searchViewModel: SearchGameViewModel = viewModel(factory = factory)
+    //val searchViewModel = SearchGameViewModel(repository = ListRepositoryImpl())
     val coroutineScope = rememberCoroutineScope()
     var title by remember {
         mutableStateOf("")

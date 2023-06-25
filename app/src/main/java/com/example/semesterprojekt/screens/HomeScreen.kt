@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.GameListViewModel
 import com.example.semesterprojekt.widgets.*
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController
 ) {
-    val gameListViewModel = GameListViewModel()
+    val gameListViewModel = GameListViewModel(repository = ListRepositoryImpl())
     val modalBottomSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -37,7 +38,7 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheetLayout(
         sheetContent = {
-            BottomSheetAddList()
+            BottomSheetAddList(gameListViewModel)
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),

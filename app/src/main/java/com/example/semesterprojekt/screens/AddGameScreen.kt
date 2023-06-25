@@ -14,12 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.semesterprojekt.R
-import com.example.semesterprojekt.repository.AuthRepository
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.viewmodels.AddGameViewModel
-import com.example.semesterprojekt.viewmodels.AddGameViewModelFactory
 import com.example.semesterprojekt.widgets.MinimalisticAppBar
 import com.example.semesterprojekt.widgets.SimpleTextField
 import kotlinx.coroutines.launch
@@ -28,8 +26,8 @@ import kotlinx.coroutines.launch
 fun AddGameScreen(
     navController: NavController
 ) {
-    val factory = AddGameViewModelFactory(repository = AuthRepository())
-    val addGameModel: AddGameViewModel = viewModel(factory = factory)
+
+    val addGameModel = AddGameViewModel(ListRepositoryImpl())
 
     val scaffoldState = rememberScaffoldState()
 

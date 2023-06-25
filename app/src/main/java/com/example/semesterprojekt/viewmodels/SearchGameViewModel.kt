@@ -1,11 +1,12 @@
 package com.example.semesterprojekt.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.getDefault
-import com.example.semesterprojekt.repository.AuthRepository
+import javax.inject.Inject
 
-class SearchGameViewModel(private val repository:AuthRepository): ViewModel() {
+class SearchGameViewModel@Inject constructor(private val repository: ListRepositoryImpl): ViewModel() {
 
     var game: Game = getDefault()
 

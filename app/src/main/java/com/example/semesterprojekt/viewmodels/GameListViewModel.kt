@@ -3,14 +3,16 @@ package com.example.semesterprojekt.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.semesterprojekt.data.Database
+import com.example.semesterprojekt.data.ListRepository
+import com.example.semesterprojekt.data.ListRepositoryImpl
 import com.example.semesterprojekt.models.GameList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameListViewModel : ViewModel() {
+class GameListViewModel @Inject constructor(private val repository: ListRepositoryImpl) : ViewModel() {
 
 
     private val _gameListsState = MutableStateFlow(ArrayList<GameList>())
@@ -20,7 +22,7 @@ class GameListViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            gameLists = Database.getLists(gameLists)
+            gameLists = repository.getLists(gameLists)
             if (gameLists.isEmpty()) {
                 Log.d("GamesViewModel", "Empty List")
             } else {
@@ -32,11 +34,14 @@ class GameListViewModel : ViewModel() {
     }
 
     suspend fun addList(title:String){
-        Database.addList(title)
+        repository.addList(title)
+        gameLists.clear()
+        gameLists = repository.getLists(gameLists)
+        _gameListsState.value = gameLists
     }
 
     fun logout(){
-        Database.logout()
+        repository.logout()
     }
 
 }
