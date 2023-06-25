@@ -142,7 +142,9 @@ fun BottomSheetAddGame(
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            searchViewModel.searchGame(title)
+                            if (!result){
+                                searchViewModel.searchGame(title)
+                            }
                             result = !result
                         }
                     }
@@ -150,21 +152,24 @@ fun BottomSheetAddGame(
                     Text("Search Game")
                 }
                 if (result) {
-                    GameSearchGrid(
-                        game = searchViewModel.game,
-                        onAddToListClick = { String ->
-                            coroutineScope.launch {
-                                listDetailViewModel.addGameToList(
-                                    listId,
-                                    listDetailViewModel.getGameById(String)
-                                )
-                            }
-                        },
-                        onDetailClick = onDetailClick
-                    )
+                    if (searchViewModel.game.id == "dummyId") {
+                        Text("No Game Found!")
+                    } else {
+                        GameSearchGrid(
+                            game = searchViewModel.game,
+                            onAddToListClick = { String ->
+                                coroutineScope.launch {
+                                    listDetailViewModel.addGameToList(
+                                        listId,
+                                        listDetailViewModel.getGameById(String)
+                                    )
+                                }
+                            },
+                            onDetailClick = onDetailClick
+                        )
+                    }
                 }
             }
         }
-
     }
 }

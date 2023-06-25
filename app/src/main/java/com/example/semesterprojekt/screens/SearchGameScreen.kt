@@ -83,9 +83,14 @@ fun MainContent(
             Text("Search Game")
         }
         if (result) {
-            GameGrid(game = searchViewModel.game, onItemClick = { gameId ->
-                navController.navigate(Screen.GameDetailScreen.addId(gameId))
-            })
+            if (searchViewModel.game.id == "dummyId"){
+                Text("No Game Found!")
+            } else {
+                GameGrid(game = searchViewModel.game, onItemClick = { gameId ->
+                    navController.navigate(Screen.GameDetailScreen.addId(gameId))
+
+                })
+            }
         }
     }
 }

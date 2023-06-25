@@ -39,18 +39,3 @@ class Game(
     )
 
 }
-
-fun getDefault(): Game {
-    return Game(
-        id = "Game1",
-        title = "No Game Found",
-        releaseYear = "",
-        publisher = "",
-        developer = "",
-        platform = listOf(),
-        image = "",
-        rating = "",
-        avgHours = 0.0,
-        avgRating = 0.0
-    )
-}
