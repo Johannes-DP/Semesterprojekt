@@ -30,7 +30,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun getLists(gameLists: ArrayList<GameList>): ArrayList<GameList> {
-        val db = Firebase.firestore
         if (getUid() != "") {
             db.collection("users").document(getUid()).get().addOnSuccessListener { fieldSnapshot ->
                     if (fieldSnapshot.data?.isNotEmpty() == true) {
@@ -59,7 +58,6 @@ class ListRepositoryImpl : ListRepository {
         reference: DocumentReference, gameArrayList: ArrayList<Game>
     ): ArrayList<Game> {
 
-        val db = Firebase.firestore
         db.collection("Games").document(reference.id).get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.data?.isNotEmpty() == true) {
@@ -92,7 +90,6 @@ class ListRepositoryImpl : ListRepository {
 
     override suspend fun addUserToCollection() {
 
-        val db = Firebase.firestore
         val uID = Firebase.auth.currentUser!!.uid
         Log.d("UID", "this is the uid$uID")
 
@@ -117,7 +114,6 @@ class ListRepositoryImpl : ListRepository {
     override suspend fun addGameToList(
         game: String, listName: String
     ) {
-        val db = Firebase.firestore
         val userRef = db.collection("users").document(getUid())
 
         userRef.update(listName, FieldValue.arrayUnion(db.document("Games/$game")))
@@ -128,7 +124,6 @@ class ListRepositoryImpl : ListRepository {
     override suspend fun removeGameFromList(
         game: String, listName: String
     ) {
-        val db = Firebase.firestore
         val userRef = db.collection("users").document(getUid())
 
         userRef.update(listName, FieldValue.arrayRemove(db.document("Games/$game")))
@@ -161,7 +156,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun addGameToFirebase(game: Game) {
-        val db = Firebase.firestore
         val id: String = game.id
 
         val hash = hashMapOf(
@@ -182,7 +176,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun searchGame(title: String): Game {
-        val db = Firebase.firestore
         val ref = db.collection("Games")
         var game = Game()
         ref.whereEqualTo("title", title).get().addOnSuccessListener { documents ->
@@ -198,7 +191,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun getGameById(id: String?): Game {
-        val db = Firebase.firestore
         var gameView = Game()
         if (id != "dummyId") {
             db.collection("Games").document(id!!).get().addOnSuccessListener { document ->
@@ -216,7 +208,6 @@ class ListRepositoryImpl : ListRepository {
     override suspend fun savaData(
         stars: Double, review: String, hours: Double, gameId: String
     ) {
-        val db = Firebase.firestore
 
         val hashRating = hashMapOf(
             "Stars" to stars, "UserId" to getUid(), "GameId" to gameId
@@ -244,7 +235,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun getAvgRating(gameId: String): Double {
-        val db = Firebase.firestore
         var holder: Any?
         var total = 0.0
         var count = 0.0
@@ -275,7 +265,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun getAvgHours(gameId: String): Double {
-        val db = Firebase.firestore
         var holder: Any?
         var total = 0.0
         var count = 0.0
@@ -306,7 +295,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun getReviews(gameId: String): ArrayList<String> {
-        val db = Firebase.firestore
         val reviews = ArrayList<String>()
         var holder: String
 
@@ -324,7 +312,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun addList(title: String) {
-        val db = Firebase.firestore
         val hash = hashMapOf(
             title to arrayListOf(
                 db.document("Games" + "/Game1")
@@ -340,8 +327,6 @@ class ListRepositoryImpl : ListRepository {
     }
 
     override suspend fun deleteList(title: String) {
-        val db = Firebase.firestore
-
         val updates = hashMapOf<String, Any>(
             title to FieldValue.delete()
         )
