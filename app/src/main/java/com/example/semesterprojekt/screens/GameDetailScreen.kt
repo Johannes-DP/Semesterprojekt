@@ -9,8 +9,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -83,7 +85,9 @@ fun GameDetailScreen(
 
     }) { padding ->
         Column(
-            modifier = Modifier.padding(padding),
+            modifier = Modifier
+                .padding(padding)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Card(
@@ -121,14 +125,16 @@ fun GameDetailScreen(
     val reviews by gameViewModel.reviewState.collectAsState()
 
     Column (
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Log.d("Screen", reviews.size.toString())
+        GameName(name = "Reviews", MaterialTheme.typography.h5)
         for(items in reviews) {
-            Row(){
-                Text(text = items)
-                Log.d("Screen", items)
-            }
+            TextField(
+                readOnly = true,
+                value = items,
+                onValueChange = { },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

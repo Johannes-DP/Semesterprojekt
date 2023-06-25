@@ -19,7 +19,6 @@ class GameViewModel @Inject constructor(private val id: String?/*, private val r
     var game = Game()
     val reviewState = MutableStateFlow(ArrayList<String>())
     var reviews = ArrayList<String>()
-
     init {
         viewModelScope.launch{
             if (id == "dummyId"){
@@ -31,12 +30,11 @@ class GameViewModel @Inject constructor(private val id: String?/*, private val r
             gameState.value = game
             reviews = Database.getReviews(game.id)
             reviewState.value = reviews
-            Log.d("GVM", reviews.count().toString())
+
         }
     }
 
     suspend fun savaData(stars: Double, review: String, hours: Double, userId: String, gameId: String){
         Database.savaData(stars,review,hours,userId,gameId)
     }
-
 }

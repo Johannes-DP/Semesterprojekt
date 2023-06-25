@@ -20,32 +20,66 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun BottomSheetAddList() {
-    Column(modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth()
-        .padding(20.dp)) {
-        Column(modifier = Modifier
-            .fillMaxWidth(),
+fun BottomSheetAddList(userId: String) {
+
+    val gameListViewModel = GameListViewModel()
+    val coroutineScope = rememberCoroutineScope()
+    var title by remember {
+        mutableStateOf("")
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
+            .padding(20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Divider(modifier = Modifier
-                .width(80.dp),
-                thickness = 6.dp,)
+        ) {
+            Divider(
+                modifier = Modifier
+                    .width(80.dp),
+                thickness = 6.dp,
+            )
         }
 
         Text(text = "Add List", style = MaterialTheme.typography.h5)
 
-        Row(modifier = Modifier
-            .fillMaxWidth())
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        )
         {
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = "testing",
-                onValueChange = {})
-        }
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.Start
+            ) {
+                SimpleTextField(
+                    value = title,
+                    label = "List Title",
+                    isError = false,
+                    errMsg = "Pls enter Title",
+                    onChange = { title = it }
+                )
 
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            gameListViewModel.addList(title)
+                        }
+                    }
+                ) {
+                    Text("Add List")
+                }
+
+            }
+        }
     }
 }
 @Composable

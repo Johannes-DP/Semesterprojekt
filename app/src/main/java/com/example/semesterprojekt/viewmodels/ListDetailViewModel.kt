@@ -29,8 +29,18 @@ class ListDetailViewModel @Inject constructor(private val id: String?): ViewMode
     }
 
     suspend fun addGameToList(listName: String, game: Game) {
-        Database.addGametoList(game, listName)
+        Database.addGametoList(game.id, listName)
     }
+
+    suspend fun removeGameFromList(title:String, listId: String?){
+        if(listId != null)
+            Database.removeGameFromList(title,listId)
+    }
+
+    suspend fun deleteList(listId: String){
+        Database.deleteList(listId)
+    }
+
 
     suspend fun getGameById(id: String?): Game {
         Log.d("test", Database.getGameById(id).id)

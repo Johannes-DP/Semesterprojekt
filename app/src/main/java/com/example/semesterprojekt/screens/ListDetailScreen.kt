@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
@@ -125,7 +126,14 @@ fun ListDetailScreen(
 
                     }
 
-                    DropdownMenuItem(onClick = { Log.d("DeleteList", "1" /*gameList.id*/) }) {
+                    DropdownMenuItem(onClick = {
+                        coroutineScope.launch {
+                            if(listId != null)
+                                listDetailViewModel.deleteList(listId)
+                            navController.popBackStack()
+                        }
+
+                    }) {
                         Row {
                             Icon(
                                 imageVector = Icons.Default.Delete,
@@ -140,7 +148,6 @@ fun ListDetailScreen(
                         }
 
                     }
-                    /*TODO Add more Items*/
                 }
             )
         },
@@ -161,24 +168,26 @@ fun ListDetailScreen(
                 }
             }
             Column(modifier = Modifier.padding(padding)) {
-                Log.d("test", "hello")
                 LazyVerticalGrid(columns = GridCells.Fixed(3)) {
-                    Log.d("test", "hello2")
                     if (!gameListState.games.isEmpty()) {
                         items(gameListState.games) { game ->
-                            Log.d("heeeere", game.id)
-                            Log.d("testingnow", game.toString())
                             GameGrid(
                                 game = game,
                                 gameList = gameListState,
                                 onItemClick = { gameId ->
-                                    Log.d("this is the current ID", gameId)
                                     navController.navigate(Screen.GameDetailScreen.addId(gameId))
-                                }
+                                },
+                                onLongClick = {gameId ->
+                                    coroutineScope.launch {
+                                        listDetailViewModel.removeGameFromList(gameId,listId)
 
-                            ) { listId ->
-                                navController.navigate(Screen.ModifyListScreen.addId(listId))
-                            }
+                                        navController.popBackStack()
+                                        if(listId != null)
+                                    navController.navigate(Screen.ListDetailScreen.addId(listId))
+                                    }
+
+                                }
+                            )
 
                         }
                     }

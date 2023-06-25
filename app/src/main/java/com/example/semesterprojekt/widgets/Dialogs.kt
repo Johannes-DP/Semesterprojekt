@@ -98,7 +98,7 @@ fun ClearDialog(listId: String){
 }
 
 @Composable
-fun DeleteDialog(listId: String){
+fun DeleteDialog(gameId: String){
     AlertDialog(
     onDismissRequest = {
         // Dismiss the dialog when the user clicks outside the dialog or on the back

@@ -70,7 +70,6 @@ fun GameGrid(
     game: Game,
     gameList: GameList,
     onItemClick: (String) -> Unit = {},
-    onDeleteClick: (String) -> Unit = {},
     onLongClick: (String) -> Unit = {})
 {
     Log.d("gamegrid", game.toString())
@@ -82,7 +81,7 @@ fun GameGrid(
             .padding(5.dp)
             .combinedClickable(
                 onClick = { onItemClick(game.id) },
-                onLongClick = { onLongClick(gameList.title) }),
+                onLongClick = { onLongClick(game.id) }),
         border = null,
         elevation = 0.dp
     ) {

@@ -1,5 +1,6 @@
 package com.example.semesterprojekt.viewmodels
 
+import android.provider.ContactsContract.Data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,6 +48,9 @@ class GameListViewModel : ViewModel() {
         }
     }
 
+    suspend fun addList(title:String){
+        Database.addList(title)
+    }
 
 
 

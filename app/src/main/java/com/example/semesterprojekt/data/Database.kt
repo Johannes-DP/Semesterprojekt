@@ -3,6 +3,8 @@ package com.example.semesterprojekt.data
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.runtime.rememberCoroutineScope
 import com.example.semesterprojekt.models.Game
 import com.example.semesterprojekt.models.GameList
 import com.google.firebase.auth.ktx.auth
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firestore.v1.Document
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
@@ -129,13 +132,27 @@ interface Database {
         }
 
         suspend fun addGametoList(
-            game: Game,
+            game: String,
             listName: String
         ) {
             val db = Firebase.firestore
             val userRef = db.collection("users").document(getUid())
 
-            userRef.update(listName, FieldValue.arrayUnion(db.document("Games/" + game.id)))
+            userRef.update(listName, FieldValue.arrayUnion(db.document("Games/" + game)))
+                .addOnSuccessListener { Log.d("Success", "Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
+        }
+
+        suspend fun removeGameFromList(
+            game: String,
+            listName: String
+        ) {
+            val db = Firebase.firestore
+            val userRef = db.collection("users").document(getUid())
+
+            userRef.update(listName, FieldValue.arrayRemove(db.document("Games/" + game)))
+                .addOnSuccessListener { Log.d("Success", "Successfull written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
         }
 
         fun getUid(): String {
@@ -353,6 +370,43 @@ interface Database {
                 }
                 .await()
             return reviews
+        }
+
+        suspend fun addList(title: String){
+            val db = Firebase.firestore
+            val hash = hashMapOf(
+                title to arrayListOf(
+                    db.document("Games" + "/Game1")
+                )
+            )
+            db.collection("users").document(getUid())
+                .set(hash, SetOptions.merge())
+                .addOnSuccessListener {
+                    Log.d("DB","Look DB List")
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                }
+                .await()
+            removeGameFromList("Game1",title)
+        }
+
+        suspend fun deleteList(title: String){
+            val db = Firebase.firestore
+
+            val updates = hashMapOf<String,Any>(
+                title to FieldValue.delete()
+            )
+
+            db.collection("users").document(getUid())
+                .update(updates)
+                .addOnSuccessListener {
+                    Log.d("DB","Look DB List")
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                }
+                .await()
         }
     }
 }
