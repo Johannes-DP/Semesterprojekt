@@ -20,8 +20,8 @@ data class ListDetailUiState(
 fun ListDetailUiState.selectPlatform(item: ListItemSelectable): List<Platform> {
     selectablePlatformItems.find { it.title == item.title }?.let { platform ->
         platform.isSelected = !platform.isSelected
-        Log.d("Select", platform.title)
-        Log.d("Select", platform.isSelected.toString())
+        //Log.d("Select", platform.title)
+        //Log.d("Select", platform.isSelected.toString())
     }
     return selectablePlatformItems.filter { item -> item.isSelected }.map { listItemSelectable ->
         Platform.valueOf(listItemSelectable.title)
