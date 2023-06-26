@@ -161,7 +161,7 @@ fun BottomSheetAddGame(
                                 coroutineScope.launch {
                                     listDetailViewModel.addGameToList(
                                         listId,
-                                        listDetailViewModel.getGameById(String)
+                                        String
                                     )
                                 }
                             },

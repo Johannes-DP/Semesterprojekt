@@ -33,8 +33,8 @@ class ListDetailViewModel @Inject constructor(
         }
     }
 
-    suspend fun addGameToList(listName: String, game: Game) {
-        repository.addGameToList(game.id, listName)
+    suspend fun addGameToList(listName: String, gameId: String) {
+        repository.addGameToList(gameId, listName)
         _gameListState.value = repository.getListById(listName)
     }
 

@@ -1,6 +1,6 @@
 package com.example.semesterprojekt.screens
 
-import android.util.Log
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,7 +62,7 @@ fun RegistrationContent(
             state = viewModel.textfieldUiState,
             onChange = { newUiState ->
                 viewModel.newState(newUiState)
-                Log.d("test", viewModel.textfieldUiState.email)
+                //Log.d("test", viewModel.textfieldUiState.email)
             })
         Row {
             Button(onClick = {

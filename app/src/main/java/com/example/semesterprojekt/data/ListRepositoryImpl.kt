@@ -9,7 +9,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.firestore
+
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -109,11 +109,13 @@ class ListRepositoryImpl : ListRepository {
     override suspend fun addGameToList(
         game: String, listName: String
     ) {
-        val userRef = db.collection("users").document(getUid())
+        if (game != "dummyId") {
+            val userRef = db.collection("users").document(getUid())
 
-        userRef.update(listName, FieldValue.arrayUnion(db.document("Games/$game")))
-            .addOnSuccessListener { Log.d("Success", "Successfully written") }
-            .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
+            userRef.update(listName, FieldValue.arrayUnion(db.document("Games/$game")))
+                .addOnSuccessListener { Log.d("Success", "Successfully written") }
+                .addOnFailureListener { e -> Log.w("Failure", "Error writing Document", e) }
+        }
     }
 
     override suspend fun removeGameFromList(
