@@ -95,20 +95,15 @@ class ListRepositoryImpl : ListRepository {
 
         val docData = hashMapOf(
 
-            "Favorites" to arrayListOf(
-                db.document("Games" + "/Game1"),
-                db.document("Games" + "/Game5"),
-                db.document("Games" + "/Game4")
-            ),
-            "Wishlist" to arrayListOf(
-                db.document("Games" + "/Game1"), db.document("Games" + "/Game3")
-            ),
+            "Favorites" to arrayListOf(db.document("Games" + "/Game1")),
+            "Wishlist" to arrayListOf(),
             "Played" to arrayListOf(),
         )
 
         db.collection("users").document(uID).set(docData)
             .addOnSuccessListener { Log.d("testing", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.d("testing tag", "Error writing document $e") }
+        removeGameFromList("Game1", "Favorites")
     }
 
     override suspend fun addGameToList(
